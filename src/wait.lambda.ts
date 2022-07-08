@@ -7,6 +7,7 @@ interface Input {
   resourceType: 'snapshot' | 'cluster' | 'instance';
   databaseIdentifier: string;
   snapshotIdentifier?: string;
+  isCluster: boolean;
 }
 
 class NotReady extends Error {
@@ -30,38 +31,57 @@ function empty(obj: any) {
   return obj === undefined || obj === null || Object.keys(obj).length == 0;
 }
 
-exports.handler = async function (event: Input) {
-  console.log(event);
+exports.handler = async function (input: Input) {
+  console.log(input);
 
-  if (event.resourceType == 'snapshot' && event.snapshotIdentifier) {
+  if (input.resourceType == 'snapshot' && input.snapshotIdentifier) {
     // wait for snapshot
-    const snapshots = await rds.describeDBClusterSnapshots({
-      DBClusterIdentifier: event.databaseIdentifier,
-      DBClusterSnapshotIdentifier: event.snapshotIdentifier,
-    }).promise();
+    let status: string;
+    if (input.isCluster) {
+      // wait for cluster snapshot
+      const snapshots = await rds.describeDBClusterSnapshots({
+        DBClusterIdentifier: input.databaseIdentifier,
+        DBClusterSnapshotIdentifier: input.snapshotIdentifier,
+      }).promise();
 
-    console.log(snapshots);
+      console.log(snapshots);
 
-    if (!snapshots.DBClusterSnapshots || snapshots.DBClusterSnapshots.length != 1) {
-      throw new Error(`Unable to find snapshot ${event.snapshotIdentifier} of ${event.databaseIdentifier}`);
+      if (!snapshots.DBClusterSnapshots || snapshots.DBClusterSnapshots.length != 1) {
+        throw new Error(`Unable to find snapshot ${input.snapshotIdentifier} of ${input.databaseIdentifier}`);
+      }
+
+      status = snapshots.DBClusterSnapshots[0].Status ?? '';
+    } else {
+      // wait for instance snapshot
+      const snapshots = await rds.describeDBSnapshots({
+        DBInstanceIdentifier: input.databaseIdentifier,
+        DBSnapshotIdentifier: input.snapshotIdentifier,
+      }).promise();
+
+      console.log(snapshots);
+
+      if (!snapshots.DBSnapshots || snapshots.DBSnapshots.length != 1) {
+        throw new Error(`Unable to find snapshot ${input.snapshotIdentifier} of ${input.databaseIdentifier}`);
+      }
+
+      status = snapshots.DBSnapshots[0].Status ?? '';
     }
 
-    const status = snapshots.DBClusterSnapshots[0].Status ?? '';
     if (status == 'available') {
       return;
     }
 
-    checkStatus(status, event.snapshotIdentifier);
-  } else if (event.resourceType == 'cluster') {
+    checkStatus(status, input.snapshotIdentifier);
+  } else if (input.resourceType == 'cluster') {
     // wait for db
     const dbs = await rds.describeDBClusters({
-      DBClusterIdentifier: event.databaseIdentifier,
+      DBClusterIdentifier: input.databaseIdentifier,
     }).promise();
 
     console.log(dbs);
 
     if (!dbs.DBClusters || dbs.DBClusters.length != 1) {
-      throw new Error(`Unable to find db clsuter ${event.databaseIdentifier}`);
+      throw new Error(`Unable to find db clsuter ${input.databaseIdentifier}`);
     }
 
     const status = dbs.DBClusters[0].Status ?? '';
@@ -69,17 +89,17 @@ exports.handler = async function (event: Input) {
       return;
     }
 
-    checkStatus(status, event.databaseIdentifier);
-  } else if (event.resourceType == 'instance') {
+    checkStatus(status, input.databaseIdentifier);
+  } else if (input.resourceType == 'instance') {
     // wait for db
     const instances = await rds.describeDBInstances({
-      DBInstanceIdentifier: event.databaseIdentifier,
+      DBInstanceIdentifier: input.databaseIdentifier,
     }).promise();
 
     console.log(instances);
 
     if (!instances.DBInstances || instances.DBInstances.length != 1) {
-      throw new Error(`Unable to find db instance ${event.databaseIdentifier}`);
+      throw new Error(`Unable to find db instance ${input.databaseIdentifier}`);
     }
 
     const status = instances.DBInstances[0].DBInstanceStatus ?? '';
@@ -87,7 +107,7 @@ exports.handler = async function (event: Input) {
       return;
     }
 
-    checkStatus(status, event.databaseIdentifier);
+    checkStatus(status, input.databaseIdentifier);
   } else {
     throw new Error('Bad parameters');
   }

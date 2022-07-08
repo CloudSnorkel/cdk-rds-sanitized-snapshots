@@ -6,6 +6,7 @@ const rds = new AWS.RDS();
 
 interface Input {
   executionId: string;
+  isCluster: boolean;
   databaseIdentifier: string;
   databaseKey: string;
   snapshotPrefix: string;
@@ -14,6 +15,7 @@ interface Input {
 
 interface Parameters {
   databaseIdentifier: string;
+  isCluster: boolean;
   engine: string;
   tempSnapshotId: string;
   tempEncSnapshotId: string;
@@ -29,7 +31,6 @@ interface Parameters {
     port: string;
     user: string;
     password: string;
-    database: string;
   };
 }
 
@@ -62,30 +63,60 @@ function confirmLength(name: string, value: string) {
 }
 
 exports.handler = async function (input: Input): Promise<Parameters> {
-  const origDb = await rds.describeDBClusters({ DBClusterIdentifier: input.databaseIdentifier }).promise();
-  if (!origDb.DBClusters || origDb.DBClusters.length != 1) {
-    throw new Error(`Unable to find ${input.databaseIdentifier}`);
-  }
+  let port: number;
+  let user: string;
+  let engine: string | undefined;
+  let kmsKeyId: string | undefined;
+  let instanceClass: string;
 
-  const cluster = origDb.DBClusters[0];
-  if (!cluster.Endpoint || !cluster.Port || !cluster.MasterUsername || !cluster.DBClusterMembers) {
-    throw new Error(`Database missing some required parameters: ${JSON.stringify(cluster)}`);
+  if (input.isCluster) {
+    const origDb = await rds.describeDBClusters({ DBClusterIdentifier: input.databaseIdentifier }).promise();
+    if (!origDb.DBClusters || origDb.DBClusters.length != 1) {
+      throw new Error(`Unable to find ${input.databaseIdentifier}`);
+    }
+
+    const cluster = origDb.DBClusters[0];
+    if (!cluster.Port || !cluster.MasterUsername || !cluster.DBClusterMembers) {
+      throw new Error(`Database missing some required parameters: ${JSON.stringify(cluster)}`);
+    }
+
+    const origInstances = await rds.describeDBInstances({ DBInstanceIdentifier: cluster.DBClusterMembers[0].DBInstanceIdentifier }).promise();
+    if (!origInstances.DBInstances || origInstances.DBInstances.length < 1) {
+      throw new Error(`Unable to find instances for ${input.databaseIdentifier}`);
+    }
+
+    const instance = origInstances.DBInstances[0];
+    if (!instance.DBInstanceClass) {
+      throw new Error(`Database instance missing class: ${JSON.stringify(instance)}`);
+    }
+
+    port = cluster.Port;
+    user = cluster.MasterUsername;
+    engine = cluster.Engine;
+    kmsKeyId = cluster.KmsKeyId;
+    instanceClass = instance.DBInstanceClass;
+  } else {
+    const origDb = await rds.describeDBInstances({ DBInstanceIdentifier: input.databaseIdentifier }).promise();
+    if (!origDb.DBInstances || origDb.DBInstances.length != 1) {
+      throw new Error(`Unable to find ${input.databaseIdentifier}`);
+    }
+
+    const instance = origDb.DBInstances[0];
+    if (!instance.Endpoint?.Address || !instance.Endpoint?.Port || !instance.MasterUsername) {
+      throw new Error(`Database missing some required parameters: ${JSON.stringify(instance)}`);
+    }
+
+    port = instance.Endpoint.Port;
+    user = instance.MasterUsername;
+    engine = instance.Engine;
+    kmsKeyId = instance.KmsKeyId;
+    instanceClass = instance.DBInstanceClass ?? 'db.m5.large';
   }
 
   if (input.databaseKey && input.databaseKey !== '') {
-    if (input.databaseKey !== cluster.KmsKeyId) {
-      throw new Error(`Database key (${cluster.KmsKeyId}) doesn't match databaseKey parameter (${input.databaseKey})`);
+    if (input.databaseKey !== kmsKeyId) {
+      throw new Error(`Database key (${kmsKeyId}) doesn't match databaseKey parameter (${input.databaseKey})`);
     }
-  }
-
-  const origInstances = await rds.describeDBInstances({ DBInstanceIdentifier: cluster.DBClusterMembers[0].DBInstanceIdentifier }).promise();
-  if (!origInstances.DBInstances || origInstances.DBInstances.length < 1) {
-    throw new Error(`Unable to find instances for ${input.databaseIdentifier}`);
-  }
-
-  const instance = origInstances.DBInstances[0];
-  if (!instance.DBInstanceClass) {
-    throw new Error(`Database instance missing class: ${JSON.stringify(instance)}`);
   }
 
   const timestamp = new Date();
@@ -94,24 +125,24 @@ exports.handler = async function (input: Input): Promise<Parameters> {
 
   const tempSuffix = crypto.randomBytes(8).toString('hex');
 
-  const result = {
+  const result: Parameters = {
     databaseIdentifier: input.databaseIdentifier,
-    engine: cluster.Engine || 'unknown',
+    isCluster: input.isCluster,
+    engine: engine ?? 'unknown',
     tempSnapshotId: `${input.tempPrefix}-${tempSuffix}`,
     tempEncSnapshotId: `${input.tempPrefix}-enc-${tempSuffix}`,
     tempDbId: `${input.tempPrefix}-${tempSuffix}`,
     tempDbInstanceId: `${input.tempPrefix}-inst-${tempSuffix}`,
-    tempDbInstanceClass: instance.DBInstanceClass,
+    tempDbInstanceClass: instanceClass,
     targetSnapshotId,
-    dockerImage: getDockerImage(cluster.Engine ?? ''),
+    dockerImage: getDockerImage(engine ?? ''),
     tempDb: {
       host: {
-        endpoint: 'NOT KNOWN YET',
+        endpoint: 'NOT KNOWN YET', // we want the temp db endpoint here
       },
-      port: cluster.Port.toString(),
-      user: cluster.MasterUsername,
+      port: port.toString(),
+      user: user,
       password: crypto.randomBytes(16).toString('hex'),
-      database: cluster.DatabaseName ?? cluster.MasterUsername,
     },
   };
 

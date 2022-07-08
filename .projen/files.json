@@ -16,6 +16,8 @@
     "LICENSE",
     "src/delete-old-function.ts",
     "src/parameters-function.ts",
+    "src/test-function.ts",
+    "src/test-wait-function.ts",
     "src/wait-function.ts",
     "tsconfig.dev.json"
   ],

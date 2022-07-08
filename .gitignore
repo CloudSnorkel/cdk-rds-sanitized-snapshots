@@ -57,4 +57,15 @@ tsconfig.json
 /assets/
 !/src\delete-old-function.ts
 !/src\parameters-function.ts
+!/src\test-wait-function.ts
+!/src\test-function.ts
 !/src\wait-function.ts
+test\.tmp
+test\default.integ.snapshot/asset.*
+test\default.integ.snapshot/**/asset.*
+test\default.integ.snapshot/cdk.out
+test\default.integ.snapshot/**/cdk.out
+test\default.integ.snapshot/manifest.json
+test\default.integ.snapshot/**/manifest.json
+test\default.integ.snapshot/tree.json
+test\default.integ.snapshot/**/tree.json

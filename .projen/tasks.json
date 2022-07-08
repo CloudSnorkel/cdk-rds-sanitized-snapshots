@@ -52,6 +52,12 @@
           "spawn": "bundle:parameters.lambda"
         },
         {
+          "spawn": "bundle:test-wait.lambda"
+        },
+        {
+          "spawn": "bundle:test.lambda"
+        },
+        {
           "spawn": "bundle:wait.lambda"
         }
       ]
@@ -89,6 +95,42 @@
       "steps": [
         {
           "exec": "esbuild --bundle src\\parameters.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets\\parameters.lambda\\index.js\" --external:aws-sdk --watch"
+        }
+      ]
+    },
+    "bundle:test-wait.lambda": {
+      "name": "bundle:test-wait.lambda",
+      "description": "Create a JavaScript bundle from src\\test-wait.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src\\test-wait.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets\\test-wait.lambda\\index.js\" --external:aws-sdk"
+        }
+      ]
+    },
+    "bundle:test-wait.lambda:watch": {
+      "name": "bundle:test-wait.lambda:watch",
+      "description": "Continuously update the JavaScript bundle from src\\test-wait.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src\\test-wait.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets\\test-wait.lambda\\index.js\" --external:aws-sdk --watch"
+        }
+      ]
+    },
+    "bundle:test.lambda": {
+      "name": "bundle:test.lambda",
+      "description": "Create a JavaScript bundle from src\\test.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src\\test.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets\\test.lambda\\index.js\" --external:aws-sdk"
+        }
+      ]
+    },
+    "bundle:test.lambda:watch": {
+      "name": "bundle:test.lambda:watch",
+      "description": "Continuously update the JavaScript bundle from src\\test.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src\\test.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets\\test.lambda\\index.js\" --external:aws-sdk --watch"
         }
       ]
     },
@@ -196,6 +238,78 @@
       "steps": [
         {
           "exec": "eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern src test build-tools .projenrc.js"
+        }
+      ]
+    },
+    "integ:default:assert": {
+      "name": "integ:default:assert",
+      "description": "assert the snapshot of integration test 'default'",
+      "steps": [
+        {
+          "exec": "[ -d \"test\\default.integ.snapshot\" ] || (echo \"No snapshot available for integration test 'default'. Run 'projen integ:default:deploy' to capture.\" && exit 1)"
+        },
+        {
+          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test\\default.integ.ts\" --no-version-reporting --no-asset-metadata --no-path-metadata -o test\\.tmp\\default.integ\\assert.cdk.out > /dev/null"
+        },
+        {
+          "exec": "diff -r -x asset.* -x cdk.out -x manifest.json -x tree.json test\\default.integ.snapshot/ test\\.tmp\\default.integ\\assert.cdk.out/"
+        }
+      ]
+    },
+    "integ:default:deploy": {
+      "name": "integ:default:deploy",
+      "description": "deploy integration test 'default' and capture snapshot",
+      "steps": [
+        {
+          "exec": "rm -fr test\\.tmp\\default.integ\\deploy.cdk.out"
+        },
+        {
+          "exec": "cdk deploy --app \"ts-node -P tsconfig.dev.json test\\default.integ.ts\" --no-version-reporting --no-asset-metadata --no-path-metadata '**' --require-approval=never -o test\\.tmp\\default.integ\\deploy.cdk.out"
+        },
+        {
+          "exec": "rm -fr test\\default.integ.snapshot"
+        },
+        {
+          "exec": "mv test\\.tmp\\default.integ\\deploy.cdk.out test\\default.integ.snapshot"
+        },
+        {
+          "spawn": "integ:default:destroy"
+        }
+      ]
+    },
+    "integ:default:destroy": {
+      "name": "integ:default:destroy",
+      "description": "destroy integration test 'default'",
+      "steps": [
+        {
+          "exec": "cdk destroy --app test\\default.integ.snapshot '**' --no-version-reporting"
+        }
+      ]
+    },
+    "integ:default:snapshot": {
+      "name": "integ:default:snapshot",
+      "description": "update snapshot for integration test \"default\"",
+      "steps": [
+        {
+          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test\\default.integ.ts\" --no-version-reporting --no-asset-metadata --no-path-metadata -o test\\default.integ.snapshot > /dev/null"
+        }
+      ]
+    },
+    "integ:default:watch": {
+      "name": "integ:default:watch",
+      "description": "watch integration test 'default' (without updating snapshots)",
+      "steps": [
+        {
+          "exec": "cdk watch --app \"ts-node -P tsconfig.dev.json test\\default.integ.ts\" --no-version-reporting --no-asset-metadata --no-path-metadata '**' -o test\\.tmp\\default.integ\\deploy.cdk.out"
+        }
+      ]
+    },
+    "integ:snapshot-all": {
+      "name": "integ:snapshot-all",
+      "description": "update snapshot for all integration tests",
+      "steps": [
+        {
+          "spawn": "integ:default:snapshot"
         }
       ]
     },
@@ -329,6 +443,9 @@
         },
         {
           "spawn": "eslint"
+        },
+        {
+          "spawn": "integ:default:assert"
         }
       ]
     },

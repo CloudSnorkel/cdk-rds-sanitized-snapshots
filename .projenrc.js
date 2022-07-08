@@ -11,7 +11,6 @@ const project = new awscdk.AwsCdkConstructLibrary({
   repositoryUrl: 'https://github.com/CloudSnorkel/cdk-rds-sanitized-snapshots.git',
   license: 'Apache-2.0',
   description: 'CDK construct to periodically take snapshots of RDS databases, sanitize them, and share with selected accounts.',
-  // packageName: undefined,  /* The "name" in package.json. */
   devDeps: [
     'esbuild', // for faster NodejsFunction bundling
     'aws-sdk',

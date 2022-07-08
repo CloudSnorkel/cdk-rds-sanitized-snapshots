@@ -42,14 +42,30 @@ export interface IRdsSanitizedSnapshotter {
   readonly vpc: ec2.IVpc;
 
   /**
+   * VPC subnets to use for temporary databases.
+   *
+   * @default ec2.SubnetType.PRIVATE_ISOLATED
+   */
+  readonly dbSubnets?: ec2.SubnetSelection;
+
+  /**
+   * VPC subnets to use for sanitization task.
+   *
+   * @default ec2.SubnetType.PRIVATE_WITH_NAT
+   */
+  readonly sanitizeSubnets?: ec2.SubnetSelection;
+
+  /**
    * Cluster where sanitization task will be executed.
    *
    * @default a new cluster running on given VPC
    */
-  readonly cluster?: ecs.ICluster;
+  readonly fargateCluster?: ecs.ICluster;
 
   /**
    * SQL script used to sanitize the database. It will be executed against the temporary database.
+   *
+   * You would usually want to start this with `USE mydatabase;`.
    */
   readonly script: string;
 
@@ -83,16 +99,24 @@ export interface IRdsSanitizedSnapshotter {
   readonly snapshotHistoryLimit?: number;
 }
 
-// TODO make work for non-clusters too
-// TODO existing snapshot
-
+/**
+ * A process to create sanitized snapshots of RDS instance or cluster, optionally on a schedule. The process is handled by a step function.
+ *
+ * 1. Snapshot the source database
+ * 2. Optionally re-ncrypt the snapshot with a different key in case you want to share it with an account that doesn't have access to the original key
+ * 3. Create a temporary database
+ * 4. Run a Fargate task to connect to the temporary database and execute an arbitrary SQL script to sanitize it
+ * 5. Snapshot the sanitized database
+ * 6. Clean-up temporary snapshots and databases
+ */
 export class RdsSanitizedSnapshotter extends Construct {
   private waitFn: WaitFunction | undefined;
 
   private readonly securityGroup: ec2.SecurityGroup;
   private readonly subnetGroup: rds.SubnetGroup;
-  private readonly cluster: ecs.ICluster;
-  private readonly script: string;
+  private readonly subnets: ec2.SubnetSelection;
+  private readonly fargateCluster: ecs.ICluster;
+  private readonly sqlScript: string;
   private readonly reencrypt: boolean;
 
   private readonly generalTags: {Key: string; Value: string}[];
@@ -100,11 +124,18 @@ export class RdsSanitizedSnapshotter extends Construct {
   private readonly databaseIdentifier: string;
   private readonly snapshotPrefix: string;
   private readonly tempPrefix: string;
-  private readonly dbArn: string;
+  private readonly isCluster: boolean;
+  private readonly dbClusterArn: string;
+  private readonly dbInstanceArn: string;
   private readonly targetSnapshotArn: string;
   private readonly tempSnapshotArn: string;
   private readonly tempDbClusterArn: string;
   private readonly tempDbInstanceArn: string;
+
+  /**
+   * Step function in charge of the entire process including snapshotting, sanitizing, and cleanup. Trigger this step function to get a new snapshot.
+   */
+  public snapshotter: stepfunctions.StateMachine;
 
   constructor(scope: Construct, id: string, readonly props: IRdsSanitizedSnapshotter) {
     super(scope, id);
@@ -118,15 +149,22 @@ export class RdsSanitizedSnapshotter extends Construct {
     this.subnetGroup = new rds.SubnetGroup(this, 'Subnet group', {
       description: 'Temporary database used for RDS-sanitize-snapshots',
       vpc: props.vpc,
-      vpcSubnets: props.vpc.selectSubnets({ subnetType: ec2.SubnetType.PRIVATE_ISOLATED }),
+      vpcSubnets: props.vpc.selectSubnets(props.dbSubnets ?? { subnetType: ec2.SubnetType.PRIVATE_ISOLATED }),
     });
 
-    this.cluster = props.cluster ?? new ecs.Cluster(this, 'cluster', { vpc: props.vpc });
-    this.script = props.script;
+    this.subnets = props.sanitizeSubnets ?? { subnetType: ec2.SubnetType.PRIVATE_WITH_NAT };
+    this.fargateCluster = props.fargateCluster ?? new ecs.Cluster(this, 'cluster', { vpc: props.vpc });
+    this.sqlScript = props.script;
+
+    if (this.subnets.subnetType === ec2.SubnetType.PRIVATE_ISOLATED) {
+      cdk.Annotations.of(this).addWarning('Isolated subnets may not work for sanitization task as it requires access to public ECR');
+    }
 
     if (props.databaseCluster) {
+      this.isCluster = true;
       this.databaseIdentifier = props.databaseCluster.clusterIdentifier;
     } else if (props.databaseInstance) {
+      this.isCluster = false;
       this.databaseIdentifier = props.databaseInstance.instanceIdentifier;
     } else {
       throw new Error('One of `databaseCluster` or `databaseInstance` must be specified');
@@ -137,15 +175,21 @@ export class RdsSanitizedSnapshotter extends Construct {
 
     this.reencrypt = props.snapshotKey !== undefined;
 
-    this.dbArn = cdk.Stack.of(this).formatArn({
+    this.dbClusterArn = cdk.Stack.of(this).formatArn({
       service: 'rds',
       resource: 'cluster',
       resourceName: this.databaseIdentifier,
       arnFormat: cdk.ArnFormat.COLON_RESOURCE_NAME,
     });
+    this.dbInstanceArn = cdk.Stack.of(this).formatArn({
+      service: 'rds',
+      resource: 'db',
+      resourceName: this.databaseIdentifier,
+      arnFormat: cdk.ArnFormat.COLON_RESOURCE_NAME,
+    });
     this.tempSnapshotArn = cdk.Stack.of(this).formatArn({
       service: 'rds',
-      resource: 'cluster-snapshot',
+      resource: this.isCluster ? 'cluster-snapshot' : 'snapshot',
       resourceName: `${this.tempPrefix}-*`,
       arnFormat: cdk.ArnFormat.COLON_RESOURCE_NAME,
     });
@@ -163,7 +207,7 @@ export class RdsSanitizedSnapshotter extends Construct {
     });
     this.targetSnapshotArn = cdk.Stack.of(this).formatArn({
       service: 'rds',
-      resource: 'cluster-snapshot',
+      resource: this.isCluster ? 'cluster-snapshot' : 'snapshot',
       resourceName: `${this.snapshotPrefix}-*`,
       arnFormat: cdk.ArnFormat.COLON_RESOURCE_NAME,
     });
@@ -193,12 +237,16 @@ export class RdsSanitizedSnapshotter extends Construct {
     } else {
       s = s.next(this.createTemporaryDatabase('$.tempSnapshotId'));
     }
-    s = s.next(this.waitForOperation('Wait for Temporary Database', 'cluster', '$.tempDbId'));
+    s = s.next(this.waitForOperation('Wait for Temporary Database', this.isCluster ? 'cluster' : 'instance', '$.tempDbId'));
     s = s.next(this.setPassword());
-    s = s.next(this.waitForOperation('Wait for Temporary Password', 'cluster', '$.tempDbId'));
-    s = s.next(this.createTemporaryDatabaseInstance());
-    s = s.next(this.waitForOperation('Wait for Temporary Instance', 'instance', '$.tempDbInstanceId'));
-    s = s.next(this.getTempDbEndpoint());
+    s = s.next(this.waitForOperation('Wait for Temporary Password', this.isCluster ? 'cluster' : 'instance', '$.tempDbId'));
+    if (this.isCluster) {
+      s = s.next(this.createTemporaryDatabaseInstance());
+      s = s.next(this.waitForOperation('Wait for Temporary Instance', 'instance', '$.tempDbInstanceId'));
+      s = s.next(this.getTempDbClusterEndpoint());
+    } else {
+      s = s.next(this.getTempDbEndpoint());
+    }
     s = s.next(this.sanitize());
     s = s.next(this.finalSnapshot());
     s = s.next(this.waitForOperation('Wait for Final Snapshot', 'snapshot', '$.tempDbId', '$.targetSnapshotId'));
@@ -210,22 +258,25 @@ export class RdsSanitizedSnapshotter extends Construct {
     errorCatcher.branch(c);
 
     const cleanupTasks = this.cleanup();
-    const sfn = new stepfunctions.StateMachine(this, 'Director', {
+    this.snapshotter = new stepfunctions.StateMachine(this, 'Director', {
       definition: parametersState.next(errorCatcher.addCatch(cleanupTasks, { resultPath: stepfunctions.JsonPath.DISCARD })).next(cleanupTasks),
     });
 
     // needed for creating a snapshot with tags
-    sfn.addToRolePolicy(new iam.PolicyStatement({
+    this.snapshotter.addToRolePolicy(new iam.PolicyStatement({
       actions: ['rds:AddTagsToResource'],
       resources: [this.tempSnapshotArn, this.targetSnapshotArn, this.tempDbClusterArn],
     }));
 
+    // key permissions
+    if (props.snapshotKey) {
+      props.snapshotKey.grant(this.snapshotter, 'kms:CreateGrant', 'kms:DescribeKey');
+    }
     if (props.databaseKey) {
-      // props.snapshotKey.grant(sfn, 'kms:CreateGrant', 'kms:DescribeKey');
-      props.databaseKey.grant(sfn, 'kms:CreateGrant', 'kms:DescribeKey');
+      props.databaseKey.grant(this.snapshotter, 'kms:CreateGrant', 'kms:DescribeKey');
     }
 
-    // allow fargate to access rds
+    // allow fargate to access RDS
     this.securityGroup.connections.allowFrom(this.securityGroup.connections, ec2.Port.allTcp());
 
     // schedule
@@ -234,7 +285,7 @@ export class RdsSanitizedSnapshotter extends Construct {
         description: `Sanitized snapshot of RDS ${this.databaseIdentifier}`,
         schedule: props.schedule,
         targets: [
-          new events_targets.SfnStateMachine(sfn),
+          new events_targets.SfnStateMachine(this.snapshotter),
         ],
       });
     }
@@ -246,6 +297,7 @@ export class RdsSanitizedSnapshotter extends Construct {
       lambdaFunction: parametersFn,
       payload: stepfunctions.TaskInput.fromObject({
         executionId: stepfunctions.JsonPath.stringAt('$$.Execution.Id'),
+        isCluster: this.isCluster,
         databaseIdentifier: this.databaseIdentifier,
         databaseKey: databaseKey?.keyArn || '',
         snapshotPrefix: this.snapshotPrefix,
@@ -253,24 +305,33 @@ export class RdsSanitizedSnapshotter extends Construct {
       }),
       payloadResponseOnly: true,
     });
-    parametersFn.addToRolePolicy(new iam.PolicyStatement({
-      actions: ['rds:DescribeDBClusters'],
-      resources: [this.dbArn],
-    }));
-    parametersFn.addToRolePolicy(new iam.PolicyStatement({
-      actions: ['rds:DescribeDBInstances'],
-      resources: ['*'], // TODO can we do better without knowing the instance name ahead of time?
-    }));
+    if (this.isCluster) {
+      parametersFn.addToRolePolicy(new iam.PolicyStatement({
+        actions: ['rds:DescribeDBClusters'],
+        resources: [this.dbClusterArn],
+      }));
+      parametersFn.addToRolePolicy(new iam.PolicyStatement({
+        actions: ['rds:DescribeDBInstances'],
+        resources: ['*'], // TODO can we do better without knowing the cluster instance name ahead of time?
+      }));
+    } else {
+      parametersFn.addToRolePolicy(new iam.PolicyStatement({
+        actions: ['rds:DescribeDBInstances'],
+        resources: [this.dbInstanceArn],
+      }));
+    }
     return parametersState;
   }
 
-  private createSnapshot(id: string, clusterId: string, snapshotId: string, tags: { Key: string; Value: string }[]) {
+  private createSnapshot(id: string, databaseId: string, snapshotId: string, tags: { Key: string; Value: string }[]) {
     return new stepfunctions_tasks.CallAwsService(this, id, {
       service: 'rds',
-      action: 'createDBClusterSnapshot',
+      action: this.isCluster ? 'createDBClusterSnapshot' : 'createDBSnapshot',
       parameters: {
-        DbClusterIdentifier: stepfunctions.JsonPath.stringAt(clusterId),
-        DbClusterSnapshotIdentifier: stepfunctions.JsonPath.stringAt(snapshotId),
+        DbClusterIdentifier: this.isCluster ? stepfunctions.JsonPath.stringAt(databaseId) : undefined,
+        DbClusterSnapshotIdentifier: this.isCluster ? stepfunctions.JsonPath.stringAt(snapshotId) : undefined,
+        DbInstanceIdentifier: this.isCluster ? undefined : stepfunctions.JsonPath.stringAt(databaseId),
+        DbSnapshotIdentifier: this.isCluster ? undefined : stepfunctions.JsonPath.stringAt(snapshotId),
         Tags: tags,
       },
       iamResources: ['*'],
@@ -283,8 +344,9 @@ export class RdsSanitizedSnapshotter extends Construct {
       logRetention: logs.RetentionDays.ONE_MONTH,
       initialPolicy: [
         new iam.PolicyStatement({
-          actions: ['rds:DescribeDBClusters', 'rds:DescribeDBClusterSnapshots', 'rds:DescribeDBInstances'],
-          resources: [this.dbArn, this.tempDbClusterArn, this.tempSnapshotArn, this.targetSnapshotArn, this.tempDbInstanceArn],
+          actions: ['rds:DescribeDBClusters', 'rds:DescribeDBClusterSnapshots', 'rds:DescribeDBSnapshots', 'rds:DescribeDBInstances'],
+          resources: [this.dbClusterArn, this.dbInstanceArn, this.tempDbClusterArn,
+            this.tempSnapshotArn, this.targetSnapshotArn, this.tempDbInstanceArn],
         }),
       ],
     });
@@ -293,6 +355,7 @@ export class RdsSanitizedSnapshotter extends Construct {
       resourceType,
       databaseIdentifier: stepfunctions.JsonPath.stringAt(databaseIdentifier),
       snapshotIdentifier: undefined as String | undefined,
+      isCluster: this.isCluster,
     };
     if (snapshotId) {
       payload.snapshotIdentifier = stepfunctions.JsonPath.stringAt(snapshotId);
@@ -314,10 +377,12 @@ export class RdsSanitizedSnapshotter extends Construct {
   private reencryptSnapshot(key: kms.IKey) {
     return new stepfunctions_tasks.CallAwsService(this, 'Re-encrypt Snapshot', {
       service: 'rds',
-      action: 'copyDBClusterSnapshot',
+      action: this.isCluster ? 'copyDBClusterSnapshot' : 'copyDBSnapshot',
       parameters: {
-        SourceDBClusterSnapshotIdentifier: stepfunctions.JsonPath.stringAt('$.tempSnapshotId'),
-        TargetDBClusterSnapshotIdentifier: stepfunctions.JsonPath.stringAt('$.tempEncSnapshotId'),
+        SourceDBClusterSnapshotIdentifier: this.isCluster ? stepfunctions.JsonPath.stringAt('$.tempSnapshotId') : undefined,
+        TargetDBClusterSnapshotIdentifier: this.isCluster ? stepfunctions.JsonPath.stringAt('$.tempEncSnapshotId') : undefined,
+        SourceDBSnapshotIdentifier: this.isCluster ? undefined : stepfunctions.JsonPath.stringAt('$.tempSnapshotId'),
+        TargetDBSnapshotIdentifier: this.isCluster ? undefined : stepfunctions.JsonPath.stringAt('$.tempEncSnapshotId'),
         KmsKeyId: key.keyId,
         CopyTags: false,
         Tags: this.generalTags,
@@ -330,11 +395,13 @@ export class RdsSanitizedSnapshotter extends Construct {
   private createTemporaryDatabase(snapshotIdentifier: string) {
     return new stepfunctions_tasks.CallAwsService(this, 'Create Temporary Database', {
       service: 'rds',
-      action: 'restoreDBClusterFromSnapshot',
+      action: this.isCluster ? 'restoreDBClusterFromSnapshot' : 'restoreDBInstanceFromDBSnapshot',
       parameters: {
-        DbClusterIdentifier: stepfunctions.JsonPath.stringAt('$.tempDbId'),
+        DbClusterIdentifier: this.isCluster ? stepfunctions.JsonPath.stringAt('$.tempDbId') : undefined,
+        DbInstanceIdentifier: this.isCluster ? undefined : stepfunctions.JsonPath.stringAt('$.tempDbId'),
         Engine: stepfunctions.JsonPath.stringAt('$.engine'),
-        SnapshotIdentifier: stepfunctions.JsonPath.stringAt(snapshotIdentifier),
+        SnapshotIdentifier: this.isCluster ? stepfunctions.JsonPath.stringAt(snapshotIdentifier) : undefined,
+        DbSnapshotIdentifier: this.isCluster ? undefined : stepfunctions.JsonPath.stringAt(snapshotIdentifier),
         PubliclyAccessible: false,
         VpcSecurityGroupIds: [this.securityGroup.securityGroupId],
         DbSubnetGroupName: this.subnetGroup.subnetGroupName,
@@ -342,6 +409,7 @@ export class RdsSanitizedSnapshotter extends Construct {
       },
       iamResources: [
         this.tempDbClusterArn,
+        this.tempDbInstanceArn,
         this.tempSnapshotArn,
         cdk.Stack.of(this).formatArn({
           service: 'rds',
@@ -357,13 +425,15 @@ export class RdsSanitizedSnapshotter extends Construct {
   private setPassword() {
     return new stepfunctions_tasks.CallAwsService(this, 'Set Temporary Password', {
       service: 'rds',
-      action: 'modifyDBCluster',
+      action: this.isCluster ? 'modifyDBCluster' : 'modifyDBInstance',
       parameters: {
-        DbClusterIdentifier: stepfunctions.JsonPath.stringAt('$.tempDbId'),
+        DbClusterIdentifier: this.isCluster ? stepfunctions.JsonPath.stringAt('$.tempDbId') : undefined,
+        DbInstanceIdentifier: this.isCluster ? undefined : stepfunctions.JsonPath.stringAt('$.tempDbId'),
         MasterUserPassword: stepfunctions.JsonPath.stringAt('$.tempDb.password'),
         ApplyImmediately: true,
+        BackupRetentionPeriod: this.isCluster ? undefined : 0,
       },
-      iamResources: [this.tempDbClusterArn],
+      iamResources: [this.isCluster ? this.tempDbClusterArn : this.tempDbInstanceArn],
       resultPath: stepfunctions.JsonPath.DISCARD,
     });
   }
@@ -383,7 +453,7 @@ export class RdsSanitizedSnapshotter extends Construct {
     });
   }
 
-  private getTempDbEndpoint() {
+  private getTempDbClusterEndpoint() {
     return new stepfunctions_tasks.CallAwsService(this, 'Get Temporary Cluster Endpoint', {
       service: 'rds',
       action: 'describeDBClusters',
@@ -398,26 +468,55 @@ export class RdsSanitizedSnapshotter extends Construct {
     });
   }
 
+  private getTempDbEndpoint() {
+    return new stepfunctions_tasks.CallAwsService(this, 'Get Temporary Endpoint', {
+      service: 'rds',
+      action: 'describeDBInstances',
+      parameters: {
+        DbInstanceIdentifier: stepfunctions.JsonPath.stringAt('$.tempDbId'),
+      },
+      iamResources: [this.tempDbInstanceArn],
+      resultSelector: {
+        endpoint: stepfunctions.JsonPath.stringAt('$.DbInstances[0].Endpoint.Address'),
+      },
+      resultPath: stepfunctions.JsonPath.stringAt('$.tempDb.host'),
+    });
+  }
+
   private sanitize(): stepfunctions.IChainable {
     const logGroup = new logs.LogGroup(this, 'Logs', {
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       retention: logs.RetentionDays.ONE_MONTH,
     });
 
-    const mysqlTask = new ecs.FargateTaskDefinition(this, 'MySQL Task');
+    const mysqlTask = new ecs.FargateTaskDefinition(this, 'MySQL Task', {
+      volumes: [{ name: 'config', host: {} }],
+    });
+    const mysqlConfigContainer = mysqlTask.addContainer('config', {
+      image: ecs.AssetImage.fromRegistry('public.ecr.aws/docker/library/bash:4-alpine3.15'),
+      command: ['bash', '-c', 'echo "[client]\nuser=$MYSQL_USER\nhost=$MYSQL_HOST\nport=$MYSQL_PORT\npassword=$MYSQL_PASSWORD" > ~/.my.cnf && chmod 700 ~/.my.cnf'],
+      logging: ecs.LogDriver.awsLogs({
+        logGroup,
+        streamPrefix: 'mysql-config',
+      }),
+      essential: false,
+    });
+    mysqlConfigContainer.addMountPoints({ sourceVolume: 'config', containerPath: '/root', readOnly: false });
     const mysqlContainer = mysqlTask.addContainer('mysql', {
       image: ecs.AssetImage.fromRegistry('public.ecr.aws/lts/mysql:latest'),
-      command: ['mysql', '-e', this.script],
+      command: ['mysql', '-e', this.sqlScript],
       logging: ecs.LogDriver.awsLogs({
         logGroup,
         streamPrefix: 'mysql-sanitize',
       }),
     });
+    mysqlContainer.addMountPoints({ sourceVolume: 'config', containerPath: '/root', readOnly: true });
+    mysqlContainer.addContainerDependencies({ container: mysqlConfigContainer, condition: ecs.ContainerDependencyCondition.SUCCESS });
 
     const postgresTask = new ecs.FargateTaskDefinition(this, 'PostreSQL Task');
     const postgresContainer = postgresTask.addContainer('postgres', {
       image: ecs.AssetImage.fromRegistry('public.ecr.aws/lts/postgres:latest'),
-      command: ['psql', '-c', this.script],
+      command: ['psql', '-c', this.sqlScript],
       logging: ecs.LogDriver.awsLogs({
         logGroup,
         streamPrefix: 'psql-sanitize',
@@ -430,12 +529,13 @@ export class RdsSanitizedSnapshotter extends Construct {
         new stepfunctions_tasks.EcsRunTask(this, 'Sanitize MySQL', {
           integrationPattern: stepfunctions.IntegrationPattern.RUN_JOB, // sync
           launchTarget: new stepfunctions_tasks.EcsFargateLaunchTarget(),
-          cluster: this.cluster,
+          cluster: this.fargateCluster,
+          subnets: this.subnets,
           securityGroups: [this.securityGroup],
           taskDefinition: mysqlTask,
           containerOverrides: [
             {
-              containerDefinition: mysqlContainer,
+              containerDefinition: mysqlConfigContainer,
               environment: [
                 {
                   name: 'MYSQL_HOST',
@@ -453,11 +553,6 @@ export class RdsSanitizedSnapshotter extends Construct {
                   name: 'MYSQL_PASSWORD',
                   value: stepfunctions.JsonPath.stringAt('$.tempDb.password'),
                 },
-                {
-                  name: 'MYSQL_DATABASE',
-                  value: stepfunctions.JsonPath.stringAt('$.tempDb.database'),
-                },
-
               ],
             },
           ],
@@ -469,7 +564,8 @@ export class RdsSanitizedSnapshotter extends Construct {
         new stepfunctions_tasks.EcsRunTask(this, 'Sanitize Postgres', {
           integrationPattern: stepfunctions.IntegrationPattern.RUN_JOB, // sync
           launchTarget: new stepfunctions_tasks.EcsFargateLaunchTarget(),
-          cluster: this.cluster,
+          cluster: this.fargateCluster,
+          subnets: this.subnets,
           securityGroups: [this.securityGroup],
           taskDefinition: postgresTask,
           containerOverrides: [
@@ -491,10 +587,6 @@ export class RdsSanitizedSnapshotter extends Construct {
                 {
                   name: 'PGPASSWORD',
                   value: stepfunctions.JsonPath.stringAt('$.tempDb.password'),
-                },
-                {
-                  name: 'PGDATABASE',
-                  value: stepfunctions.JsonPath.stringAt('$.tempDb.database'),
                 },
                 {
                   name: 'PGCONNECT_TIMEOUT',
@@ -554,7 +646,7 @@ export class RdsSanitizedSnapshotter extends Construct {
       resources: ['*'],
     }));
     deleteOldFn.addToRolePolicy(new iam.PolicyStatement({
-      actions: ['rds:DeleteDBClusterSnapshot'],
+      actions: ['rds:DeleteDBClusterSnapshot', 'rds:DeleteDBSnapshot'],
       resources: [this.targetSnapshotArn],
     }));
     return new stepfunctions_tasks.LambdaInvoke(this, 'Delete Old Snapshots', {
@@ -572,13 +664,14 @@ export class RdsSanitizedSnapshotter extends Construct {
   private cleanup() {
     // We retry everything because when any branch fails, all other branches are cancelled.
     // Retrying gives other branches an opportunity to start and hopefully at least run.
-    const p = new stepfunctions.Parallel(this, 'Cleanup');
+    const p = new stepfunctions.Parallel(this, 'Cleanup', { resultPath: stepfunctions.JsonPath.DISCARD });
     p.branch(
       new stepfunctions_tasks.CallAwsService(this, 'Temporary Snapshot', {
         service: 'rds',
-        action: 'deleteDBClusterSnapshot',
+        action: this.isCluster ? 'deleteDBClusterSnapshot' : 'deleteDBSnapshot',
         parameters: {
-          DbClusterSnapshotIdentifier: stepfunctions.JsonPath.stringAt('$.tempSnapshotId'),
+          DbClusterSnapshotIdentifier: this.isCluster ? stepfunctions.JsonPath.stringAt('$.tempSnapshotId') : undefined,
+          DbSnapshotIdentifier: this.isCluster ? undefined : stepfunctions.JsonPath.stringAt('$.tempSnapshotId'),
         },
         iamResources: [this.tempSnapshotArn],
         resultPath: stepfunctions.JsonPath.DISCARD,
@@ -588,9 +681,10 @@ export class RdsSanitizedSnapshotter extends Construct {
       p.branch(
         new stepfunctions_tasks.CallAwsService(this, 'Re-encrypted Snapshot', {
           service: 'rds',
-          action: 'deleteDBClusterSnapshot',
+          action: this.isCluster ? 'deleteDBClusterSnapshot' : 'deleteDBSnapshot',
           parameters: {
-            DbClusterSnapshotIdentifier: stepfunctions.JsonPath.stringAt('$.tempEncSnapshotId'),
+            DbClusterSnapshotIdentifier: this.isCluster ? stepfunctions.JsonPath.stringAt('$.tempEncSnapshotId') : undefined,
+            DbSnapshotIdentifier: this.isCluster ? undefined : stepfunctions.JsonPath.stringAt('$.tempEncSnapshotId'),
           },
           iamResources: [this.tempSnapshotArn],
           resultPath: stepfunctions.JsonPath.DISCARD,
@@ -602,25 +696,33 @@ export class RdsSanitizedSnapshotter extends Construct {
         service: 'rds',
         action: 'deleteDBInstance',
         parameters: {
-          DbInstanceIdentifier: stepfunctions.JsonPath.stringAt('$.tempDbInstanceId'),
+          DbInstanceIdentifier: stepfunctions.JsonPath.stringAt(this.isCluster ? '$.tempDbInstanceId' : '$.tempDbId'),
           SkipFinalSnapshot: true,
         },
         iamResources: [this.tempDbInstanceArn],
         resultPath: stepfunctions.JsonPath.DISCARD,
-      }).addRetry({ maxAttempts: 5, interval: cdk.Duration.seconds(10) }),
+      }).addRetry({
+        maxAttempts: 5,
+        interval: cdk.Duration.seconds(10),
+      }),
     );
-    p.branch(
-      new stepfunctions_tasks.CallAwsService(this, 'Temporary Database', {
-        service: 'rds',
-        action: 'deleteDBCluster',
-        parameters: {
-          DbClusterIdentifier: stepfunctions.JsonPath.stringAt('$.tempDbId'),
-          SkipFinalSnapshot: true,
-        },
-        iamResources: [this.tempDbClusterArn],
-        resultPath: stepfunctions.JsonPath.DISCARD,
-      }).addRetry({ maxAttempts: 5, interval: cdk.Duration.seconds(10) }),
-    );
+    if (this.isCluster) {
+      p.branch(
+        new stepfunctions_tasks.CallAwsService(this, 'Temporary Database', {
+          service: 'rds',
+          action: 'deleteDBCluster',
+          parameters: {
+            DbClusterIdentifier: stepfunctions.JsonPath.stringAt('$.tempDbId'),
+            SkipFinalSnapshot: true,
+          },
+          iamResources: [this.tempDbClusterArn],
+          resultPath: stepfunctions.JsonPath.DISCARD,
+        }).addRetry({
+          maxAttempts: 5,
+          interval: cdk.Duration.seconds(10),
+        }),
+      );
+    }
     return p;
   }
 }
