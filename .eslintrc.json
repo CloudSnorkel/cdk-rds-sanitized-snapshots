@@ -146,11 +146,11 @@
         "devDependencies": [
           "**/test/**",
           "**/build-tools/**",
-          "src/delete-old.lambda.ts",
-          "src/parameters.lambda.ts",
-          "src/test-wait.lambda.ts",
-          "src/test.lambda.ts",
-          "src/wait.lambda.ts"
+          "src\\delete-old.lambda.ts",
+          "src\\parameters.lambda.ts",
+          "src\\test-wait.lambda.ts",
+          "src\\test.lambda.ts",
+          "src\\wait.lambda.ts"
         ],
         "optionalDependencies": false,
         "peerDependencies": true

@@ -85,6 +85,11 @@ const releaseWorkflow = project.github.tryFindWorkflow('release');
 releaseWorkflow.file.addDeletionOverride('on.push');
 
 // set proper line endings
+project.gitattributes.addAttributes('.git*', 'eol=lf');
+project.gitattributes.addAttributes('.npmignore', 'eol=lf');
+project.gitattributes.addAttributes('yarn.lock', 'eol=lf');
+project.gitattributes.addAttributes('*.md', 'eol=lf');
+project.gitattributes.addAttributes('*.ts', 'eol=lf');
 project.gitattributes.addAttributes('*.js', 'eol=lf');
 project.gitattributes.addAttributes('*.json', 'eol=lf');
 project.gitattributes.addAttributes('*.sh', 'eol=lf');
