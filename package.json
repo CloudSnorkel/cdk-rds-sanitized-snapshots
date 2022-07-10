@@ -147,7 +147,7 @@
     "outdir": "dist",
     "targets": {
       "java": {
-        "package": "com.cloudsnorkel.cdk.rds.sanitized-snapshots",
+        "package": "com.cloudsnorkel.cdk.rds.sanitizedsnapshots",
         "maven": {
           "groupId": "com.cloudsnorkel",
           "artifactId": "cdk.rds.sanitized-snapshots"
