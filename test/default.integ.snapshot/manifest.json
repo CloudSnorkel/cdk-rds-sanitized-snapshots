@@ -1,0 +1,1347 @@
+{
+  "version": "15.0.0",
+  "artifacts": {
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    },
+    "RDS-Sanitized-Snapshotter-VPC.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "RDS-Sanitized-Snapshotter-VPC.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "RDS-Sanitized-Snapshotter-VPC": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "RDS-Sanitized-Snapshotter-VPC.template.json",
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/e1ad50fff358a4d76a975fbed49a11be9092a80929266a283050aeb617026a8a.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "RDS-Sanitized-Snapshotter-VPC.assets"
+        ]
+      },
+      "dependencies": [
+        "RDS-Sanitized-Snapshotter-VPC.assets"
+      ],
+      "metadata": {
+        "/RDS-Sanitized-Snapshotter-VPC/VPC/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VPCB9E5F0B4"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/VPC/PublicSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VPCPublicSubnet1SubnetB4246D30"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/VPC/PublicSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VPCPublicSubnet1RouteTableFEE4B781"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/VPC/PublicSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VPCPublicSubnet1RouteTableAssociation0B0896DC"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/VPC/PublicSubnet1/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VPCPublicSubnet1DefaultRoute91CEF279"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/VPC/PublicSubnet1/EIP": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VPCPublicSubnet1EIP6AD938E8"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/VPC/PublicSubnet1/NATGateway": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VPCPublicSubnet1NATGatewayE0556630"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/VPC/PublicSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VPCPublicSubnet2Subnet74179F39"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/VPC/PublicSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VPCPublicSubnet2RouteTable6F1A15F1"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/VPC/PublicSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VPCPublicSubnet2RouteTableAssociation5A808732"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/VPC/PublicSubnet2/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VPCPublicSubnet2DefaultRouteB7481BBA"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/VPC/PrivateSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VPCPrivateSubnet1Subnet8BCA10E0"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/VPC/PrivateSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VPCPrivateSubnet1RouteTableBE8A6027"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/VPC/PrivateSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VPCPrivateSubnet1RouteTableAssociation347902D1"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/VPC/PrivateSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VPCPrivateSubnet2SubnetCFCDAA7A"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/VPC/PrivateSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VPCPrivateSubnet2RouteTable0A19E10E"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/VPC/PrivateSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VPCPrivateSubnet2RouteTableAssociation0C73D413"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/VPC/IsolatedSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VPCIsolatedSubnet1SubnetEBD00FC6"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/VPC/IsolatedSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VPCIsolatedSubnet1RouteTableEB156210"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/VPC/IsolatedSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VPCIsolatedSubnet1RouteTableAssociationA2D18F7C"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/VPC/IsolatedSubnet1/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VPCIsolatedSubnet1DefaultRoute97D5523A"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/VPC/IsolatedSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VPCIsolatedSubnet2Subnet4B1C8CAA"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/VPC/IsolatedSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VPCIsolatedSubnet2RouteTable9B4F78DC"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/VPC/IsolatedSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VPCIsolatedSubnet2RouteTableAssociation7BF8E0EB"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/VPC/IsolatedSubnet2/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VPCIsolatedSubnet2DefaultRoute5D7CAC57"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/VPC/IGW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VPCIGWB7E252D3"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/VPC/VPCGW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VPCVPCGW99B986DC"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/Exports/Output{\"Ref\":\"VPCIsolatedSubnet1SubnetEBD00FC6\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefVPCIsolatedSubnet1SubnetEBD00FC6298E81EF"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/Exports/Output{\"Ref\":\"VPCIsolatedSubnet2Subnet4B1C8CAA\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefVPCIsolatedSubnet2Subnet4B1C8CAAD8B83B81"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/Exports/Output{\"Ref\":\"VPCB9E5F0B4\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefVPCB9E5F0B4BD23A326"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/Exports/Output{\"Ref\":\"VPCPrivateSubnet1Subnet8BCA10E0\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefVPCPrivateSubnet1Subnet8BCA10E01F79A1B7"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/Exports/Output{\"Ref\":\"VPCPrivateSubnet2SubnetCFCDAA7A\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefVPCPrivateSubnet2SubnetCFCDAA7AB22CF85D"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-VPC/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "RDS-Sanitized-Snapshotter-VPC"
+    },
+    "RDS-Sanitized-Snapshotter-RDS.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "RDS-Sanitized-Snapshotter-RDS.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "RDS-Sanitized-Snapshotter-RDS": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "RDS-Sanitized-Snapshotter-RDS.template.json",
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/1775a9e74905e5fb316990d4feb676dd5e22557797d13181ba6a7e402e794fe9.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "RDS-Sanitized-Snapshotter-RDS.assets"
+        ]
+      },
+      "dependencies": [
+        "RDS-Sanitized-Snapshotter-VPC",
+        "RDS-Sanitized-Snapshotter-RDS.assets"
+      ],
+      "metadata": {
+        "/RDS-Sanitized-Snapshotter-RDS/MySQL Instance/SubnetGroup/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLInstanceSubnetGroup2F3554B3"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-RDS/MySQL Instance/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLInstanceSecurityGroupF67D2455"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-RDS/MySQL Instance/Secret/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLInstanceSecret84563F6F"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-RDS/MySQL Instance/Secret/Attachment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLInstanceSecretAttachmentD80E5663"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-RDS/MySQL Instance/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLInstanceA2499B9D"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-RDS/MySQL Cluster/Subnets/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLClusterSubnets30A4ABD4"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-RDS/MySQL Cluster/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLClusterSecurityGroupBC9C8E26"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-RDS/MySQL Cluster/Secret/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLClusterSecret06B35C31"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-RDS/MySQL Cluster/Secret/Attachment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLClusterSecretAttachmentE3959A60"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-RDS/MySQL Cluster/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLClusterD5C73C33"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-RDS/MySQL Cluster/Instance1": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLClusterInstance1C435F94D"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-RDS/Key/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "Key961B73FD"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-RDS/Postgres Instance/SubnetGroup/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgresInstanceSubnetGroup539F8609"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-RDS/Postgres Instance/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgresInstanceSecurityGroup08920A2A"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-RDS/Postgres Instance/Secret/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgresInstanceSecret47B7DD5E"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-RDS/Postgres Instance/Secret/Attachment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgresInstanceSecretAttachment5B3ACFDC"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-RDS/Postgres Instance/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgresInstance8F00D2DD"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-RDS/Postgres Cluster/Subnets/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgresClusterSubnetsFC10D676"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-RDS/Postgres Cluster/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgresClusterSecurityGroupA7EFBA97"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-RDS/Postgres Cluster/Secret/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgresClusterSecretEB353FC9"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-RDS/Postgres Cluster/Secret/Attachment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgresClusterSecretAttachment0D03F96A"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-RDS/Postgres Cluster/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgresCluster5A5B7BE8"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-RDS/Postgres Cluster/Instance1": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgresClusterInstance1A52CA01E"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-RDS/Exports/Output{\"Ref\":\"MySQLInstanceA2499B9D\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefMySQLInstanceA2499B9D2BD8E026"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-RDS/Exports/Output{\"Ref\":\"MySQLClusterD5C73C33\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefMySQLClusterD5C73C3376F94030"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-RDS/Exports/Output{\"Ref\":\"PostgresInstance8F00D2DD\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefPostgresInstance8F00D2DD14EE3CD9"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-RDS/Exports/Output{\"Fn::GetAtt\":[\"Key961B73FD\",\"Arn\"]}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputFnGetAttKey961B73FDArn5A860C43"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-RDS/Exports/Output{\"Ref\":\"PostgresCluster5A5B7BE8\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefPostgresCluster5A5B7BE8BE4E3D78"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-RDS/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-RDS/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "RDS-Sanitized-Snapshotter-RDS"
+    },
+    "RDS-Sanitized-Snapshotter-SFN.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "RDS-Sanitized-Snapshotter-SFN.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "RDS-Sanitized-Snapshotter-SFN": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "RDS-Sanitized-Snapshotter-SFN.template.json",
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/17d658ef3bb9ea4c46d603253e8080f1c583bca7e2874fe7af1d36d989cacd2b.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "RDS-Sanitized-Snapshotter-SFN.assets"
+        ]
+      },
+      "dependencies": [
+        "RDS-Sanitized-Snapshotter-VPC",
+        "RDS-Sanitized-Snapshotter-RDS",
+        "RDS-Sanitized-Snapshotter-SFN.assets"
+      ],
+      "metadata": {
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Instance Snapshotter/SG/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLInstanceSnapshotterSGC75DA465"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Instance Snapshotter/SG/from RDSSanitizedSnapshotterSFNMySQLInstanceSnapshotterSG69AE57C1:ALL PORTS": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLInstanceSnapshotterSGfromRDSSanitizedSnapshotterSFNMySQLInstanceSnapshotterSG69AE57C1ALLPORTSE497E70E"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Instance Snapshotter/Subnet group/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLInstanceSnapshotterSubnetgroup503CB3B3"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Instance Snapshotter/cluster/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLInstanceSnapshottercluster86DF6015"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Instance Snapshotter/parameters/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLInstanceSnapshotterparametersServiceRole0017B602"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Instance Snapshotter/parameters/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLInstanceSnapshotterparametersServiceRoleDefaultPolicyD8BFD2E0"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Instance Snapshotter/parameters/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLInstanceSnapshotterparameters53B0A6E1"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Instance Snapshotter/parameters/LogRetention/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLInstanceSnapshotterparametersLogRetention879E313F"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Instance Snapshotter/wait/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLInstanceSnapshotterwaitServiceRole21AAE4F2"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Instance Snapshotter/wait/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLInstanceSnapshotterwaitServiceRoleDefaultPolicyE6063975"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Instance Snapshotter/wait/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLInstanceSnapshotterwait17927A95"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Instance Snapshotter/wait/LogRetention/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLInstanceSnapshotterwaitLogRetentionE2296216"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Instance Snapshotter/Logs/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLInstanceSnapshotterLogs55691739"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Instance Snapshotter/MySQL Task/TaskRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLInstanceSnapshotterMySQLTaskTaskRoleBFA1FB36"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Instance Snapshotter/MySQL Task/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLInstanceSnapshotterMySQLTask45C5FE96"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Instance Snapshotter/MySQL Task/ExecutionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLInstanceSnapshotterMySQLTaskExecutionRole1DD381B7"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Instance Snapshotter/MySQL Task/ExecutionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLInstanceSnapshotterMySQLTaskExecutionRoleDefaultPolicy99EE7B1E"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Instance Snapshotter/PostreSQL Task/TaskRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLInstanceSnapshotterPostreSQLTaskTaskRole82DDF085"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Instance Snapshotter/PostreSQL Task/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLInstanceSnapshotterPostreSQLTaskFAABAACF"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Instance Snapshotter/PostreSQL Task/ExecutionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLInstanceSnapshotterPostreSQLTaskExecutionRole78969E33"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Instance Snapshotter/PostreSQL Task/ExecutionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLInstanceSnapshotterPostreSQLTaskExecutionRoleDefaultPolicy78800565"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Instance Snapshotter/Director/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLInstanceSnapshotterDirectorRoleE2669C80"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Instance Snapshotter/Director/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLInstanceSnapshotterDirectorRoleDefaultPolicyF62C2EC2"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Instance Snapshotter/Director/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLInstanceSnapshotterDirector69A6B7B4"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Cluster Snapshotter/SG/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLClusterSnapshotterSGF5188D63"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Cluster Snapshotter/SG/from RDSSanitizedSnapshotterSFNMySQLClusterSnapshotterSG88C422B1:ALL PORTS": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLClusterSnapshotterSGfromRDSSanitizedSnapshotterSFNMySQLClusterSnapshotterSG88C422B1ALLPORTS9D3E93FA"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Cluster Snapshotter/Subnet group/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLClusterSnapshotterSubnetgroupF2F35C6A"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Cluster Snapshotter/cluster/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLClusterSnapshottercluster9B2B4982"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Cluster Snapshotter/parameters/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLClusterSnapshotterparametersServiceRole4959428F"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Cluster Snapshotter/parameters/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLClusterSnapshotterparametersServiceRoleDefaultPolicy9544C62B"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Cluster Snapshotter/parameters/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLClusterSnapshotterparametersAF9FF89F"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Cluster Snapshotter/parameters/LogRetention/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLClusterSnapshotterparametersLogRetention49B4A2F1"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Cluster Snapshotter/wait/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLClusterSnapshotterwaitServiceRoleD1DB455D"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Cluster Snapshotter/wait/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLClusterSnapshotterwaitServiceRoleDefaultPolicy9E878AF7"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Cluster Snapshotter/wait/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLClusterSnapshotterwait73D57C6D"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Cluster Snapshotter/wait/LogRetention/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLClusterSnapshotterwaitLogRetention01D1F254"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Cluster Snapshotter/Logs/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLClusterSnapshotterLogs987A7E0A"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Cluster Snapshotter/MySQL Task/TaskRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLClusterSnapshotterMySQLTaskTaskRole3BAE9027"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Cluster Snapshotter/MySQL Task/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLClusterSnapshotterMySQLTask8414A409"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Cluster Snapshotter/MySQL Task/ExecutionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLClusterSnapshotterMySQLTaskExecutionRole50CCB6FA"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Cluster Snapshotter/MySQL Task/ExecutionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLClusterSnapshotterMySQLTaskExecutionRoleDefaultPolicy109BFD8B"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Cluster Snapshotter/PostreSQL Task/TaskRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLClusterSnapshotterPostreSQLTaskTaskRole09172C54"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Cluster Snapshotter/PostreSQL Task/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLClusterSnapshotterPostreSQLTaskB18030B4"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Cluster Snapshotter/PostreSQL Task/ExecutionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLClusterSnapshotterPostreSQLTaskExecutionRole430431E0"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Cluster Snapshotter/PostreSQL Task/ExecutionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLClusterSnapshotterPostreSQLTaskExecutionRoleDefaultPolicyBFF6CA44"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Cluster Snapshotter/Director/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLClusterSnapshotterDirectorRole6035EB89"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Cluster Snapshotter/Director/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLClusterSnapshotterDirectorRoleDefaultPolicy78A869F9"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/MySQL Cluster Snapshotter/Director/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MySQLClusterSnapshotterDirector73A14BB0"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Instance Snapshotter/SG/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLInstanceSnapshotterSG97FD02BB"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Instance Snapshotter/SG/from RDSSanitizedSnapshotterSFNPostgreSQLInstanceSnapshotterSG52C89F5A:ALL PORTS": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLInstanceSnapshotterSGfromRDSSanitizedSnapshotterSFNPostgreSQLInstanceSnapshotterSG52C89F5AALLPORTSEF1B0737"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Instance Snapshotter/Subnet group/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLInstanceSnapshotterSubnetgroup7F19C7EE"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Instance Snapshotter/cluster/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLInstanceSnapshottercluster067EC069"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Instance Snapshotter/parameters/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLInstanceSnapshotterparametersServiceRole23B2E630"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Instance Snapshotter/parameters/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLInstanceSnapshotterparametersServiceRoleDefaultPolicy9C4B4594"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Instance Snapshotter/parameters/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLInstanceSnapshotterparametersA0CF862A"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Instance Snapshotter/parameters/LogRetention/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLInstanceSnapshotterparametersLogRetentionED632F48"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Instance Snapshotter/wait/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLInstanceSnapshotterwaitServiceRole7815F7FF"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Instance Snapshotter/wait/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLInstanceSnapshotterwaitServiceRoleDefaultPolicy20C24234"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Instance Snapshotter/wait/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLInstanceSnapshotterwaitE64141BC"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Instance Snapshotter/wait/LogRetention/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLInstanceSnapshotterwaitLogRetentionB9508260"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Instance Snapshotter/Logs/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLInstanceSnapshotterLogsF028D514"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Instance Snapshotter/MySQL Task/TaskRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLInstanceSnapshotterMySQLTaskTaskRoleB2EF5D11"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Instance Snapshotter/MySQL Task/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLInstanceSnapshotterMySQLTask53136402"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Instance Snapshotter/MySQL Task/ExecutionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLInstanceSnapshotterMySQLTaskExecutionRoleD0258DFF"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Instance Snapshotter/MySQL Task/ExecutionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLInstanceSnapshotterMySQLTaskExecutionRoleDefaultPolicyBC957120"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Instance Snapshotter/PostreSQL Task/TaskRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLInstanceSnapshotterPostreSQLTaskTaskRole04FEDCFB"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Instance Snapshotter/PostreSQL Task/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLInstanceSnapshotterPostreSQLTask3DC21CCB"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Instance Snapshotter/PostreSQL Task/ExecutionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLInstanceSnapshotterPostreSQLTaskExecutionRoleF7C4A7FB"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Instance Snapshotter/PostreSQL Task/ExecutionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLInstanceSnapshotterPostreSQLTaskExecutionRoleDefaultPolicy9201194B"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Instance Snapshotter/Director/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLInstanceSnapshotterDirectorRole89143BB2"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Instance Snapshotter/Director/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLInstanceSnapshotterDirectorRoleDefaultPolicyC372C868"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Instance Snapshotter/Director/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLInstanceSnapshotterDirector22C6400C"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/Snapshot Key/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SnapshotKey0EDEBDF6"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Cluster Snapshotter/SG/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLClusterSnapshotterSG7FF985A8"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Cluster Snapshotter/SG/from RDSSanitizedSnapshotterSFNPostgreSQLClusterSnapshotterSGD655B838:ALL PORTS": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLClusterSnapshotterSGfromRDSSanitizedSnapshotterSFNPostgreSQLClusterSnapshotterSGD655B838ALLPORTS45F04871"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Cluster Snapshotter/Subnet group/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLClusterSnapshotterSubnetgroupA37EB2B3"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Cluster Snapshotter/cluster/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLClusterSnapshotterclusterD066B562"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Cluster Snapshotter/parameters/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLClusterSnapshotterparametersServiceRoleB3208E28"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Cluster Snapshotter/parameters/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLClusterSnapshotterparametersServiceRoleDefaultPolicy82F25ECA"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Cluster Snapshotter/parameters/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLClusterSnapshotterparameters25147BEC"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Cluster Snapshotter/parameters/LogRetention/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLClusterSnapshotterparametersLogRetention51777008"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Cluster Snapshotter/wait/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLClusterSnapshotterwaitServiceRole662B9A5C"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Cluster Snapshotter/wait/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLClusterSnapshotterwaitServiceRoleDefaultPolicyB7AEBC76"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Cluster Snapshotter/wait/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLClusterSnapshotterwait7A15A210"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Cluster Snapshotter/wait/LogRetention/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLClusterSnapshotterwaitLogRetention454520B8"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Cluster Snapshotter/Logs/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLClusterSnapshotterLogsD5C5A603"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Cluster Snapshotter/MySQL Task/TaskRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLClusterSnapshotterMySQLTaskTaskRoleE079F904"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Cluster Snapshotter/MySQL Task/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLClusterSnapshotterMySQLTask9D91D3F5"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Cluster Snapshotter/MySQL Task/ExecutionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLClusterSnapshotterMySQLTaskExecutionRole82F4953B"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Cluster Snapshotter/MySQL Task/ExecutionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLClusterSnapshotterMySQLTaskExecutionRoleDefaultPolicy6066AB09"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Cluster Snapshotter/PostreSQL Task/TaskRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLClusterSnapshotterPostreSQLTaskTaskRole4CCD7360"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Cluster Snapshotter/PostreSQL Task/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLClusterSnapshotterPostreSQLTaskE150FEBD"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Cluster Snapshotter/PostreSQL Task/ExecutionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLClusterSnapshotterPostreSQLTaskExecutionRole9B27EF24"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Cluster Snapshotter/PostreSQL Task/ExecutionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLClusterSnapshotterPostreSQLTaskExecutionRoleDefaultPolicyC9A9FEA1"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Cluster Snapshotter/Director/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLClusterSnapshotterDirectorRole38961E19"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Cluster Snapshotter/Director/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLClusterSnapshotterDirectorRoleDefaultPolicy6668829B"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/PostgreSQL Cluster Snapshotter/Director/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgreSQLClusterSnapshotterDirector864DA8F0"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/Exports/Output{\"Ref\":\"MySQLInstanceSnapshotterDirector69A6B7B4\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefMySQLInstanceSnapshotterDirector69A6B7B421EEFD9B"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/Exports/Output{\"Ref\":\"MySQLClusterSnapshotterDirector73A14BB0\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefMySQLClusterSnapshotterDirector73A14BB07F203611"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/Exports/Output{\"Ref\":\"PostgreSQLInstanceSnapshotterDirector22C6400C\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefPostgreSQLInstanceSnapshotterDirector22C6400CD7D4E9FC"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/Exports/Output{\"Ref\":\"PostgreSQLClusterSnapshotterDirector864DA8F0\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefPostgreSQLClusterSnapshotterDirector864DA8F006C62DA7"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-SFN/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "RDS-Sanitized-Snapshotter-SFN"
+    },
+    "RDS-Sanitized-Snapshotter-Test.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "RDS-Sanitized-Snapshotter-Test.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "RDS-Sanitized-Snapshotter-Test": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "RDS-Sanitized-Snapshotter-Test.template.json",
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/bb258c0c235df6983b581ef5f8fa23dd95cbab81e4841e2d128edd433a36235a.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "RDS-Sanitized-Snapshotter-Test.assets"
+        ]
+      },
+      "dependencies": [
+        "RDS-Sanitized-Snapshotter-SFN",
+        "RDS-Sanitized-Snapshotter-Test.assets"
+      ],
+      "metadata": {
+        "/RDS-Sanitized-Snapshotter-Test/Test/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TestServiceRoleCF49002B"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-Test/Test/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TestServiceRoleDefaultPolicyE51BF2AA"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-Test/Test/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "Test7BFAF513"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-Test/Test/LogRetention/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TestLogRetention7A4CD73F"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-Test/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-Test/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-Test/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-Test/Wait/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WaitServiceRole80F0B8D7"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-Test/Wait/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WaitServiceRoleDefaultPolicy527907DE"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-Test/Wait/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "Wait4449FB25"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-Test/Wait/LogRetention/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WaitLogRetentionD0E6D74E"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-Test/Provider/framework-onEvent/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProviderframeworkonEventServiceRole9FF04296"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-Test/Provider/framework-onEvent/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProviderframeworkonEventServiceRoleDefaultPolicy48CD2133"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-Test/Provider/framework-onEvent/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProviderframeworkonEvent83C1D0A7"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-Test/Provider/framework-onEvent/LogRetention/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProviderframeworkonEventLogRetention74EACA97"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-Test/Provider/framework-isComplete/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProviderframeworkisCompleteServiceRoleB1087139"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-Test/Provider/framework-isComplete/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProviderframeworkisCompleteServiceRoleDefaultPolicy2E7140AC"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-Test/Provider/framework-isComplete/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProviderframeworkisComplete26D7B0CB"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-Test/Provider/framework-isComplete/LogRetention/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProviderframeworkisCompleteLogRetentionC7DBBE41"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-Test/Provider/framework-onTimeout/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProviderframeworkonTimeoutServiceRole28643D26"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-Test/Provider/framework-onTimeout/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProviderframeworkonTimeoutServiceRoleDefaultPolicy2688969F"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-Test/Provider/framework-onTimeout/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProviderframeworkonTimeout0B47CA38"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-Test/Provider/framework-onTimeout/LogRetention/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProviderframeworkonTimeoutLogRetentionE4EB0919"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-Test/Provider/waiter-state-machine/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProviderwaiterstatemachineRole0C7159F9"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-Test/Provider/waiter-state-machine/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProviderwaiterstatemachineRoleDefaultPolicyD3C3DA1A"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-Test/Provider/waiter-state-machine/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "Providerwaiterstatemachine5D4A9DF0"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-Test/Test MySQL Instance/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TestMySQLInstance"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-Test/Test MySQL Cluster/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TestMySQLCluster"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-Test/Test PostgreSQL Instance/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TestPostgreSQLInstance"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-Test/Test PostgreSQL Cluster/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TestPostgreSQLCluster"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-Test/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/RDS-Sanitized-Snapshotter-Test/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "RDS-Sanitized-Snapshotter-Test"
+    }
+  }
+}

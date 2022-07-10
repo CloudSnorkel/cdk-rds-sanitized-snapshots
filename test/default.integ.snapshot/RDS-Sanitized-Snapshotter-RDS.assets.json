@@ -1,0 +1,19 @@
+{
+  "version": "15.0.0",
+  "files": {
+    "1775a9e74905e5fb316990d4feb676dd5e22557797d13181ba6a7e402e794fe9": {
+      "source": {
+        "path": "RDS-Sanitized-Snapshotter-RDS.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "current_account-current_region": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "1775a9e74905e5fb316990d4feb676dd5e22557797d13181ba6a7e402e794fe9.json",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}
