@@ -1,10 +1,10 @@
 # CDK Construct for RDS Sanitized Snapshots
 
-[![NPM](https://img.shields.io/npm/v/@cloudsnorkel/cdk-rds-sanitized-snapshots?label=npm&logo=npm)][6]
-[![PyPI](https://img.shields.io/pypi/v/cloudsnorkel.cdk-rds-sanitized-snapshots?label=pypi&logo=pypi)][7]
-[![Maven Central](https://img.shields.io/maven-central/v/com.cloudsnorkel/cdk.rds.sanitized-snapshots.svg?label=Maven%20Central&logo=java)][8]
-[![Go](https://img.shields.io/github/v/tag/CloudSnorkel/cdk-rds-sanitized-snapshots?color=red&label=go&logo=go)][11]
-[![Nuget](https://img.shields.io/nuget/v/CloudSnorkel.Cdk.Rds.SanitizedSnapshots?color=red&&logo=nuget)][12]
+[![NPM](https://img.shields.io/npm/v/@cloudsnorkel/cdk-rds-sanitized-snapshots?label=npm&logo=npm)][2]
+[![PyPI](https://img.shields.io/pypi/v/cloudsnorkel.cdk-rds-sanitized-snapshots?label=pypi&logo=pypi)][3]
+[![Maven Central](https://img.shields.io/maven-central/v/com.cloudsnorkel/cdk.rds.sanitized-snapshots.svg?label=Maven%20Central&logo=java)][4]
+[![Go](https://img.shields.io/github/v/tag/CloudSnorkel/cdk-rds-sanitized-snapshots?color=red&label=go&logo=go)][5]
+[![Nuget](https://img.shields.io/nuget/v/CloudSnorkel.Cdk.Rds.SanitizedSnapshots?color=red&&logo=nuget)][6]
 [![Release](https://github.com/CloudSnorkel/cdk-rds-sanitized-snapshots/actions/workflows/release.yml/badge.svg)](https://github.com/CloudSnorkel/cdk-rds-sanitized-snapshots/actions/workflows/release.yml)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue)](https://github.com/CloudSnorkel/cdk-rds-sanitized-snapshots/blob/main/LICENSE)
 
@@ -19,7 +19,7 @@ See [Constructs Hub][1] for installation instructions and API in all supported l
 
 ## Overview
 
-![Architecture diagram](https://github.com/CloudSnorkel/cdk-rds-sanitized-snapshots/raw/master/architecture.svg?sanitize=true)
+![Architecture diagram](architecture.svg)
 
 This project supplies a CDK construct that sets up a step function and a timer to execute this function. The
 function will create a sanitized snapshot of a given database and share it with configured accounts. Those accounts can
@@ -73,3 +73,8 @@ npm run bundle && npm run integ:default:deploy
 ```
 
 [1]: https://constructs.dev/packages/@cloudsnorkel/cdk-rds-sanitized-snapshots/
+[2]: https://www.npmjs.com/package/@cloudsnorkel/cdk-rds-sanitized-snapshots
+[3]: https://pypi.org/project/cloudsnorkel.cdk-rds-sanitized-snapshots
+[4]: https://search.maven.org/search?q=g:%22com.cloudsnorkel%22%20AND%20a:%22cdk.rds.sanitized-snapshots%22
+[5]: https://pkg.go.dev/github.com/CloudSnorkel/cdk-rds-sanitized-snapshots-go/cloudsnorkelcdkrdssanitizedsnapshots
+[6]: https://www.nuget.org/packages/CloudSnorkel.Cdk.Rds.SanitizedSnapshots/
