@@ -133,27 +133,23 @@ new cdk.CustomResource(testStack, 'Test MySQL Instance', {
   serviceToken: provider.serviceToken,
   properties: {
     StepFunctionArn: mysqlInstanceSfn.stateMachineArn,
-    AlwaysRun: Math.random(),
   },
 });
 new cdk.CustomResource(testStack, 'Test MySQL Cluster', {
   serviceToken: provider.serviceToken,
   properties: {
     StepFunctionArn: mysqlClusterSfn.stateMachineArn,
-    AlwaysRun: Math.random(),
   },
 });
 new cdk.CustomResource(testStack, 'Test PostgreSQL Instance', {
   serviceToken: provider.serviceToken,
   properties: {
     StepFunctionArn: postgresInstanceSfn.stateMachineArn,
-    AlwaysRun: Math.random(),
   },
 });
 new cdk.CustomResource(testStack, 'Test PostgreSQL Cluster', {
   serviceToken: provider.serviceToken,
   properties: {
     StepFunctionArn: postgresClusterSfn.stateMachineArn,
-    AlwaysRun: Math.random(),
   },
 });
