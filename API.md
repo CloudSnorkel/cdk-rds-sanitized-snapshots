@@ -9,7 +9,7 @@ A process to create sanitized snapshots of RDS instance or cluster, optionally o
 The process is handled by a step function.
 
 1. Snapshot the source database
-2. Optionally re-ncrypt the snapshot with a different key in case you want to share it with an account that doesn't have access to the original key
+2. Optionally re-encrypt the snapshot with a different key in case you want to share it with an account that doesn't have access to the original key
 3. Create a temporary database
 4. Run a Fargate task to connect to the temporary database and execute an arbitrary SQL script to sanitize it
 5. Snapshot the sanitized database
@@ -160,6 +160,7 @@ Trigger this step function to get a new snapshot.
 | <code><a href="#@cloudsnorkel/cdk-rds-sanitized-snapshots.IRdsSanitizedSnapshotter.property.fargateCluster">fargateCluster</a></code> | <code>aws-cdk-lib.aws_ecs.ICluster</code> | Cluster where sanitization task will be executed. |
 | <code><a href="#@cloudsnorkel/cdk-rds-sanitized-snapshots.IRdsSanitizedSnapshotter.property.sanitizeSubnets">sanitizeSubnets</a></code> | <code>aws-cdk-lib.aws_ec2.SubnetSelection</code> | VPC subnets to use for sanitization task. |
 | <code><a href="#@cloudsnorkel/cdk-rds-sanitized-snapshots.IRdsSanitizedSnapshotter.property.schedule">schedule</a></code> | <code>aws-cdk-lib.aws_events.Schedule</code> | The schedule or rate (frequency) that determines when the sanitized snapshot runs automatically. |
+| <code><a href="#@cloudsnorkel/cdk-rds-sanitized-snapshots.IRdsSanitizedSnapshotter.property.shareAccounts">shareAccounts</a></code> | <code>string[]</code> | List of accounts the sanitized snapshot should be shared with. |
 | <code><a href="#@cloudsnorkel/cdk-rds-sanitized-snapshots.IRdsSanitizedSnapshotter.property.snapshotHistoryLimit">snapshotHistoryLimit</a></code> | <code>number</code> | Limit the number of snapshot history. |
 | <code><a href="#@cloudsnorkel/cdk-rds-sanitized-snapshots.IRdsSanitizedSnapshotter.property.snapshotKey">snapshotKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | Optional KMS key to encrypt target snapshot. |
 | <code><a href="#@cloudsnorkel/cdk-rds-sanitized-snapshots.IRdsSanitizedSnapshotter.property.snapshotPrefix">snapshotPrefix</a></code> | <code>string</code> | Prefix for sanitized snapshot name. |
@@ -281,6 +282,18 @@ public readonly schedule: Schedule;
 - *Type:* aws-cdk-lib.aws_events.Schedule
 
 The schedule or rate (frequency) that determines when the sanitized snapshot runs automatically.
+
+---
+
+##### `shareAccounts`<sup>Optional</sup> <a name="shareAccounts" id="@cloudsnorkel/cdk-rds-sanitized-snapshots.IRdsSanitizedSnapshotter.property.shareAccounts"></a>
+
+```typescript
+public readonly shareAccounts: string[];
+```
+
+- *Type:* string[]
+
+List of accounts the sanitized snapshot should be shared with.
 
 ---
 
