@@ -40,7 +40,36 @@ The step function does the following to create the snapshot:
 9. Optionally share the snapshot with other accounts (if you have separate accounts for developers/QA)
 10. Delete temporary database and snapshot
 
-## Example
+## Usage
+
+1. Confirm you're using CDK v2
+2. Install the appropriate package
+   1. [Python][3]
+      ```
+      pip install cloudsnorkel.cdk-rds-sanitized-snapshots
+      ```
+   2. [TypeScript or JavaScript][2]
+      ```
+      npm i @cloudsnorkel/cdk-rds-sanitized-snapshots
+      ```
+   3. [Java][4]
+      ```xml
+      <dependency>
+      <groupId>com.cloudsnorkel</groupId>
+      <artifactId>cdk.rds.sanitized-snapshots</artifactId>
+      </dependency>
+      ```
+   4. [Go][5]
+      ```
+      go get github.com/CloudSnorkel/cdk-rds-sanitized-snapshots-go/cloudsnorkelcdkrdssanitizedsnapshots
+      ```
+   5. [.NET][6]
+      ```
+      dotnet add package CloudSnorkel.Cdk.Rds.SanitizedSnapshots
+      ```
+3. Use `RdsSanitizedSnapshotter` construct in your code (starting with default arguments is fine)
+
+### Code Sample
 
 ```typescript
 let vpc: ec2.Vpc;
