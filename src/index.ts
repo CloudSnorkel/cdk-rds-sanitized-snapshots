@@ -33,7 +33,7 @@ export interface IRdsSanitizedSnapshotter {
 
   /**
    * Name of database to connect to inside the RDS cluster or instance. This database will be used to execute the SQL script.
-   * 
+   *
    * @default 'postgres' for PostgreSQL and not set for MySQL
    */
   readonly databaseName?: string;
@@ -501,9 +501,9 @@ export class RdsSanitizedSnapshotter extends Construct {
     const mysqlTask = new ecs.FargateTaskDefinition(this, 'MySQL Task', {
       volumes: [{ name: 'config', host: {} }],
     });
-    let mycnf = "[client]\nuser=$MYSQL_USER\nhost=$MYSQL_HOST\nport=$MYSQL_PORT\npassword=$MYSQL_PASSWORD";
+    let mycnf = '[client]\nuser=$MYSQL_USER\nhost=$MYSQL_HOST\nport=$MYSQL_PORT\npassword=$MYSQL_PASSWORD';
     if (this.databaseName) {
-      mycnf += "\ndatabase=$MYSQL_DATABASE";
+      mycnf += '\ndatabase=$MYSQL_DATABASE';
     }
     const mysqlConfigContainer = mysqlTask.addContainer('config', {
       image: ecs.AssetImage.fromRegistry('public.ecr.aws/docker/library/bash:4-alpine3.15'),
