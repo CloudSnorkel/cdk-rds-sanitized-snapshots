@@ -3892,7 +3892,7 @@
                                   "GroupId"
                                 ]
                               },
-                              "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"config\",\"Environment\":[{\"Name\":\"MYSQL_HOST\",\"Value.$\":\"$.tempDb.host.endpoint\"},{\"Name\":\"MYSQL_PORT\",\"Value.$\":\"$.tempDb.port\"},{\"Name\":\"MYSQL_USER\",\"Value.$\":\"$.tempDb.user\"},{\"Name\":\"MYSQL_PASSWORD\",\"Value.$\":\"$.tempDb.password\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Create Final Snapshot\":{\"Next\":\"Wait for Final Snapshot\",\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"arn:",
+                              "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"config\",\"Environment\":[{\"Name\":\"MYSQL_HOST\",\"Value.$\":\"$.tempDb.host.endpoint\"},{\"Name\":\"MYSQL_PORT\",\"Value.$\":\"$.tempDb.port\"},{\"Name\":\"MYSQL_USER\",\"Value.$\":\"$.tempDb.user\"},{\"Name\":\"MYSQL_PASSWORD\",\"Value.$\":\"$.tempDb.password\"},{\"Name\":\"MYSQL_DATABASE\",\"Value\":\"\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Create Final Snapshot\":{\"Next\":\"Wait for Final Snapshot\",\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"arn:",
                               {
                                 "Ref": "AWS::Partition"
                               },
@@ -3926,7 +3926,7 @@
                                   "GroupId"
                                 ]
                               },
-                              "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"postgres\",\"Environment\":[{\"Name\":\"PGHOST\",\"Value.$\":\"$.tempDb.host.endpoint\"},{\"Name\":\"PGPORT\",\"Value.$\":\"$.tempDb.port\"},{\"Name\":\"PGUSER\",\"Value.$\":\"$.tempDb.user\"},{\"Name\":\"PGPASSWORD\",\"Value.$\":\"$.tempDb.password\"},{\"Name\":\"PGCONNECT_TIMEOUT\",\"Value\":\"30\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Wait for Final Snapshot\":{\"End\":true,\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
+                              "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"postgres\",\"Environment\":[{\"Name\":\"PGHOST\",\"Value.$\":\"$.tempDb.host.endpoint\"},{\"Name\":\"PGPORT\",\"Value.$\":\"$.tempDb.port\"},{\"Name\":\"PGUSER\",\"Value.$\":\"$.tempDb.user\"},{\"Name\":\"PGPASSWORD\",\"Value.$\":\"$.tempDb.password\"},{\"Name\":\"PGDATABASE\",\"Value\":\"postgres\"},{\"Name\":\"PGCONNECT_TIMEOUT\",\"Value\":\"30\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Wait for Final Snapshot\":{\"End\":true,\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
                               {
                                 "Fn::GetAtt": [
                                   "MySQLInstanceSnapshotterwait17927A95",
@@ -6255,7 +6255,7 @@
                                   "GroupId"
                                 ]
                               },
-                              "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"config\",\"Environment\":[{\"Name\":\"MYSQL_HOST\",\"Value.$\":\"$.tempDb.host.endpoint\"},{\"Name\":\"MYSQL_PORT\",\"Value.$\":\"$.tempDb.port\"},{\"Name\":\"MYSQL_USER\",\"Value.$\":\"$.tempDb.user\"},{\"Name\":\"MYSQL_PASSWORD\",\"Value.$\":\"$.tempDb.password\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Create Final Snapshot\":{\"Next\":\"Wait for Final Snapshot\",\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"arn:",
+                              "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"config\",\"Environment\":[{\"Name\":\"MYSQL_HOST\",\"Value.$\":\"$.tempDb.host.endpoint\"},{\"Name\":\"MYSQL_PORT\",\"Value.$\":\"$.tempDb.port\"},{\"Name\":\"MYSQL_USER\",\"Value.$\":\"$.tempDb.user\"},{\"Name\":\"MYSQL_PASSWORD\",\"Value.$\":\"$.tempDb.password\"},{\"Name\":\"MYSQL_DATABASE\",\"Value\":\"\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Create Final Snapshot\":{\"Next\":\"Wait for Final Snapshot\",\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"arn:",
                               {
                                 "Ref": "AWS::Partition"
                               },
@@ -6289,7 +6289,7 @@
                                   "GroupId"
                                 ]
                               },
-                              "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"postgres\",\"Environment\":[{\"Name\":\"PGHOST\",\"Value.$\":\"$.tempDb.host.endpoint\"},{\"Name\":\"PGPORT\",\"Value.$\":\"$.tempDb.port\"},{\"Name\":\"PGUSER\",\"Value.$\":\"$.tempDb.user\"},{\"Name\":\"PGPASSWORD\",\"Value.$\":\"$.tempDb.password\"},{\"Name\":\"PGCONNECT_TIMEOUT\",\"Value\":\"30\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Wait for Final Snapshot\":{\"End\":true,\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
+                              "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"postgres\",\"Environment\":[{\"Name\":\"PGHOST\",\"Value.$\":\"$.tempDb.host.endpoint\"},{\"Name\":\"PGPORT\",\"Value.$\":\"$.tempDb.port\"},{\"Name\":\"PGUSER\",\"Value.$\":\"$.tempDb.user\"},{\"Name\":\"PGPASSWORD\",\"Value.$\":\"$.tempDb.password\"},{\"Name\":\"PGDATABASE\",\"Value\":\"postgres\"},{\"Name\":\"PGCONNECT_TIMEOUT\",\"Value\":\"30\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Wait for Final Snapshot\":{\"End\":true,\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
                               {
                                 "Fn::GetAtt": [
                                   "MySQLClusterSnapshotterwait73D57C6D",
@@ -8381,7 +8381,7 @@
                                   "GroupId"
                                 ]
                               },
-                              "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"config\",\"Environment\":[{\"Name\":\"MYSQL_HOST\",\"Value.$\":\"$.tempDb.host.endpoint\"},{\"Name\":\"MYSQL_PORT\",\"Value.$\":\"$.tempDb.port\"},{\"Name\":\"MYSQL_USER\",\"Value.$\":\"$.tempDb.user\"},{\"Name\":\"MYSQL_PASSWORD\",\"Value.$\":\"$.tempDb.password\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Create Final Snapshot\":{\"Next\":\"Wait for Final Snapshot\",\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"arn:",
+                              "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"config\",\"Environment\":[{\"Name\":\"MYSQL_HOST\",\"Value.$\":\"$.tempDb.host.endpoint\"},{\"Name\":\"MYSQL_PORT\",\"Value.$\":\"$.tempDb.port\"},{\"Name\":\"MYSQL_USER\",\"Value.$\":\"$.tempDb.user\"},{\"Name\":\"MYSQL_PASSWORD\",\"Value.$\":\"$.tempDb.password\"},{\"Name\":\"MYSQL_DATABASE\",\"Value\":\"\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Create Final Snapshot\":{\"Next\":\"Wait for Final Snapshot\",\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"arn:",
                               {
                                 "Ref": "AWS::Partition"
                               },
@@ -8415,7 +8415,7 @@
                                   "GroupId"
                                 ]
                               },
-                              "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"postgres\",\"Environment\":[{\"Name\":\"PGHOST\",\"Value.$\":\"$.tempDb.host.endpoint\"},{\"Name\":\"PGPORT\",\"Value.$\":\"$.tempDb.port\"},{\"Name\":\"PGUSER\",\"Value.$\":\"$.tempDb.user\"},{\"Name\":\"PGPASSWORD\",\"Value.$\":\"$.tempDb.password\"},{\"Name\":\"PGCONNECT_TIMEOUT\",\"Value\":\"30\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Wait for Final Snapshot\":{\"End\":true,\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
+                              "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"postgres\",\"Environment\":[{\"Name\":\"PGHOST\",\"Value.$\":\"$.tempDb.host.endpoint\"},{\"Name\":\"PGPORT\",\"Value.$\":\"$.tempDb.port\"},{\"Name\":\"PGUSER\",\"Value.$\":\"$.tempDb.user\"},{\"Name\":\"PGPASSWORD\",\"Value.$\":\"$.tempDb.password\"},{\"Name\":\"PGDATABASE\",\"Value\":\"postgres\"},{\"Name\":\"PGCONNECT_TIMEOUT\",\"Value\":\"30\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Wait for Final Snapshot\":{\"End\":true,\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
                               {
                                 "Fn::GetAtt": [
                                   "PostgreSQLInstanceSnapshotterwaitE64141BC",
@@ -10745,7 +10745,7 @@
                                   "GroupId"
                                 ]
                               },
-                              "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"config\",\"Environment\":[{\"Name\":\"MYSQL_HOST\",\"Value.$\":\"$.tempDb.host.endpoint\"},{\"Name\":\"MYSQL_PORT\",\"Value.$\":\"$.tempDb.port\"},{\"Name\":\"MYSQL_USER\",\"Value.$\":\"$.tempDb.user\"},{\"Name\":\"MYSQL_PASSWORD\",\"Value.$\":\"$.tempDb.password\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Create Final Snapshot\":{\"Next\":\"Wait for Final Snapshot\",\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"arn:",
+                              "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"config\",\"Environment\":[{\"Name\":\"MYSQL_HOST\",\"Value.$\":\"$.tempDb.host.endpoint\"},{\"Name\":\"MYSQL_PORT\",\"Value.$\":\"$.tempDb.port\"},{\"Name\":\"MYSQL_USER\",\"Value.$\":\"$.tempDb.user\"},{\"Name\":\"MYSQL_PASSWORD\",\"Value.$\":\"$.tempDb.password\"},{\"Name\":\"MYSQL_DATABASE\",\"Value\":\"\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Create Final Snapshot\":{\"Next\":\"Wait for Final Snapshot\",\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"arn:",
                               {
                                 "Ref": "AWS::Partition"
                               },
@@ -10779,7 +10779,7 @@
                                   "GroupId"
                                 ]
                               },
-                              "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"postgres\",\"Environment\":[{\"Name\":\"PGHOST\",\"Value.$\":\"$.tempDb.host.endpoint\"},{\"Name\":\"PGPORT\",\"Value.$\":\"$.tempDb.port\"},{\"Name\":\"PGUSER\",\"Value.$\":\"$.tempDb.user\"},{\"Name\":\"PGPASSWORD\",\"Value.$\":\"$.tempDb.password\"},{\"Name\":\"PGCONNECT_TIMEOUT\",\"Value\":\"30\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Wait for Final Snapshot\":{\"End\":true,\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
+                              "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"postgres\",\"Environment\":[{\"Name\":\"PGHOST\",\"Value.$\":\"$.tempDb.host.endpoint\"},{\"Name\":\"PGPORT\",\"Value.$\":\"$.tempDb.port\"},{\"Name\":\"PGUSER\",\"Value.$\":\"$.tempDb.user\"},{\"Name\":\"PGPASSWORD\",\"Value.$\":\"$.tempDb.password\"},{\"Name\":\"PGDATABASE\",\"Value\":\"postgres\"},{\"Name\":\"PGCONNECT_TIMEOUT\",\"Value\":\"30\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Wait for Final Snapshot\":{\"End\":true,\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
                               {
                                 "Fn::GetAtt": [
                                   "PostgreSQLClusterSnapshotterwait7A15A210",

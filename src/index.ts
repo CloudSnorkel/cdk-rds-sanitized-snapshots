@@ -32,6 +32,13 @@ export interface IRdsSanitizedSnapshotter {
   readonly databaseInstance?: rds.IDatabaseInstance;
 
   /**
+   * Name of database to connect to inside the RDS cluster or instance. This database will be used to execute the SQL script.
+   * 
+   * @default 'postgres' for PostgreSQL and not set for MySQL
+   */
+  readonly databaseName?: string;
+
+  /**
    * KMS key used to encrypt original database, if any.
    */
   readonly databaseKey?: kms.IKey;
@@ -122,6 +129,7 @@ export class RdsSanitizedSnapshotter extends Construct {
   private readonly generalTags: {Key: string; Value: string}[];
   private readonly finalSnapshotTags: {Key: string; Value: string}[];
   private readonly databaseIdentifier: string;
+  private readonly databaseName?: string;
   private readonly snapshotPrefix: string;
   private readonly tempPrefix: string;
   private readonly isCluster: boolean;
@@ -169,6 +177,7 @@ export class RdsSanitizedSnapshotter extends Construct {
     } else {
       throw new Error('One of `databaseCluster` or `databaseInstance` must be specified');
     }
+    this.databaseName = props.databaseName;
 
     this.tempPrefix = props.tempPrefix ?? 'sanitize';
     this.snapshotPrefix = props.snapshotPrefix ?? this.databaseIdentifier;
@@ -492,9 +501,13 @@ export class RdsSanitizedSnapshotter extends Construct {
     const mysqlTask = new ecs.FargateTaskDefinition(this, 'MySQL Task', {
       volumes: [{ name: 'config', host: {} }],
     });
+    let mycnf = "[client]\nuser=$MYSQL_USER\nhost=$MYSQL_HOST\nport=$MYSQL_PORT\npassword=$MYSQL_PASSWORD";
+    if (this.databaseName) {
+      mycnf += "\ndatabase=$MYSQL_DATABASE";
+    }
     const mysqlConfigContainer = mysqlTask.addContainer('config', {
       image: ecs.AssetImage.fromRegistry('public.ecr.aws/docker/library/bash:4-alpine3.15'),
-      command: ['bash', '-c', 'echo "[client]\nuser=$MYSQL_USER\nhost=$MYSQL_HOST\nport=$MYSQL_PORT\npassword=$MYSQL_PASSWORD" > ~/.my.cnf && chmod 700 ~/.my.cnf'],
+      command: ['bash', '-c', `echo "${mycnf}" > ~/.my.cnf && chmod 700 ~/.my.cnf`],
       logging: ecs.LogDriver.awsLogs({
         logGroup,
         streamPrefix: 'mysql-config',
@@ -553,6 +566,10 @@ export class RdsSanitizedSnapshotter extends Construct {
                   name: 'MYSQL_PASSWORD',
                   value: stepfunctions.JsonPath.stringAt('$.tempDb.password'),
                 },
+                {
+                  name: 'MYSQL_DATABASE',
+                  value: this.databaseName ?? '',
+                },
               ],
             },
           ],
@@ -590,7 +607,7 @@ export class RdsSanitizedSnapshotter extends Construct {
                 },
                 {
                   name: 'PGDATABASE',
-                  value: 'postgres',
+                  value: this.databaseName ?? 'postgres',
                 },
                 {
                   name: 'PGCONNECT_TIMEOUT',
