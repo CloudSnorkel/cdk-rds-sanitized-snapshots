@@ -156,6 +156,7 @@ Trigger this step function to get a new snapshot.
 | <code><a href="#@cloudsnorkel/cdk-rds-sanitized-snapshots.IRdsSanitizedSnapshotter.property.databaseCluster">databaseCluster</a></code> | <code>aws-cdk-lib.aws_rds.IDatabaseCluster</code> | Database cluster to snapshot and sanitize. |
 | <code><a href="#@cloudsnorkel/cdk-rds-sanitized-snapshots.IRdsSanitizedSnapshotter.property.databaseInstance">databaseInstance</a></code> | <code>aws-cdk-lib.aws_rds.IDatabaseInstance</code> | Database instance to snapshot and sanitize. |
 | <code><a href="#@cloudsnorkel/cdk-rds-sanitized-snapshots.IRdsSanitizedSnapshotter.property.databaseKey">databaseKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | KMS key used to encrypt original database, if any. |
+| <code><a href="#@cloudsnorkel/cdk-rds-sanitized-snapshots.IRdsSanitizedSnapshotter.property.databaseName">databaseName</a></code> | <code>string</code> | Name of database to connect to inside the RDS cluster or instance. |
 | <code><a href="#@cloudsnorkel/cdk-rds-sanitized-snapshots.IRdsSanitizedSnapshotter.property.dbSubnets">dbSubnets</a></code> | <code>aws-cdk-lib.aws_ec2.SubnetSelection</code> | VPC subnets to use for temporary databases. |
 | <code><a href="#@cloudsnorkel/cdk-rds-sanitized-snapshots.IRdsSanitizedSnapshotter.property.fargateCluster">fargateCluster</a></code> | <code>aws-cdk-lib.aws_ecs.ICluster</code> | Cluster where sanitization task will be executed. |
 | <code><a href="#@cloudsnorkel/cdk-rds-sanitized-snapshots.IRdsSanitizedSnapshotter.property.sanitizeSubnets">sanitizeSubnets</a></code> | <code>aws-cdk-lib.aws_ec2.SubnetSelection</code> | VPC subnets to use for sanitization task. |
@@ -230,6 +231,21 @@ public readonly databaseKey: IKey;
 - *Type:* aws-cdk-lib.aws_kms.IKey
 
 KMS key used to encrypt original database, if any.
+
+---
+
+##### `databaseName`<sup>Optional</sup> <a name="databaseName" id="@cloudsnorkel/cdk-rds-sanitized-snapshots.IRdsSanitizedSnapshotter.property.databaseName"></a>
+
+```typescript
+public readonly databaseName: string;
+```
+
+- *Type:* string
+- *Default:* 'postgres' for PostgreSQL and not set for MySQL
+
+Name of database to connect to inside the RDS cluster or instance.
+
+This database will be used to execute the SQL script.
 
 ---
 
