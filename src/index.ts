@@ -97,13 +97,18 @@ export interface IRdsSanitizedSnapshotter {
    * Limit the number of snapshot history. Set this to delete old snapshots and only leave a certain number of snapshots.
    */
   readonly snapshotHistoryLimit?: number;
+
+  /**
+   * List of accounts the sanitized snapshot should be shared with.
+   */
+  readonly shareAccounts?: string[];
 }
 
 /**
  * A process to create sanitized snapshots of RDS instance or cluster, optionally on a schedule. The process is handled by a step function.
  *
  * 1. Snapshot the source database
- * 2. Optionally re-ncrypt the snapshot with a different key in case you want to share it with an account that doesn't have access to the original key
+ * 2. Optionally re-encrypt the snapshot with a different key in case you want to share it with an account that doesn't have access to the original key
  * 3. Create a temporary database
  * 4. Run a Fargate task to connect to the temporary database and execute an arbitrary SQL script to sanitize it
  * 5. Snapshot the sanitized database
@@ -250,6 +255,9 @@ export class RdsSanitizedSnapshotter extends Construct {
     s = s.next(this.sanitize());
     s = s.next(this.finalSnapshot());
     s = s.next(this.waitForOperation('Wait for Final Snapshot', 'snapshot', '$.tempDbId', '$.targetSnapshotId'));
+    if (props.shareAccounts) {
+      s = s.next(this.shareSnapshot(props.shareAccounts));
+    }
 
     if (props.snapshotHistoryLimit) {
       s.next(this.deleteOldSnapshots(props.snapshotHistoryLimit));
@@ -635,6 +643,21 @@ export class RdsSanitizedSnapshotter extends Construct {
   //       .otherwise(describeSnapshot),
   //   );
   // }
+
+  private shareSnapshot(accounts: string[]) {
+    return new stepfunctions_tasks.CallAwsService(this, 'Share Snapshot', {
+      service: 'rds',
+      action: this.isCluster ? 'modifyDBClusterSnapshotAttribute' : 'modifyDBSnapshotAttribute',
+      parameters: {
+        DbClusterSnapshotIdentifier: this.isCluster ? stepfunctions.JsonPath.stringAt('$.targetSnapshotId') : undefined,
+        DbSnapshotIdentifier: this.isCluster ? undefined : stepfunctions.JsonPath.stringAt('$.targetSnapshotId'),
+        AttributeName: 'restore',
+        ValuesToAdd: accounts,
+      },
+      iamResources: [this.targetSnapshotArn],
+      resultPath: stepfunctions.JsonPath.DISCARD,
+    });
+  }
 
   private deleteOldSnapshots(historyLimit: number) {
     const deleteOldFn = new DeleteOldFunction(this, 'delete-old', {
