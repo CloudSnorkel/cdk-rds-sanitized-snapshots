@@ -1428,7 +1428,7 @@
                   "GroupId"
                 ]
               },
-              "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"config\",\"Environment\":[{\"Name\":\"MYSQL_HOST\",\"Value.$\":\"$.tempDb.host.endpoint\"},{\"Name\":\"MYSQL_PORT\",\"Value.$\":\"$.tempDb.port\"},{\"Name\":\"MYSQL_USER\",\"Value.$\":\"$.tempDb.user\"},{\"Name\":\"MYSQL_PASSWORD\",\"Value.$\":\"$.tempDb.password\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Create Final Snapshot\":{\"Next\":\"Wait for Final Snapshot\",\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"arn:",
+              "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"config\",\"Environment\":[{\"Name\":\"MYSQL_HOST\",\"Value.$\":\"$.tempDb.host.endpoint\"},{\"Name\":\"MYSQL_PORT\",\"Value.$\":\"$.tempDb.port\"},{\"Name\":\"MYSQL_USER\",\"Value.$\":\"$.tempDb.user\"},{\"Name\":\"MYSQL_PASSWORD\",\"Value.$\":\"$.tempDb.password\"},{\"Name\":\"MYSQL_DATABASE\",\"Value\":\"\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Create Final Snapshot\":{\"Next\":\"Wait for Final Snapshot\",\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"arn:",
               {
                 "Ref": "AWS::Partition"
               },
@@ -3079,7 +3079,7 @@
                   "GroupId"
                 ]
               },
-              "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"config\",\"Environment\":[{\"Name\":\"MYSQL_HOST\",\"Value.$\":\"$.tempDb.host.endpoint\"},{\"Name\":\"MYSQL_PORT\",\"Value.$\":\"$.tempDb.port\"},{\"Name\":\"MYSQL_USER\",\"Value.$\":\"$.tempDb.user\"},{\"Name\":\"MYSQL_PASSWORD\",\"Value.$\":\"$.tempDb.password\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Create Final Snapshot\":{\"Next\":\"Wait for Final Snapshot\",\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"arn:",
+              "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"config\",\"Environment\":[{\"Name\":\"MYSQL_HOST\",\"Value.$\":\"$.tempDb.host.endpoint\"},{\"Name\":\"MYSQL_PORT\",\"Value.$\":\"$.tempDb.port\"},{\"Name\":\"MYSQL_USER\",\"Value.$\":\"$.tempDb.user\"},{\"Name\":\"MYSQL_PASSWORD\",\"Value.$\":\"$.tempDb.password\"},{\"Name\":\"MYSQL_DATABASE\",\"Value\":\"\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Create Final Snapshot\":{\"Next\":\"Wait for Final Snapshot\",\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"arn:",
               {
                 "Ref": "AWS::Partition"
               },
@@ -4584,7 +4584,7 @@
                   "GroupId"
                 ]
               },
-              "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"config\",\"Environment\":[{\"Name\":\"MYSQL_HOST\",\"Value.$\":\"$.tempDb.host.endpoint\"},{\"Name\":\"MYSQL_PORT\",\"Value.$\":\"$.tempDb.port\"},{\"Name\":\"MYSQL_USER\",\"Value.$\":\"$.tempDb.user\"},{\"Name\":\"MYSQL_PASSWORD\",\"Value.$\":\"$.tempDb.password\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Create Final Snapshot\":{\"Next\":\"Wait for Final Snapshot\",\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"arn:",
+              "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"config\",\"Environment\":[{\"Name\":\"MYSQL_HOST\",\"Value.$\":\"$.tempDb.host.endpoint\"},{\"Name\":\"MYSQL_PORT\",\"Value.$\":\"$.tempDb.port\"},{\"Name\":\"MYSQL_USER\",\"Value.$\":\"$.tempDb.user\"},{\"Name\":\"MYSQL_PASSWORD\",\"Value.$\":\"$.tempDb.password\"},{\"Name\":\"MYSQL_DATABASE\",\"Value\":\"\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Create Final Snapshot\":{\"Next\":\"Wait for Final Snapshot\",\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"arn:",
               {
                 "Ref": "AWS::Partition"
               },
@@ -6263,7 +6263,7 @@
                   "GroupId"
                 ]
               },
-              "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"config\",\"Environment\":[{\"Name\":\"MYSQL_HOST\",\"Value.$\":\"$.tempDb.host.endpoint\"},{\"Name\":\"MYSQL_PORT\",\"Value.$\":\"$.tempDb.port\"},{\"Name\":\"MYSQL_USER\",\"Value.$\":\"$.tempDb.user\"},{\"Name\":\"MYSQL_PASSWORD\",\"Value.$\":\"$.tempDb.password\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Create Final Snapshot\":{\"Next\":\"Wait for Final Snapshot\",\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"arn:",
+              "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"config\",\"Environment\":[{\"Name\":\"MYSQL_HOST\",\"Value.$\":\"$.tempDb.host.endpoint\"},{\"Name\":\"MYSQL_PORT\",\"Value.$\":\"$.tempDb.port\"},{\"Name\":\"MYSQL_USER\",\"Value.$\":\"$.tempDb.user\"},{\"Name\":\"MYSQL_PASSWORD\",\"Value.$\":\"$.tempDb.password\"},{\"Name\":\"MYSQL_DATABASE\",\"Value\":\"\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Create Final Snapshot\":{\"Next\":\"Wait for Final Snapshot\",\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"arn:",
               {
                 "Ref": "AWS::Partition"
               },
