@@ -153,7 +153,6 @@ Trigger this step function to get a new snapshot.
 | --- | --- | --- |
 | <code><a href="#@cloudsnorkel/cdk-rds-sanitized-snapshots.IRdsSanitizedSnapshotter.property.script">script</a></code> | <code>string</code> | SQL script used to sanitize the database. It will be executed against the temporary database. |
 | <code><a href="#@cloudsnorkel/cdk-rds-sanitized-snapshots.IRdsSanitizedSnapshotter.property.vpc">vpc</a></code> | <code>aws-cdk-lib.aws_ec2.IVpc</code> | VPC where temporary database and sanitizing task will be created. |
-| <code><a href="#@cloudsnorkel/cdk-rds-sanitized-snapshots.IRdsSanitizedSnapshotter.property.databaseAccount">databaseAccount</a></code> | <code>string</code> | Account of database cluster or instance to snapshot and sanitize. |
 | <code><a href="#@cloudsnorkel/cdk-rds-sanitized-snapshots.IRdsSanitizedSnapshotter.property.databaseCluster">databaseCluster</a></code> | <code>aws-cdk-lib.aws_rds.IDatabaseCluster</code> | Database cluster to snapshot and sanitize. |
 | <code><a href="#@cloudsnorkel/cdk-rds-sanitized-snapshots.IRdsSanitizedSnapshotter.property.databaseInstance">databaseInstance</a></code> | <code>aws-cdk-lib.aws_rds.IDatabaseInstance</code> | Database instance to snapshot and sanitize. |
 | <code><a href="#@cloudsnorkel/cdk-rds-sanitized-snapshots.IRdsSanitizedSnapshotter.property.databaseKey">databaseKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | KMS key used to encrypt original database, if any. |
@@ -191,20 +190,6 @@ public readonly vpc: IVpc;
 - *Type:* aws-cdk-lib.aws_ec2.IVpc
 
 VPC where temporary database and sanitizing task will be created.
-
----
-
-##### `databaseAccount`<sup>Optional</sup> <a name="databaseAccount" id="@cloudsnorkel/cdk-rds-sanitized-snapshots.IRdsSanitizedSnapshotter.property.databaseAccount"></a>
-
-```typescript
-public readonly databaseAccount: string;
-```
-
-- *Type:* string
-
-Account of database cluster or instance to snapshot and sanitize.
-
-Use this when the database is shared across accounts.
 
 ---
 

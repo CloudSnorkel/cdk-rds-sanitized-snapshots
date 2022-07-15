@@ -32,13 +32,6 @@ export interface IRdsSanitizedSnapshotter {
   readonly databaseInstance?: rds.IDatabaseInstance;
 
   /**
-   * Account of database cluster or instance to snapshot and sanitize.
-   *
-   * Use this when the database is shared across accounts.
-   */
-  readonly databaseAccount?: string;
-
-  /**
    * KMS key used to encrypt original database, if any.
    */
   readonly databaseKey?: kms.IKey;
@@ -183,14 +176,12 @@ export class RdsSanitizedSnapshotter extends Construct {
     this.reencrypt = props.snapshotKey !== undefined;
 
     this.dbClusterArn = cdk.Stack.of(this).formatArn({
-      account: props.databaseAccount,
       service: 'rds',
       resource: 'cluster',
       resourceName: this.databaseIdentifier,
       arnFormat: cdk.ArnFormat.COLON_RESOURCE_NAME,
     });
     this.dbInstanceArn = cdk.Stack.of(this).formatArn({
-      account: props.databaseAccount,
       service: 'rds',
       resource: 'db',
       resourceName: this.databaseIdentifier,
