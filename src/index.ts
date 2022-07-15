@@ -589,6 +589,10 @@ export class RdsSanitizedSnapshotter extends Construct {
                   value: stepfunctions.JsonPath.stringAt('$.tempDb.password'),
                 },
                 {
+                  name: 'PGDATABASE',
+                  value: 'postgres',
+                },
+                {
                   name: 'PGCONNECT_TIMEOUT',
                   value: '30',
                 },
