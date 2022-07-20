@@ -120,7 +120,7 @@ exports.handler = async function (input: Input): Promise<Parameters> {
   }
 
   const timestamp = new Date();
-  const snapshotSuffix = `-${timestamp.getUTCFullYear()}${timestamp.getUTCMonth().toString().padStart(2, '0')}${timestamp.getUTCDay().toString().padStart(2, '0')}${timestamp.getUTCHours().toString().padStart(2, '0')}${timestamp.getUTCMinutes().toString().padStart(2, '0')}`;
+  const snapshotSuffix = `-${timestamp.getUTCFullYear()}${(timestamp.getUTCMonth() + 1).toString().padStart(2, '0')}${timestamp.getUTCDate().toString().padStart(2, '0')}${timestamp.getUTCHours().toString().padStart(2, '0')}${timestamp.getUTCMinutes().toString().padStart(2, '0')}`;
   const targetSnapshotId = `${input.snapshotPrefix}${snapshotSuffix}`;
 
   const tempSuffix = crypto.randomBytes(8).toString('hex');
