@@ -67,7 +67,7 @@
       "description": "Create a JavaScript bundle from src/delete-old.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/delete-old.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/delete-old.lambda/index.js\" --external:aws-sdk"
+          "exec": "esbuild --bundle src/delete-old.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/delete-old.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk"
         }
       ]
     },
@@ -76,7 +76,7 @@
       "description": "Continuously update the JavaScript bundle from src/delete-old.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/delete-old.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/delete-old.lambda/index.js\" --external:aws-sdk --watch"
+          "exec": "esbuild --bundle src/delete-old.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/delete-old.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk --watch"
         }
       ]
     },
@@ -85,7 +85,7 @@
       "description": "Create a JavaScript bundle from src/parameters.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/parameters.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/parameters.lambda/index.js\" --external:aws-sdk"
+          "exec": "esbuild --bundle src/parameters.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/parameters.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk"
         }
       ]
     },
@@ -94,7 +94,7 @@
       "description": "Continuously update the JavaScript bundle from src/parameters.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/parameters.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/parameters.lambda/index.js\" --external:aws-sdk --watch"
+          "exec": "esbuild --bundle src/parameters.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/parameters.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk --watch"
         }
       ]
     },
@@ -103,7 +103,7 @@
       "description": "Create a JavaScript bundle from src/test-wait.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/test-wait.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/test-wait.lambda/index.js\" --external:aws-sdk"
+          "exec": "esbuild --bundle src/test-wait.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/test-wait.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk"
         }
       ]
     },
@@ -112,7 +112,7 @@
       "description": "Continuously update the JavaScript bundle from src/test-wait.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/test-wait.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/test-wait.lambda/index.js\" --external:aws-sdk --watch"
+          "exec": "esbuild --bundle src/test-wait.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/test-wait.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk --watch"
         }
       ]
     },
@@ -121,7 +121,7 @@
       "description": "Create a JavaScript bundle from src/test.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/test.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/test.lambda/index.js\" --external:aws-sdk"
+          "exec": "esbuild --bundle src/test.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/test.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk"
         }
       ]
     },
@@ -130,7 +130,7 @@
       "description": "Continuously update the JavaScript bundle from src/test.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/test.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/test.lambda/index.js\" --external:aws-sdk --watch"
+          "exec": "esbuild --bundle src/test.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/test.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk --watch"
         }
       ]
     },
@@ -139,7 +139,7 @@
       "description": "Create a JavaScript bundle from src/wait.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/wait.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/wait.lambda/index.js\" --external:aws-sdk"
+          "exec": "esbuild --bundle src/wait.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/wait.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk"
         }
       ]
     },
@@ -148,7 +148,7 @@
       "description": "Continuously update the JavaScript bundle from src/wait.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/wait.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/wait.lambda/index.js\" --external:aws-sdk --watch"
+          "exec": "esbuild --bundle src/wait.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/wait.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk --watch"
         }
       ]
     },
@@ -249,7 +249,7 @@
           "exec": "[ -d \"test/default.integ.snapshot\" ] || (echo \"No snapshot available for integration test 'default'. Run 'projen integ:default:deploy' to capture.\" && exit 1)"
         },
         {
-          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/default.integ.ts\" --no-version-reporting --no-asset-metadata --no-path-metadata -o test/.tmp/default.integ/assert.cdk.out > /dev/null"
+          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/default.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata -o test/.tmp/default.integ/assert.cdk.out > /dev/null"
         },
         {
           "exec": "diff -r -x asset.* -x cdk.out -x manifest.json -x tree.json test/default.integ.snapshot/ test/.tmp/default.integ/assert.cdk.out/"
@@ -264,7 +264,7 @@
           "exec": "rm -fr test/.tmp/default.integ/deploy.cdk.out"
         },
         {
-          "exec": "cdk deploy --app \"ts-node -P tsconfig.dev.json test/default.integ.ts\" --no-version-reporting --no-asset-metadata --no-path-metadata '**' --require-approval=never -o test/.tmp/default.integ/deploy.cdk.out"
+          "exec": "cdk deploy --app \"ts-node -P tsconfig.dev.json test/default.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata '**' --require-approval=never -o test/.tmp/default.integ/deploy.cdk.out"
         },
         {
           "exec": "rm -fr test/default.integ.snapshot"
@@ -291,7 +291,7 @@
       "description": "update snapshot for integration test \"default\"",
       "steps": [
         {
-          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/default.integ.ts\" --no-version-reporting --no-asset-metadata --no-path-metadata -o test/default.integ.snapshot > /dev/null"
+          "exec": "cdk synth --app \"ts-node -P tsconfig.dev.json test/default.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata -o test/default.integ.snapshot > /dev/null"
         }
       ]
     },
@@ -300,7 +300,7 @@
       "description": "watch integration test 'default' (without updating snapshots)",
       "steps": [
         {
-          "exec": "cdk watch --app \"ts-node -P tsconfig.dev.json test/default.integ.ts\" --no-version-reporting --no-asset-metadata --no-path-metadata '**' -o test/.tmp/default.integ/deploy.cdk.out"
+          "exec": "cdk watch --app \"ts-node -P tsconfig.dev.json test/default.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata '**' -o test/.tmp/default.integ/deploy.cdk.out"
         }
       ]
     },
