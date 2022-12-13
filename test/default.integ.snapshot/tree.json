@@ -1720,7 +1720,7 @@
                     "dbSubnetGroupName": {
                       "Ref": "PostgresClusterSubnetsFC10D676"
                     },
-                    "engineVersion": "12.4",
+                    "engineVersion": "12.8",
                     "kmsKeyId": {
                       "Fn::GetAtt": [
                         "Key961B73FD",
@@ -1782,7 +1782,7 @@
                       "Ref": "PostgresClusterSubnetsFC10D676"
                     },
                     "engine": "aurora-postgresql",
-                    "engineVersion": "12.4"
+                    "engineVersion": "12.8"
                   }
                 },
                 "constructInfo": {
