@@ -63,7 +63,7 @@ const postgresDatabaseCluster = new rds.DatabaseCluster(rdsStack, 'Postgres Clus
     vpc,
   },
   instances: 1,
-  engine: rds.DatabaseClusterEngine.auroraPostgres({ version: rds.AuroraPostgresEngineVersion.VER_12_4 }),
+  engine: rds.DatabaseClusterEngine.auroraPostgres({ version: rds.AuroraPostgresEngineVersion.VER_12_8 }),
   storageEncryptionKey: sourceKey,
   backup: {
     retention: cdk.Duration.days(1),

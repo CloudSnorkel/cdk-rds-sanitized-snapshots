@@ -478,7 +478,7 @@
         "DBSubnetGroupName": {
           "Ref": "PostgresClusterSubnetsFC10D676"
         },
-        "EngineVersion": "12.4",
+        "EngineVersion": "12.8",
         "KmsKeyId": {
           "Fn::GetAtt": [
             "Key961B73FD",
@@ -534,7 +534,7 @@
           "Ref": "PostgresClusterSubnetsFC10D676"
         },
         "Engine": "aurora-postgresql",
-        "EngineVersion": "12.4"
+        "EngineVersion": "12.8"
       },
       "UpdateReplacePolicy": "Delete",
       "DeletionPolicy": "Delete"
