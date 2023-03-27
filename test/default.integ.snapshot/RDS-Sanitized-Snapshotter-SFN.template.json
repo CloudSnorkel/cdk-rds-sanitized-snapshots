@@ -156,7 +156,7 @@
           }
         },
         "Handler": "index.handler",
-        "Runtime": "nodejs14.x"
+        "Runtime": "nodejs16.x"
       },
       "DependsOn": [
         "MySQLInstanceSnapshotterparametersServiceRoleDefaultPolicyD8BFD2E0",
@@ -392,7 +392,7 @@
           }
         },
         "Handler": "index.handler",
-        "Runtime": "nodejs14.x"
+        "Runtime": "nodejs16.x"
       },
       "DependsOn": [
         "MySQLInstanceSnapshotterwaitServiceRoleDefaultPolicyE6063975",
@@ -1726,7 +1726,7 @@
           }
         },
         "Handler": "index.handler",
-        "Runtime": "nodejs14.x"
+        "Runtime": "nodejs16.x"
       },
       "DependsOn": [
         "MySQLClusterSnapshotterparametersServiceRoleDefaultPolicy9544C62B",
@@ -1962,7 +1962,7 @@
           }
         },
         "Handler": "index.handler",
-        "Runtime": "nodejs14.x"
+        "Runtime": "nodejs16.x"
       },
       "DependsOn": [
         "MySQLClusterSnapshotterwaitServiceRoleDefaultPolicy9E878AF7",
@@ -3298,7 +3298,7 @@
           }
         },
         "Handler": "index.handler",
-        "Runtime": "nodejs14.x"
+        "Runtime": "nodejs16.x"
       },
       "DependsOn": [
         "PostgreSQLInstanceSnapshotterparametersServiceRoleDefaultPolicy9C4B4594",
@@ -3534,7 +3534,7 @@
           }
         },
         "Handler": "index.handler",
-        "Runtime": "nodejs14.x"
+        "Runtime": "nodejs16.x"
       },
       "DependsOn": [
         "PostgreSQLInstanceSnapshotterwaitServiceRoleDefaultPolicy20C24234",
@@ -4840,7 +4840,7 @@
           }
         },
         "Handler": "index.handler",
-        "Runtime": "nodejs14.x"
+        "Runtime": "nodejs16.x"
       },
       "DependsOn": [
         "PostgreSQLClusterSnapshotterparametersServiceRoleDefaultPolicy82F25ECA",
@@ -5076,7 +5076,7 @@
           }
         },
         "Handler": "index.handler",
-        "Runtime": "nodejs14.x"
+        "Runtime": "nodejs16.x"
       },
       "DependsOn": [
         "PostgreSQLClusterSnapshotterwaitServiceRoleDefaultPolicyB7AEBC76",
