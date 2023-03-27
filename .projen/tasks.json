@@ -67,7 +67,7 @@
       "description": "Create a JavaScript bundle from src/delete-old.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/delete-old.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/delete-old.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk"
+          "exec": "esbuild --bundle src/delete-old.lambda.ts --target=\"node16\" --platform=\"node\" --outfile=\"assets/delete-old.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk"
         }
       ]
     },
@@ -76,7 +76,7 @@
       "description": "Continuously update the JavaScript bundle from src/delete-old.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/delete-old.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/delete-old.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk --watch"
+          "exec": "esbuild --bundle src/delete-old.lambda.ts --target=\"node16\" --platform=\"node\" --outfile=\"assets/delete-old.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk --watch"
         }
       ]
     },
@@ -85,7 +85,7 @@
       "description": "Create a JavaScript bundle from src/parameters.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/parameters.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/parameters.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk"
+          "exec": "esbuild --bundle src/parameters.lambda.ts --target=\"node16\" --platform=\"node\" --outfile=\"assets/parameters.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk"
         }
       ]
     },
@@ -94,7 +94,7 @@
       "description": "Continuously update the JavaScript bundle from src/parameters.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/parameters.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/parameters.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk --watch"
+          "exec": "esbuild --bundle src/parameters.lambda.ts --target=\"node16\" --platform=\"node\" --outfile=\"assets/parameters.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk --watch"
         }
       ]
     },
@@ -103,7 +103,7 @@
       "description": "Create a JavaScript bundle from src/test-wait.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/test-wait.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/test-wait.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk"
+          "exec": "esbuild --bundle src/test-wait.lambda.ts --target=\"node16\" --platform=\"node\" --outfile=\"assets/test-wait.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk"
         }
       ]
     },
@@ -112,7 +112,7 @@
       "description": "Continuously update the JavaScript bundle from src/test-wait.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/test-wait.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/test-wait.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk --watch"
+          "exec": "esbuild --bundle src/test-wait.lambda.ts --target=\"node16\" --platform=\"node\" --outfile=\"assets/test-wait.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk --watch"
         }
       ]
     },
@@ -121,7 +121,7 @@
       "description": "Create a JavaScript bundle from src/test.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/test.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/test.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk"
+          "exec": "esbuild --bundle src/test.lambda.ts --target=\"node16\" --platform=\"node\" --outfile=\"assets/test.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk"
         }
       ]
     },
@@ -130,7 +130,7 @@
       "description": "Continuously update the JavaScript bundle from src/test.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/test.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/test.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk --watch"
+          "exec": "esbuild --bundle src/test.lambda.ts --target=\"node16\" --platform=\"node\" --outfile=\"assets/test.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk --watch"
         }
       ]
     },
@@ -139,7 +139,7 @@
       "description": "Create a JavaScript bundle from src/wait.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/wait.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/wait.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk"
+          "exec": "esbuild --bundle src/wait.lambda.ts --target=\"node16\" --platform=\"node\" --outfile=\"assets/wait.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk"
         }
       ]
     },
@@ -148,7 +148,7 @@
       "description": "Continuously update the JavaScript bundle from src/wait.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/wait.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/wait.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk --watch"
+          "exec": "esbuild --bundle src/wait.lambda.ts --target=\"node16\" --platform=\"node\" --outfile=\"assets/wait.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:aws-sdk --watch"
         }
       ]
     },
@@ -504,19 +504,19 @@
           "exec": "yarn upgrade npm-check-updates"
         },
         {
-          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='aws-cdk-lib,constructs'"
+          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='aws-cdk-lib,constructs,jsii'"
         },
         {
-          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='aws-cdk-lib,constructs'"
+          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='aws-cdk-lib,constructs,jsii'"
         },
         {
-          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='aws-cdk-lib,constructs'"
+          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='aws-cdk-lib,constructs,jsii'"
         },
         {
-          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='aws-cdk-lib,constructs'"
+          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='aws-cdk-lib,constructs,jsii'"
         },
         {
-          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='aws-cdk-lib,constructs'"
+          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='aws-cdk-lib,constructs,jsii'"
         },
         {
           "exec": "yarn install --check-files"
