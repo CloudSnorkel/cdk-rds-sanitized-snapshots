@@ -56,7 +56,7 @@
     "organization": false
   },
   "devDependencies": {
-    "@aws-sdk/types": "^3.341.0",
+    "@aws-sdk/types": "^3.342.0",
     "@types/aws-lambda": "^8.10.115",
     "@types/jest": "^27.0.0",
     "@types/node": "^16",
@@ -64,7 +64,7 @@
     "@typescript-eslint/parser": "^5",
     "aws-cdk": "^2",
     "aws-cdk-lib": "2.0.0",
-    "aws-sdk": "^2.1386.0",
+    "aws-sdk": "^2.1390.0",
     "constructs": "10.0.5",
     "esbuild": "^0.17.19",
     "eslint": "^8",
@@ -78,7 +78,7 @@
     "jsii-docgen": "^7.2.9",
     "jsii-pacmak": "^1.82.0",
     "npm-check-updates": "^16",
-    "projen": "^0.71.75",
+    "projen": "^0.71.82",
     "standard-version": "^9",
     "ts-jest": "^27.0.0",
     "ts-node": "^10.9.1",
