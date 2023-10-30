@@ -59,7 +59,7 @@
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
           },
-          "S3Key": "b2231302e0945be1140abd0cc9fc1e27a71955c5f01aa5665d7b945f6226b4f0.zip"
+          "S3Key": "97b590c7ee6304183b966b22e3246b6086a89ed3c20267b3a9cd944df7ac4cb9.zip"
         },
         "Role": {
           "Fn::GetAtt": [
@@ -74,7 +74,7 @@
           }
         },
         "Handler": "index.handler",
-        "Runtime": "nodejs16.x"
+        "Runtime": "nodejs18.x"
       },
       "DependsOn": [
         "TestServiceRoleDefaultPolicyE51BF2AA",
@@ -247,7 +247,7 @@
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
           },
-          "S3Key": "eb703dc0a50e8c0c7127e1dc201a57b0d91fc02b1537344c69e4fba5eefbb1a9.zip"
+          "S3Key": "8b6846efdbd59549edcde659c0cd396434f41431d0fbd238e7df0dc10ff975aa.zip"
         },
         "Role": {
           "Fn::GetAtt": [
@@ -262,7 +262,7 @@
           }
         },
         "Handler": "index.handler",
-        "Runtime": "nodejs16.x",
+        "Runtime": "nodejs18.x",
         "Timeout": 180
       },
       "DependsOn": [
