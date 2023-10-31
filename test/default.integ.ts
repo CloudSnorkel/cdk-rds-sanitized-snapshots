@@ -22,7 +22,7 @@ const vpc = new ec2.Vpc(vpcStack, 'VPC', {
       name: 'Private',
     },
     {
-      subnetType: ec2.SubnetType.PRIVATE_WITH_NAT,
+      subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
       name: 'Isolated',
     },
   ],
@@ -39,10 +39,8 @@ const mysqlDatabaseInstance = new rds.DatabaseInstance(rdsStack, 'MySQL Instance
   deleteAutomatedBackups: true,
 });
 const mysqlDatabaseCluster = new rds.DatabaseCluster(rdsStack, 'MySQL Cluster', {
-  instanceProps: {
-    vpc,
-  },
-  instances: 1,
+  vpc,
+  writer: rds.ClusterInstance.provisioned('writer'),
   engine: rds.DatabaseClusterEngine.auroraMysql({
     version: AuroraMysqlEngineVersion.of('8.0.mysql_aurora.3.05.0', '8.0'),
   }),
@@ -62,10 +60,8 @@ const postgresDatabaseInstance = new rds.DatabaseInstance(rdsStack, 'Postgres In
   deleteAutomatedBackups: true,
 });
 const postgresDatabaseCluster = new rds.DatabaseCluster(rdsStack, 'Postgres Cluster', {
-  instanceProps: {
-    vpc,
-  },
-  instances: 1,
+  vpc,
+  writer: rds.ClusterInstance.provisioned('writer'),
   engine: rds.DatabaseClusterEngine.auroraPostgres({ version: rds.AuroraPostgresEngineVersion.VER_13_4 }),
   storageEncryptionKey: sourceKey,
   backup: {

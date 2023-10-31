@@ -229,17 +229,15 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete"
   },
-  "MySQLClusterInstance1C435F94D": {
+  "MySQLClusterwriterD1438EA3": {
    "Type": "AWS::RDS::DBInstance",
    "Properties": {
     "DBClusterIdentifier": {
      "Ref": "MySQLClusterD5C73C33"
     },
     "DBInstanceClass": "db.t3.medium",
-    "DBSubnetGroupName": {
-     "Ref": "MySQLClusterSubnets30A4ABD4"
-    },
-    "Engine": "aurora-mysql"
+    "Engine": "aurora-mysql",
+    "PromotionTier": 0
    },
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete"
@@ -524,17 +522,15 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete"
   },
-  "PostgresClusterInstance1A52CA01E": {
+  "PostgresClusterwriter527489C6": {
    "Type": "AWS::RDS::DBInstance",
    "Properties": {
     "DBClusterIdentifier": {
      "Ref": "PostgresCluster5A5B7BE8"
     },
     "DBInstanceClass": "db.t3.medium",
-    "DBSubnetGroupName": {
-     "Ref": "PostgresClusterSubnetsFC10D676"
-    },
-    "Engine": "aurora-postgresql"
+    "Engine": "aurora-postgresql",
+    "PromotionTier": 0
    },
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete"
