@@ -58,7 +58,7 @@ export interface IRdsSanitizedSnapshotter {
   /**
    * VPC subnets to use for sanitization task.
    *
-   * @default ec2.SubnetType.PRIVATE_WITH_NAT
+   * @default ec2.SubnetType.PRIVATE_WITH_EGRESS
    */
   readonly sanitizeSubnets?: ec2.SubnetSelection;
 
@@ -165,7 +165,7 @@ export class RdsSanitizedSnapshotter extends Construct {
       vpcSubnets: props.vpc.selectSubnets(props.dbSubnets ?? { subnetType: ec2.SubnetType.PRIVATE_ISOLATED }),
     });
 
-    this.subnets = props.sanitizeSubnets ?? { subnetType: ec2.SubnetType.PRIVATE_WITH_NAT };
+    this.subnets = props.sanitizeSubnets ?? { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS };
     this.fargateCluster = props.fargateCluster ?? new ecs.Cluster(this, 'cluster', { vpc: props.vpc });
     this.sqlScript = props.script;
 
@@ -276,7 +276,9 @@ export class RdsSanitizedSnapshotter extends Construct {
 
     const cleanupTasks = this.cleanup();
     this.snapshotter = new stepfunctions.StateMachine(this, 'Director', {
-      definition: parametersState.next(errorCatcher.addCatch(cleanupTasks, { resultPath: stepfunctions.JsonPath.DISCARD })).next(cleanupTasks),
+      definitionBody: stepfunctions.DefinitionBody.fromChainable(
+        parametersState.next(errorCatcher.addCatch(cleanupTasks, { resultPath: stepfunctions.JsonPath.DISCARD })).next(cleanupTasks),
+      ),
     });
 
     // needed for creating a snapshot with tags

@@ -393,7 +393,7 @@ public readonly sanitizeSubnets: SubnetSelection;
 ```
 
 - *Type:* aws-cdk-lib.aws_ec2.SubnetSelection
-- *Default:* ec2.SubnetType.PRIVATE_WITH_NAT
+- *Default:* ec2.SubnetType.PRIVATE_WITH_EGRESS
 
 VPC subnets to use for sanitization task.
 
