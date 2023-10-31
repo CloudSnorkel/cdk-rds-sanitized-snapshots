@@ -1,7 +1,13 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import * as AWS from 'aws-sdk';
+import {
+  DescribeDBClustersCommand,
+  DescribeDBClusterSnapshotsCommand,
+  DescribeDBInstancesCommand,
+  DescribeDBSnapshotsCommand,
+  RDSClient,
+} from '@aws-sdk/client-rds';
 
-const rds = new AWS.RDS();
+const rds = new RDSClient();
 
 interface Input {
   resourceType: 'snapshot' | 'cluster' | 'instance';
@@ -39,10 +45,10 @@ exports.handler = async function (input: Input) {
     let status: string;
     if (input.isCluster) {
       // wait for cluster snapshot
-      const snapshots = await rds.describeDBClusterSnapshots({
+      const snapshots = await rds.send(new DescribeDBClusterSnapshotsCommand({
         DBClusterIdentifier: input.databaseIdentifier,
         DBClusterSnapshotIdentifier: input.snapshotIdentifier,
-      }).promise();
+      }));
 
       console.log(snapshots);
 
@@ -53,10 +59,10 @@ exports.handler = async function (input: Input) {
       status = snapshots.DBClusterSnapshots[0].Status ?? '';
     } else {
       // wait for instance snapshot
-      const snapshots = await rds.describeDBSnapshots({
+      const snapshots = await rds.send(new DescribeDBSnapshotsCommand({
         DBInstanceIdentifier: input.databaseIdentifier,
         DBSnapshotIdentifier: input.snapshotIdentifier,
-      }).promise();
+      }));
 
       console.log(snapshots);
 
@@ -74,9 +80,9 @@ exports.handler = async function (input: Input) {
     checkStatus(status, input.snapshotIdentifier);
   } else if (input.resourceType == 'cluster') {
     // wait for db
-    const dbs = await rds.describeDBClusters({
+    const dbs = await rds.send(new DescribeDBClustersCommand({
       DBClusterIdentifier: input.databaseIdentifier,
-    }).promise();
+    }));
 
     console.log(dbs);
 
@@ -92,9 +98,9 @@ exports.handler = async function (input: Input) {
     checkStatus(status, input.databaseIdentifier);
   } else if (input.resourceType == 'instance') {
     // wait for db
-    const instances = await rds.describeDBInstances({
+    const instances = await rds.send(new DescribeDBInstancesCommand({
       DBInstanceIdentifier: input.databaseIdentifier,
-    }).promise();
+    }));
 
     console.log(instances);
 

@@ -56,15 +56,16 @@
     "organization": false
   },
   "devDependencies": {
-    "@aws-sdk/types": "^3.433.0",
-    "@types/aws-lambda": "^8.10.125",
+    "@aws-sdk/client-rds": "^3.438.0",
+    "@aws-sdk/client-resource-groups-tagging-api": "^3.438.0",
+    "@aws-sdk/client-sfn": "^3.438.0",
+    "@types/aws-lambda": "^8.10.124",
     "@types/jest": "^27.0.0",
     "@types/node": "^16",
     "@typescript-eslint/eslint-plugin": "^6",
     "@typescript-eslint/parser": "^6",
     "aws-cdk": "^2",
-    "aws-cdk-lib": "2.0.0",
-    "aws-sdk": "^2.1483.0",
+    "aws-cdk-lib": "2.85.0",
     "constructs": "10.0.5",
     "esbuild": "^0.19.5",
     "eslint": "^8",
@@ -86,7 +87,7 @@
     "typescript": "^4.9.5"
   },
   "peerDependencies": {
-    "aws-cdk-lib": "^2.0.0",
+    "aws-cdk-lib": "^2.85.0",
     "constructs": "^10.0.5"
   },
   "resolutions": {

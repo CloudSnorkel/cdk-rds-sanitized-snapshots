@@ -1,5 +1,6 @@
 import * as cdk from 'aws-cdk-lib';
 import { aws_ec2 as ec2, aws_iam as iam, aws_kms as kms, aws_logs as logs, aws_rds as rds, custom_resources, RemovalPolicy } from 'aws-cdk-lib';
+import { AuroraMysqlEngineVersion } from 'aws-cdk-lib/aws-rds';
 import { RdsSanitizedSnapshotter } from '../src';
 import { TestFunction } from '../src/test-function';
 import { TestWaitFunction } from '../src/test-wait-function';
@@ -42,7 +43,9 @@ const mysqlDatabaseCluster = new rds.DatabaseCluster(rdsStack, 'MySQL Cluster', 
     vpc,
   },
   instances: 1,
-  engine: rds.DatabaseClusterEngine.AURORA_MYSQL,
+  engine: rds.DatabaseClusterEngine.auroraMysql({
+    version: AuroraMysqlEngineVersion.of('8.0.mysql_aurora.3.05.0', '8.0'),
+  }),
   backup: {
     retention: cdk.Duration.days(1),
   },
@@ -51,7 +54,7 @@ const mysqlDatabaseCluster = new rds.DatabaseCluster(rdsStack, 'MySQL Cluster', 
 const sourceKey = new kms.Key(rdsStack, 'Key', { description: 'RDS sanitize test source key' });
 const postgresDatabaseInstance = new rds.DatabaseInstance(rdsStack, 'Postgres Instance', {
   vpc,
-  engine: rds.DatabaseInstanceEngine.postgres({ version: rds.PostgresEngineVersion.VER_10 }),
+  engine: rds.DatabaseInstanceEngine.postgres({ version: rds.PostgresEngineVersion.VER_13 }),
   instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE3, ec2.InstanceSize.SMALL),
   storageEncryptionKey: sourceKey,
   removalPolicy: RemovalPolicy.DESTROY,
@@ -63,7 +66,7 @@ const postgresDatabaseCluster = new rds.DatabaseCluster(rdsStack, 'Postgres Clus
     vpc,
   },
   instances: 1,
-  engine: rds.DatabaseClusterEngine.auroraPostgres({ version: rds.AuroraPostgresEngineVersion.VER_12_8 }),
+  engine: rds.DatabaseClusterEngine.auroraPostgres({ version: rds.AuroraPostgresEngineVersion.VER_13_4 }),
   storageEncryptionKey: sourceKey,
   backup: {
     retention: cdk.Duration.days(1),
@@ -101,6 +104,12 @@ const postgresClusterSfn = new RdsSanitizedSnapshotter(sfnStack, 'PostgreSQL Clu
   databaseKey: sourceKey,
   snapshotKey: new kms.Key(sfnStack, 'Snapshot Key', { description: 'RDS sanitize test target key' }), // test re-encryption
 }).snapshotter;
+// const postgresServerlessSfn = new RdsSanitizedSnapshotter(sfnStack, 'PostgreSQL Serverless Snapshotter', {
+//   vpc,
+//   databaseCluster: postgresDatabaseServerless,
+//   script: 'SELECT 1',
+//   snapshotPrefix: 'psql-serverless-snapshot',
+// }).snapshotter;
 
 // Trigger step functions
 const testStack = new cdk.Stack(app, 'RDS-Sanitized-Snapshotter-Test');
@@ -153,3 +162,9 @@ new cdk.CustomResource(testStack, 'Test PostgreSQL Cluster', {
     StepFunctionArn: postgresClusterSfn.stateMachineArn,
   },
 });
+// new cdk.CustomResource(testStack, 'Test PostgreSQL Serverless', {
+//   serviceToken: provider.serviceToken,
+//   properties: {
+//     StepFunctionArn: postgresServerlessSfn.stateMachineArn,
+//   },
+// });
