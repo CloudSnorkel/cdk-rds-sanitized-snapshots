@@ -5,7 +5,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   author: 'Amir Szekely',
   authorAddress: 'amir@cloudsnorkel.com',
   stability: Stability.EXPERIMENTAL,
-  cdkVersion: '2.0.0',
+  cdkVersion: '2.85.0', // for no more deprecated nodejs 14 in integration test
   defaultReleaseBranch: 'main',
   name: '@cloudsnorkel/cdk-rds-sanitized-snapshots',
   repositoryUrl: 'https://github.com/CloudSnorkel/cdk-rds-sanitized-snapshots.git',
@@ -13,8 +13,9 @@ const project = new awscdk.AwsCdkConstructLibrary({
   description: 'CDK construct to periodically take snapshots of RDS databases, sanitize them, and share with selected accounts.',
   devDeps: [
     'esbuild', // for faster NodejsFunction bundling
-    'aws-sdk',
-    '@aws-sdk/types',
+    '@aws-sdk/client-resource-groups-tagging-api',
+    '@aws-sdk/client-rds',
+    '@aws-sdk/client-sfn',
     '@types/aws-lambda',
   ],
   deps: [

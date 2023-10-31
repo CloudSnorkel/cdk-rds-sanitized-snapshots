@@ -1,8 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import * as crypto from 'crypto';
-import * as AWS from 'aws-sdk';
+import { DescribeDBClustersCommand, DescribeDBInstancesCommand, RDSClient } from '@aws-sdk/client-rds';
 
-const rds = new AWS.RDS();
+const rds = new RDSClient();
 
 interface Input {
   executionId: string;
@@ -70,7 +70,7 @@ exports.handler = async function (input: Input): Promise<Parameters> {
   let instanceClass: string;
 
   if (input.isCluster) {
-    const origDb = await rds.describeDBClusters({ DBClusterIdentifier: input.databaseIdentifier }).promise();
+    const origDb = await rds.send(new DescribeDBClustersCommand({ DBClusterIdentifier: input.databaseIdentifier }));
     if (!origDb.DBClusters || origDb.DBClusters.length != 1) {
       throw new Error(`Unable to find ${input.databaseIdentifier}`);
     }
@@ -80,7 +80,7 @@ exports.handler = async function (input: Input): Promise<Parameters> {
       throw new Error(`Database missing some required parameters: ${JSON.stringify(cluster)}`);
     }
 
-    const origInstances = await rds.describeDBInstances({ DBInstanceIdentifier: cluster.DBClusterMembers[0].DBInstanceIdentifier }).promise();
+    const origInstances = await rds.send(new DescribeDBInstancesCommand({ DBInstanceIdentifier: cluster.DBClusterMembers[0].DBInstanceIdentifier }));
     if (!origInstances.DBInstances || origInstances.DBInstances.length < 1) {
       throw new Error(`Unable to find instances for ${input.databaseIdentifier}`);
     }
@@ -96,7 +96,7 @@ exports.handler = async function (input: Input): Promise<Parameters> {
     kmsKeyId = cluster.KmsKeyId;
     instanceClass = instance.DBInstanceClass;
   } else {
-    const origDb = await rds.describeDBInstances({ DBInstanceIdentifier: input.databaseIdentifier }).promise();
+    const origDb = await rds.send(new DescribeDBInstancesCommand({ DBInstanceIdentifier: input.databaseIdentifier }));
     if (!origDb.DBInstances || origDb.DBInstances.length != 1) {
       throw new Error(`Unable to find ${input.databaseIdentifier}`);
     }

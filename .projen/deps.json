@@ -1,7 +1,15 @@
 {
   "dependencies": [
     {
-      "name": "@aws-sdk/types",
+      "name": "@aws-sdk/client-rds",
+      "type": "build"
+    },
+    {
+      "name": "@aws-sdk/client-resource-groups-tagging-api",
+      "type": "build"
+    },
+    {
+      "name": "@aws-sdk/client-sfn",
       "type": "build"
     },
     {
@@ -31,10 +39,6 @@
     {
       "name": "aws-cdk",
       "version": "^2",
-      "type": "build"
-    },
-    {
-      "name": "aws-sdk",
       "type": "build"
     },
     {
@@ -129,7 +133,7 @@
     },
     {
       "name": "aws-cdk-lib",
-      "version": "^2.0.0",
+      "version": "^2.85.0",
       "type": "peer"
     },
     {

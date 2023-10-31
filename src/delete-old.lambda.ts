@@ -1,8 +1,9 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import * as AWS from 'aws-sdk';
+import { DeleteDBClusterSnapshotCommand, RDSClient } from '@aws-sdk/client-rds';
+import { GetResourcesCommand, ResourceGroupsTaggingAPIClient } from '@aws-sdk/client-resource-groups-tagging-api';
 
-const tagging = new AWS.ResourceGroupsTaggingAPI();
-const rds = new AWS.RDS();
+const tagging = new ResourceGroupsTaggingAPIClient();
+const rds = new RDSClient();
 
 interface Input {
   tags: { Key: string; Value: string }[];
@@ -11,12 +12,12 @@ interface Input {
 }
 
 exports.handler = async function (input: Input) {
-  const snapshotsResponse = await tagging.getResources({
+  const snapshotsResponse = await tagging.send(new GetResourcesCommand({
     TagFilters: input.tags.map(f => {
       return { Key: f.Key, Values: [f.Value] };
     }),
     ResourceTypeFilters: [input.resourceType],
-  }).promise();
+  }));
   if (!snapshotsResponse.ResourceTagMappingList) {
     console.error('No snapshots found');
   }
@@ -37,8 +38,8 @@ exports.handler = async function (input: Input) {
 
   for (const snapshot of toDelete) {
     console.log(`Deleting old snapshot: ${snapshot}`);
-    await rds.deleteDBClusterSnapshot({
+    await rds.send(new DeleteDBClusterSnapshotCommand({
       DBClusterSnapshotIdentifier: snapshot,
-    }).promise();
+    }));
   }
 };
