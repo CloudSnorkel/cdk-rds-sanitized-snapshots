@@ -56,10 +56,10 @@
     "organization": false
   },
   "devDependencies": {
-    "@aws-sdk/client-rds": "^3.438.0",
-    "@aws-sdk/client-resource-groups-tagging-api": "^3.438.0",
-    "@aws-sdk/client-sfn": "^3.438.0",
-    "@types/aws-lambda": "^8.10.124",
+    "@aws-sdk/client-rds": "^3.441.0",
+    "@aws-sdk/client-resource-groups-tagging-api": "^3.441.0",
+    "@aws-sdk/client-sfn": "^3.441.0",
+    "@types/aws-lambda": "^8.10.125",
     "@types/jest": "^27.0.0",
     "@types/node": "^16",
     "@typescript-eslint/eslint-plugin": "^6",
@@ -80,7 +80,7 @@
     "jsii-pacmak": "^1.91.0",
     "jsii-rosetta": "1.x",
     "npm-check-updates": "^16",
-    "projen": "^0.76.13",
+    "projen": "^0.76.20",
     "standard-version": "^9",
     "ts-jest": "^27.0.0",
     "ts-node": "^10.9.1",
