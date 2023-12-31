@@ -4777,8 +4777,8 @@
     },
     "Description": "RDS sanitize test target key"
    },
-   "UpdateReplacePolicy": "Retain",
-   "DeletionPolicy": "Retain"
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete"
   },
   "PostgreSQLClusterSnapshotterSG7FF985A8": {
    "Type": "AWS::EC2::SecurityGroup",

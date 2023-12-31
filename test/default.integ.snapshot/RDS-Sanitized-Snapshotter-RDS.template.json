@@ -275,8 +275,8 @@
     },
     "Description": "RDS sanitize test source key"
    },
-   "UpdateReplacePolicy": "Retain",
-   "DeletionPolicy": "Retain"
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete"
   },
   "PostgresInstanceSubnetGroup539F8609": {
    "Type": "AWS::RDS::DBSubnetGroup",
