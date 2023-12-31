@@ -49,7 +49,7 @@ const mysqlDatabaseCluster = new rds.DatabaseCluster(rdsStack, 'MySQL Cluster', 
   },
   removalPolicy: RemovalPolicy.DESTROY,
 });
-const sourceKey = new kms.Key(rdsStack, 'Key', { description: 'RDS sanitize test source key' });
+const sourceKey = new kms.Key(rdsStack, 'Key', { description: 'RDS sanitize test source key', removalPolicy: RemovalPolicy.DESTROY });
 const postgresDatabaseInstance = new rds.DatabaseInstance(rdsStack, 'Postgres Instance', {
   vpc,
   engine: rds.DatabaseInstanceEngine.postgres({ version: rds.PostgresEngineVersion.VER_13 }),
@@ -98,7 +98,7 @@ const postgresClusterSfn = new RdsSanitizedSnapshotter(sfnStack, 'PostgreSQL Clu
   script: 'SELECT 1',
   snapshotPrefix: 'psql-cluster-snapshot',
   databaseKey: sourceKey,
-  snapshotKey: new kms.Key(sfnStack, 'Snapshot Key', { description: 'RDS sanitize test target key' }), // test re-encryption
+  snapshotKey: new kms.Key(sfnStack, 'Snapshot Key', { description: 'RDS sanitize test target key', removalPolicy: RemovalPolicy.DESTROY }), // test re-encryption
 }).snapshotter;
 // const postgresServerlessSfn = new RdsSanitizedSnapshotter(sfnStack, 'PostgreSQL Serverless Snapshotter', {
 //   vpc,
