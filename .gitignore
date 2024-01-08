@@ -34,7 +34,6 @@ jspm_packages/
 cdk.out
 cdk.context.json
 /.idea
-!/.projenrc.js
 /test-reports/
 junit.xml
 /coverage/
@@ -69,3 +68,4 @@ test/default.integ.snapshot/manifest.json
 test/default.integ.snapshot/**/manifest.json
 test/default.integ.snapshot/tree.json
 test/default.integ.snapshot/**/tree.json
+!/.projenrc.js
