@@ -284,7 +284,7 @@ export class RdsSanitizedSnapshotter extends Construct {
     // needed for creating a snapshot with tags
     this.snapshotter.addToRolePolicy(new iam.PolicyStatement({
       actions: ['rds:AddTagsToResource'],
-      resources: [this.tempSnapshotArn, this.targetSnapshotArn, this.tempDbClusterArn],
+      resources: [this.tempSnapshotArn, this.targetSnapshotArn, this.tempDbClusterArn, this.tempDbInstanceArn],
     }));
 
     // key permissions
