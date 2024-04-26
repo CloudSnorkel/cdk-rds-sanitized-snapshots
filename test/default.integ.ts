@@ -1,6 +1,5 @@
 import * as cdk from 'aws-cdk-lib';
 import { aws_ec2 as ec2, aws_iam as iam, aws_kms as kms, aws_logs as logs, aws_rds as rds, custom_resources, RemovalPolicy } from 'aws-cdk-lib';
-import { AuroraMysqlEngineVersion } from 'aws-cdk-lib/aws-rds';
 import { RdsSanitizedSnapshotter } from '../src';
 import { TestFunction } from '../src/test-function';
 import { TestWaitFunction } from '../src/test-wait-function';
@@ -32,7 +31,7 @@ const vpc = new ec2.Vpc(vpcStack, 'VPC', {
 const rdsStack = new cdk.Stack(app, 'RDS-Sanitized-Snapshotter-RDS');
 const mysqlDatabaseInstance = new rds.DatabaseInstance(rdsStack, 'MySQL Instance', {
   vpc,
-  engine: rds.DatabaseInstanceEngine.mysql({ version: rds.MysqlEngineVersion.VER_8_0 }),
+  engine: rds.DatabaseInstanceEngine.MYSQL,
   instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE3, ec2.InstanceSize.SMALL),
   removalPolicy: RemovalPolicy.DESTROY,
   backupRetention: cdk.Duration.days(0),
@@ -41,18 +40,17 @@ const mysqlDatabaseInstance = new rds.DatabaseInstance(rdsStack, 'MySQL Instance
 const mysqlDatabaseCluster = new rds.DatabaseCluster(rdsStack, 'MySQL Cluster', {
   vpc,
   writer: rds.ClusterInstance.provisioned('writer'),
-  engine: rds.DatabaseClusterEngine.auroraMysql({
-    version: AuroraMysqlEngineVersion.of('8.0.mysql_aurora.3.05.0', '8.0'),
-  }),
+  engine: rds.DatabaseClusterEngine.AURORA_MYSQL,
   backup: {
     retention: cdk.Duration.days(1),
   },
   removalPolicy: RemovalPolicy.DESTROY,
 });
+(mysqlDatabaseCluster.node.defaultChild as rds.CfnDBCluster).addPropertyDeletionOverride('DBClusterParameterGroupName');
 const sourceKey = new kms.Key(rdsStack, 'Key', { description: 'RDS sanitize test source key', removalPolicy: RemovalPolicy.DESTROY });
 const postgresDatabaseInstance = new rds.DatabaseInstance(rdsStack, 'Postgres Instance', {
   vpc,
-  engine: rds.DatabaseInstanceEngine.postgres({ version: rds.PostgresEngineVersion.VER_13 }),
+  engine: rds.DatabaseInstanceEngine.POSTGRES,
   instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE3, ec2.InstanceSize.SMALL),
   storageEncryptionKey: sourceKey,
   removalPolicy: RemovalPolicy.DESTROY,
@@ -62,13 +60,15 @@ const postgresDatabaseInstance = new rds.DatabaseInstance(rdsStack, 'Postgres In
 const postgresDatabaseCluster = new rds.DatabaseCluster(rdsStack, 'Postgres Cluster', {
   vpc,
   writer: rds.ClusterInstance.provisioned('writer'),
-  engine: rds.DatabaseClusterEngine.auroraPostgres({ version: rds.AuroraPostgresEngineVersion.VER_13_4 }),
+  engine: rds.DatabaseClusterEngine.AURORA_POSTGRESQL,
+  parameterGroup: rds.ParameterGroup.fromParameterGroupName(rdsStack, 'Parameter Group', 'none'),
   storageEncryptionKey: sourceKey,
   backup: {
     retention: cdk.Duration.days(1),
   },
   removalPolicy: RemovalPolicy.DESTROY,
 });
+(postgresDatabaseCluster.node.defaultChild as rds.CfnDBCluster).addPropertyDeletionOverride('DBClusterParameterGroupName');
 
 // Step Functions
 const sfnStack = new cdk.Stack(app, 'RDS-Sanitized-Snapshotter-SFN');
@@ -133,6 +133,7 @@ const provider = new custom_resources.Provider(testStack, 'Provider', {
     ],
   }),
   logRetention: logs.RetentionDays.ONE_DAY,
+  totalTimeout: cdk.Duration.minutes(59), // custom resource have 1 hour limit, so just below that
 });
 new cdk.CustomResource(testStack, 'Test MySQL Instance', {
   serviceToken: provider.serviceToken,

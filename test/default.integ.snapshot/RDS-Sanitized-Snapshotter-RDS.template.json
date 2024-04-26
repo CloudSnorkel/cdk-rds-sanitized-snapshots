@@ -78,7 +78,6 @@
     },
     "DeleteAutomatedBackups": true,
     "Engine": "mysql",
-    "EngineVersion": "8.0",
     "MasterUsername": {
      "Fn::Join": [
       "",
@@ -187,12 +186,10 @@
    "Properties": {
     "BackupRetentionPeriod": 1,
     "CopyTagsToSnapshot": true,
-    "DBClusterParameterGroupName": "default.aurora-mysql8.0",
     "DBSubnetGroupName": {
      "Ref": "MySQLClusterSubnets30A4ABD4"
     },
     "Engine": "aurora-mysql",
-    "EngineVersion": "8.0.mysql_aurora.3.05.0",
     "MasterUsername": {
      "Fn::Join": [
       "",
@@ -356,7 +353,6 @@
     },
     "DeleteAutomatedBackups": true,
     "Engine": "postgres",
-    "EngineVersion": "13",
     "KmsKeyId": {
      "Fn::GetAtt": [
       "Key961B73FD",
@@ -472,12 +468,10 @@
    "Properties": {
     "BackupRetentionPeriod": 1,
     "CopyTagsToSnapshot": true,
-    "DBClusterParameterGroupName": "default.aurora-postgresql13",
     "DBSubnetGroupName": {
      "Ref": "PostgresClusterSubnetsFC10D676"
     },
     "Engine": "aurora-postgresql",
-    "EngineVersion": "13.4",
     "KmsKeyId": {
      "Fn::GetAtt": [
       "Key961B73FD",
