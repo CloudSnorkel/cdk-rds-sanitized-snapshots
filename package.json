@@ -56,9 +56,9 @@
     "organization": false
   },
   "devDependencies": {
-    "@aws-sdk/client-rds": "^3.577.0",
-    "@aws-sdk/client-resource-groups-tagging-api": "^3.577.0",
-    "@aws-sdk/client-sfn": "^3.577.0",
+    "@aws-sdk/client-rds": "^3.583.0",
+    "@aws-sdk/client-resource-groups-tagging-api": "^3.583.0",
+    "@aws-sdk/client-sfn": "^3.583.0",
     "@types/aws-lambda": "^8.10.138",
     "@types/jest": "^27.0.0",
     "@types/node": "^16 <= 16.18.78",
@@ -67,7 +67,7 @@
     "aws-cdk": "^2",
     "aws-cdk-lib": "2.85.0",
     "constructs": "10.0.5",
-    "esbuild": "^0.21.3",
+    "esbuild": "^0.21.4",
     "eslint": "^8",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.29.1",
@@ -78,7 +78,7 @@
     "jsii-docgen": "^7.2.9",
     "jsii-pacmak": "^1.98.0",
     "jsii-rosetta": "1.x",
-    "projen": "^0.81.15",
+    "projen": "^0.81.16",
     "standard-version": "^9",
     "ts-jest": "^27.0.0",
     "ts-node": "^10.9.2",
@@ -104,6 +104,7 @@
   "license": "Apache-2.0",
   "version": "0.0.0",
   "jest": {
+    "coverageProvider": "v8",
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.ts?(x)",
       "<rootDir>/@(test|src)/**/*(*.)@(spec|test).ts?(x)"
