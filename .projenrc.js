@@ -96,4 +96,7 @@ project.gitattributes.addAttributes('*.json', 'eol=lf');
 project.gitattributes.addAttributes('*.sh', 'eol=lf');
 project.gitattributes.addAttributes('*.yml', 'eol=lf');
 
+// funding
+project.package.addField('funding', 'https://github.com/sponsors/CloudSnorkel');
+
 project.synth();
