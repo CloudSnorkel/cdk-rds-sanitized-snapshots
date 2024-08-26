@@ -2,6 +2,7 @@
 
 .git* eol=lf
 .npmignore eol=lf
+* text=auto eol=lf
 *.js eol=lf
 *.json eol=lf
 *.md eol=lf
