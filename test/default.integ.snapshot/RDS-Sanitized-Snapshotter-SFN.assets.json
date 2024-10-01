@@ -1,5 +1,5 @@
 {
-  "version": "32.0.0",
+  "version": "36.0.0",
   "files": {
     "73ae9c6df09ad4bfbc13c9d4e1f9695a2de8da41bbb8b0037182a8cda9a710c6": {
       "source": {
@@ -10,19 +10,6 @@
         "current_account-current_region": {
           "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
           "objectKey": "73ae9c6df09ad4bfbc13c9d4e1f9695a2de8da41bbb8b0037182a8cda9a710c6.zip",
-          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
-        }
-      }
-    },
-    "5fa1330271b8967d9254ba2d4a07144f8acefe8b77e6d6bba38261373a50d5f8": {
-      "source": {
-        "path": "asset.5fa1330271b8967d9254ba2d4a07144f8acefe8b77e6d6bba38261373a50d5f8",
-        "packaging": "zip"
-      },
-      "destinations": {
-        "current_account-current_region": {
-          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
-          "objectKey": "5fa1330271b8967d9254ba2d4a07144f8acefe8b77e6d6bba38261373a50d5f8.zip",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
         }
       }
@@ -40,7 +27,7 @@
         }
       }
     },
-    "4d342d6a3f6400ba76ff90f4cd6140b4d7b6f7a8a8c14189a2b75f634544caac": {
+    "3961ed00ffe563e995f9d7e4fa79705f773ae1376c3cd5b54e937b4bb5f047c9": {
       "source": {
         "path": "RDS-Sanitized-Snapshotter-SFN.template.json",
         "packaging": "file"
@@ -48,7 +35,7 @@
       "destinations": {
         "current_account-current_region": {
           "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
-          "objectKey": "4d342d6a3f6400ba76ff90f4cd6140b4d7b6f7a8a8c14189a2b75f634544caac.json",
+          "objectKey": "3961ed00ffe563e995f9d7e4fa79705f773ae1376c3cd5b54e937b4bb5f047c9.json",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
         }
       }

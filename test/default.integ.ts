@@ -1,5 +1,13 @@
 import * as cdk from 'aws-cdk-lib';
-import { aws_ec2 as ec2, aws_iam as iam, aws_kms as kms, aws_logs as logs, aws_rds as rds, custom_resources, RemovalPolicy } from 'aws-cdk-lib';
+import {
+  aws_ec2 as ec2,
+  aws_iam as iam,
+  aws_kms as kms,
+  aws_lambda as lambda,
+  aws_logs as logs,
+  aws_rds as rds,
+  custom_resources,
+} from 'aws-cdk-lib';
 import { RdsSanitizedSnapshotter } from '../src';
 import { TestFunction } from '../src/test-function';
 import { TestWaitFunction } from '../src/test-wait-function';
@@ -33,7 +41,7 @@ const mysqlDatabaseInstance = new rds.DatabaseInstance(rdsStack, 'MySQL Instance
   vpc,
   engine: rds.DatabaseInstanceEngine.MYSQL,
   instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE3, ec2.InstanceSize.SMALL),
-  removalPolicy: RemovalPolicy.DESTROY,
+  removalPolicy: cdk.RemovalPolicy.DESTROY,
   backupRetention: cdk.Duration.days(0),
   deleteAutomatedBackups: true,
 });
@@ -44,16 +52,16 @@ const mysqlDatabaseCluster = new rds.DatabaseCluster(rdsStack, 'MySQL Cluster', 
   backup: {
     retention: cdk.Duration.days(1),
   },
-  removalPolicy: RemovalPolicy.DESTROY,
+  removalPolicy: cdk.RemovalPolicy.DESTROY,
 });
 (mysqlDatabaseCluster.node.defaultChild as rds.CfnDBCluster).addPropertyDeletionOverride('DBClusterParameterGroupName');
-const sourceKey = new kms.Key(rdsStack, 'Key', { description: 'RDS sanitize test source key', removalPolicy: RemovalPolicy.DESTROY });
+const sourceKey = new kms.Key(rdsStack, 'Key', { description: 'RDS sanitize test source key', removalPolicy: cdk.RemovalPolicy.DESTROY });
 const postgresDatabaseInstance = new rds.DatabaseInstance(rdsStack, 'Postgres Instance', {
   vpc,
   engine: rds.DatabaseInstanceEngine.POSTGRES,
   instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE3, ec2.InstanceSize.SMALL),
   storageEncryptionKey: sourceKey,
-  removalPolicy: RemovalPolicy.DESTROY,
+  removalPolicy: cdk.RemovalPolicy.DESTROY,
   backupRetention: cdk.Duration.days(0),
   deleteAutomatedBackups: true,
 });
@@ -66,7 +74,7 @@ const postgresDatabaseCluster = new rds.DatabaseCluster(rdsStack, 'Postgres Clus
   backup: {
     retention: cdk.Duration.days(1),
   },
-  removalPolicy: RemovalPolicy.DESTROY,
+  removalPolicy: cdk.RemovalPolicy.DESTROY,
 });
 (postgresDatabaseCluster.node.defaultChild as rds.CfnDBCluster).addPropertyDeletionOverride('DBClusterParameterGroupName');
 
@@ -98,7 +106,7 @@ const postgresClusterSfn = new RdsSanitizedSnapshotter(sfnStack, 'PostgreSQL Clu
   script: 'SELECT 1',
   snapshotPrefix: 'psql-cluster-snapshot',
   databaseKey: sourceKey,
-  snapshotKey: new kms.Key(sfnStack, 'Snapshot Key', { description: 'RDS sanitize test target key', removalPolicy: RemovalPolicy.DESTROY }), // test re-encryption
+  snapshotKey: new kms.Key(sfnStack, 'Snapshot Key', { description: 'RDS sanitize test target key', removalPolicy: cdk.RemovalPolicy.DESTROY }), // test re-encryption
 }).snapshotter;
 // const postgresServerlessSfn = new RdsSanitizedSnapshotter(sfnStack, 'PostgreSQL Serverless Snapshotter', {
 //   vpc,
@@ -109,9 +117,14 @@ const postgresClusterSfn = new RdsSanitizedSnapshotter(sfnStack, 'PostgreSQL Clu
 
 // Trigger step functions
 const testStack = new cdk.Stack(app, 'RDS-Sanitized-Snapshotter-Test');
+const logGroup = new logs.LogGroup(testStack, 'Logs', {
+  removalPolicy: cdk.RemovalPolicy.DESTROY,
+  retention: logs.RetentionDays.ONE_DAY,
+});
 const provider = new custom_resources.Provider(testStack, 'Provider', {
   onEventHandler: new TestFunction(testStack, 'Test', {
-    logRetention: logs.RetentionDays.ONE_DAY,
+    loggingFormat: lambda.LoggingFormat.JSON,
+    logGroup: logGroup,
     initialPolicy: [
       new iam.PolicyStatement({
         actions: ['states:StartExecution'],
@@ -121,7 +134,8 @@ const provider = new custom_resources.Provider(testStack, 'Provider', {
   }),
   isCompleteHandler: new TestWaitFunction(testStack, 'Wait', {
     timeout: cdk.Duration.minutes(3),
-    logRetention: logs.RetentionDays.ONE_DAY,
+    loggingFormat: lambda.LoggingFormat.JSON,
+    logGroup: logGroup,
     initialPolicy: [
       new iam.PolicyStatement({
         actions: [
@@ -132,7 +146,7 @@ const provider = new custom_resources.Provider(testStack, 'Provider', {
       }),
     ],
   }),
-  logRetention: logs.RetentionDays.ONE_DAY,
+  logGroup: logGroup,
   totalTimeout: cdk.Duration.minutes(59), // custom resource have 1 hour limit, so just below that
 });
 new cdk.CustomResource(testStack, 'Test MySQL Instance', {
