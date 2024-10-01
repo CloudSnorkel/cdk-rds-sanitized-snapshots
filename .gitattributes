@@ -29,6 +29,7 @@
 /LICENSE linguist-generated
 /package.json linguist-generated
 /src/delete-old-function.ts linguist-generated
+/src/find-snapshot-function.ts linguist-generated
 /src/parameters-function.ts linguist-generated
 /src/test-function.ts linguist-generated
 /src/test-wait-function.ts linguist-generated

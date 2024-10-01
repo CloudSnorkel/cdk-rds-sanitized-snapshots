@@ -13,6 +13,7 @@ import {
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { DeleteOldFunction } from './delete-old-function';
+import { FindSnapshotFunction } from './find-snapshot-function';
 import { ParametersFunction } from './parameters-function';
 import { WaitFunction } from './wait-function';
 
@@ -89,6 +90,15 @@ export interface IRdsSanitizedSnapshotter {
   readonly snapshotPrefix?: string;
 
   /**
+   * Use the latest available snapshot instead of taking a new one. This can be used to shorten the process at the cost of using a possibly older snapshot.
+   *
+   * This will use the latest snapshot whether it's an automatic system snapshot or a manual snapshot.
+   *
+   * @default false
+   */
+  readonly useExistingSnapshot?: boolean;
+
+  /**
    * Prefix for all temporary snapshots and databases. The step function execution id will be added to it.
    *
    * @default 'sanitize'
@@ -130,6 +140,7 @@ export class RdsSanitizedSnapshotter extends Construct {
   private readonly fargateCluster: ecs.ICluster;
   private readonly sqlScript: string;
   private readonly reencrypt: boolean;
+  private readonly useExistingSnapshot: boolean;
 
   private readonly generalTags: {Key: string; Value: string}[];
   private readonly finalSnapshotTags: {Key: string; Value: string}[];
@@ -188,6 +199,7 @@ export class RdsSanitizedSnapshotter extends Construct {
     this.snapshotPrefix = props.snapshotPrefix ?? this.databaseIdentifier;
 
     this.reencrypt = props.snapshotKey !== undefined;
+    this.useExistingSnapshot = props.useExistingSnapshot ?? false;
 
     this.dbClusterArn = cdk.Stack.of(this).formatArn({
       service: 'rds',
@@ -204,7 +216,7 @@ export class RdsSanitizedSnapshotter extends Construct {
     this.tempSnapshotArn = cdk.Stack.of(this).formatArn({
       service: 'rds',
       resource: this.isCluster ? 'cluster-snapshot' : 'snapshot',
-      resourceName: `${this.tempPrefix}-*`,
+      resourceName: this.useExistingSnapshot ? '*' : `${this.tempPrefix}-*`,
       arnFormat: cdk.ArnFormat.COLON_RESOURCE_NAME,
     });
     this.tempDbClusterArn = cdk.Stack.of(this).formatArn({
@@ -242,14 +254,20 @@ export class RdsSanitizedSnapshotter extends Construct {
 
     let c: stepfunctions.IChainable;
     let s: stepfunctions.INextable;
-    s = c = this.createSnapshot('Create Temporary Snapshot', '$.databaseIdentifier', '$.tempSnapshotId', this.generalTags);
-    s = s.next(this.waitForOperation('Wait for Snapshot', 'snapshot', '$.databaseIdentifier', '$.tempSnapshotId'));
+    let originalSnapshotLocation = '$.tempSnapshotId';
+    if (this.useExistingSnapshot) {
+      originalSnapshotLocation = '$.latestSnapshot.id';
+      s = c = this.findLatestSnapshot('Find Latest Snapshot', '$.databaseIdentifier');
+    } else {
+      s = c = this.createSnapshot('Create Temporary Snapshot', '$.databaseIdentifier', originalSnapshotLocation, this.generalTags);
+      s = s.next(this.waitForOperation('Wait for Snapshot', 'snapshot', '$.databaseIdentifier', originalSnapshotLocation));
+    }
     if (props.snapshotKey) {
-      s = s.next(this.reencryptSnapshot(props.snapshotKey));
+      s = s.next(this.reencryptSnapshot(originalSnapshotLocation, props.snapshotKey));
       s = s.next(this.waitForOperation('Wait for Re-encrypt', 'snapshot', '$.databaseIdentifier', '$.tempEncSnapshotId'));
       s = s.next(this.createTemporaryDatabase('$.tempEncSnapshotId'));
     } else {
-      s = s.next(this.createTemporaryDatabase('$.tempSnapshotId'));
+      s = s.next(this.createTemporaryDatabase(originalSnapshotLocation));
     }
     s = s.next(this.waitForOperation('Wait for Temporary Database', this.isCluster ? 'cluster' : 'instance', '$.tempDbId'));
     s = s.next(this.setPassword());
@@ -342,6 +360,30 @@ export class RdsSanitizedSnapshotter extends Construct {
     return parametersState;
   }
 
+  private findLatestSnapshot(id: string, databaseId: string) {
+    const findFn = new FindSnapshotFunction(this, 'find-snapshot', {
+      logRetention: logs.RetentionDays.ONE_MONTH,
+      initialPolicy: [
+        new iam.PolicyStatement({
+          actions: ['rds:DescribeDBClusterSnapshots', 'rds:DescribeDBSnapshots'],
+          resources: [this.dbClusterArn, this.dbInstanceArn],
+        }),
+      ],
+    });
+
+    let payload = {
+      databaseIdentifier: stepfunctions.JsonPath.stringAt(databaseId),
+      isCluster: this.isCluster,
+    };
+
+    return new stepfunctions_tasks.LambdaInvoke(this, id, {
+      lambdaFunction: findFn,
+      payloadResponseOnly: true,
+      payload: stepfunctions.TaskInput.fromObject(payload),
+      resultPath: stepfunctions.JsonPath.stringAt('$.latestSnapshot'),
+    });
+  }
+
   private createSnapshot(id: string, databaseId: string, snapshotId: string, tags: { Key: string; Value: string }[]) {
     return new stepfunctions_tasks.CallAwsService(this, id, {
       service: 'rds',
@@ -393,14 +435,14 @@ export class RdsSanitizedSnapshotter extends Construct {
     });
   }
 
-  private reencryptSnapshot(key: kms.IKey) {
+  private reencryptSnapshot(snapshot: string, key: kms.IKey) {
     return new stepfunctions_tasks.CallAwsService(this, 'Re-encrypt Snapshot', {
       service: 'rds',
       action: this.isCluster ? 'copyDBClusterSnapshot' : 'copyDBSnapshot',
       parameters: {
-        SourceDBClusterSnapshotIdentifier: this.isCluster ? stepfunctions.JsonPath.stringAt('$.tempSnapshotId') : undefined,
+        SourceDBClusterSnapshotIdentifier: this.isCluster ? stepfunctions.JsonPath.stringAt(snapshot) : undefined,
         TargetDBClusterSnapshotIdentifier: this.isCluster ? stepfunctions.JsonPath.stringAt('$.tempEncSnapshotId') : undefined,
-        SourceDBSnapshotIdentifier: this.isCluster ? undefined : stepfunctions.JsonPath.stringAt('$.tempSnapshotId'),
+        SourceDBSnapshotIdentifier: this.isCluster ? undefined : stepfunctions.JsonPath.stringAt(snapshot),
         TargetDBSnapshotIdentifier: this.isCluster ? undefined : stepfunctions.JsonPath.stringAt('$.tempEncSnapshotId'),
         KmsKeyId: key.keyId,
         CopyTags: false,
@@ -711,18 +753,23 @@ export class RdsSanitizedSnapshotter extends Construct {
     // We retry everything because when any branch fails, all other branches are cancelled.
     // Retrying gives other branches an opportunity to start and hopefully at least run.
     const p = new stepfunctions.Parallel(this, 'Cleanup', { resultPath: stepfunctions.JsonPath.DISCARD });
-    p.branch(
-      new stepfunctions_tasks.CallAwsService(this, 'Temporary Snapshot', {
-        service: 'rds',
-        action: this.isCluster ? 'deleteDBClusterSnapshot' : 'deleteDBSnapshot',
-        parameters: {
-          DbClusterSnapshotIdentifier: this.isCluster ? stepfunctions.JsonPath.stringAt('$.tempSnapshotId') : undefined,
-          DbSnapshotIdentifier: this.isCluster ? undefined : stepfunctions.JsonPath.stringAt('$.tempSnapshotId'),
-        },
-        iamResources: [this.tempSnapshotArn],
-        resultPath: stepfunctions.JsonPath.DISCARD,
-      }).addRetry({ maxAttempts: 5, interval: cdk.Duration.seconds(10) }),
-    );
+    if (!this.useExistingSnapshot) {
+      p.branch(
+        new stepfunctions_tasks.CallAwsService(this, 'Temporary Snapshot', {
+          service: 'rds',
+          action: this.isCluster ? 'deleteDBClusterSnapshot' : 'deleteDBSnapshot',
+          parameters: {
+            DbClusterSnapshotIdentifier: this.isCluster ? stepfunctions.JsonPath.stringAt('$.tempSnapshotId') : undefined,
+            DbSnapshotIdentifier: this.isCluster ? undefined : stepfunctions.JsonPath.stringAt('$.tempSnapshotId'),
+          },
+          iamResources: [this.tempSnapshotArn],
+          resultPath: stepfunctions.JsonPath.DISCARD,
+        }).addRetry({
+          maxAttempts: 5,
+          interval: cdk.Duration.seconds(10),
+        }),
+      );
+    }
     if (this.reencrypt) {
       p.branch(
         new stepfunctions_tasks.CallAwsService(this, 'Re-encrypted Snapshot', {

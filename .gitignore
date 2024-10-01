@@ -55,6 +55,7 @@ tsconfig.json
 !/API.md
 /assets/
 !/src/delete-old-function.ts
+!/src/find-snapshot-function.ts
 !/src/parameters-function.ts
 !/src/test-wait-function.ts
 !/src/test-function.ts

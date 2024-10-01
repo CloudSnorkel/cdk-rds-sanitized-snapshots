@@ -11,6 +11,8 @@
     "bundle": "npx projen bundle",
     "bundle:delete-old.lambda": "npx projen bundle:delete-old.lambda",
     "bundle:delete-old.lambda:watch": "npx projen bundle:delete-old.lambda:watch",
+    "bundle:find-snapshot.lambda": "npx projen bundle:find-snapshot.lambda",
+    "bundle:find-snapshot.lambda:watch": "npx projen bundle:find-snapshot.lambda:watch",
     "bundle:parameters.lambda": "npx projen bundle:parameters.lambda",
     "bundle:parameters.lambda:watch": "npx projen bundle:parameters.lambda:watch",
     "bundle:test-wait.lambda": "npx projen bundle:test-wait.lambda",
