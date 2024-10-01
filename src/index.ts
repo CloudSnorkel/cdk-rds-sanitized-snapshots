@@ -6,6 +6,7 @@ import {
   aws_events_targets as events_targets,
   aws_iam as iam,
   aws_kms as kms,
+  aws_lambda as lambda,
   aws_logs as logs,
   aws_rds as rds,
   aws_stepfunctions as stepfunctions,
@@ -141,6 +142,7 @@ export class RdsSanitizedSnapshotter extends Construct {
   private readonly sqlScript: string;
   private readonly reencrypt: boolean;
   private readonly useExistingSnapshot: boolean;
+  private readonly logGroup: logs.ILogGroup;
 
   private readonly generalTags: {Key: string; Value: string}[];
   private readonly finalSnapshotTags: {Key: string; Value: string}[];
@@ -200,6 +202,11 @@ export class RdsSanitizedSnapshotter extends Construct {
 
     this.reencrypt = props.snapshotKey !== undefined;
     this.useExistingSnapshot = props.useExistingSnapshot ?? false;
+
+    this.logGroup = new logs.LogGroup(this, 'Logs', {
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+      retention: logs.RetentionDays.ONE_MONTH,
+    });
 
     this.dbClusterArn = cdk.Stack.of(this).formatArn({
       service: 'rds',
@@ -329,7 +336,7 @@ export class RdsSanitizedSnapshotter extends Construct {
   }
 
   private dbParametersTask(databaseKey?: kms.IKey) {
-    const parametersFn = new ParametersFunction(this, 'parameters', { logRetention: logs.RetentionDays.ONE_MONTH });
+    const parametersFn = new ParametersFunction(this, 'parameters', { logGroup: this.logGroup, loggingFormat: lambda.LoggingFormat.JSON });
     const parametersState = new stepfunctions_tasks.LambdaInvoke(this, 'Get Parameters', {
       lambdaFunction: parametersFn,
       payload: stepfunctions.TaskInput.fromObject({
@@ -362,13 +369,15 @@ export class RdsSanitizedSnapshotter extends Construct {
 
   private findLatestSnapshot(id: string, databaseId: string) {
     const findFn = new FindSnapshotFunction(this, 'find-snapshot', {
-      logRetention: logs.RetentionDays.ONE_MONTH,
+      logGroup: this.logGroup,
+      loggingFormat: lambda.LoggingFormat.JSON,
       initialPolicy: [
         new iam.PolicyStatement({
           actions: ['rds:DescribeDBClusterSnapshots', 'rds:DescribeDBSnapshots'],
           resources: [this.dbClusterArn, this.dbInstanceArn],
         }),
       ],
+      timeout: cdk.Duration.minutes(1),
     });
 
     let payload = {
@@ -402,7 +411,8 @@ export class RdsSanitizedSnapshotter extends Construct {
 
   private waitForOperation(id: string, resourceType: 'snapshot' | 'cluster' | 'instance', databaseIdentifier: string, snapshotId?: string) {
     this.waitFn = this.waitFn ?? new WaitFunction(this, 'wait', {
-      logRetention: logs.RetentionDays.ONE_MONTH,
+      logGroup: this.logGroup,
+      loggingFormat: lambda.LoggingFormat.JSON,
       initialPolicy: [
         new iam.PolicyStatement({
           actions: ['rds:DescribeDBClusters', 'rds:DescribeDBClusterSnapshots', 'rds:DescribeDBSnapshots', 'rds:DescribeDBInstances'],
@@ -545,11 +555,6 @@ export class RdsSanitizedSnapshotter extends Construct {
   }
 
   private sanitize(): stepfunctions.IChainable {
-    const logGroup = new logs.LogGroup(this, 'Logs', {
-      removalPolicy: cdk.RemovalPolicy.DESTROY,
-      retention: logs.RetentionDays.ONE_MONTH,
-    });
-
     const mysqlTask = new ecs.FargateTaskDefinition(this, 'MySQL Task', {
       volumes: [{ name: 'config', host: {} }],
     });
@@ -561,7 +566,7 @@ export class RdsSanitizedSnapshotter extends Construct {
       image: ecs.AssetImage.fromRegistry('public.ecr.aws/docker/library/bash:4-alpine3.15'),
       command: ['bash', '-c', `echo "${mycnf}" > ~/.my.cnf && chmod 700 ~/.my.cnf`],
       logging: ecs.LogDriver.awsLogs({
-        logGroup,
+        logGroup: this.logGroup,
         streamPrefix: 'mysql-config',
       }),
       essential: false,
@@ -571,7 +576,7 @@ export class RdsSanitizedSnapshotter extends Construct {
       image: ecs.AssetImage.fromRegistry('public.ecr.aws/lts/mysql:latest'),
       command: ['mysql', '-e', this.sqlScript],
       logging: ecs.LogDriver.awsLogs({
-        logGroup,
+        logGroup: this.logGroup,
         streamPrefix: 'mysql-sanitize',
       }),
     });
@@ -583,7 +588,7 @@ export class RdsSanitizedSnapshotter extends Construct {
       image: ecs.AssetImage.fromRegistry('public.ecr.aws/lts/postgres:latest'),
       command: ['psql', '-c', this.sqlScript],
       logging: ecs.LogDriver.awsLogs({
-        logGroup,
+        logGroup: this.logGroup,
         streamPrefix: 'psql-sanitize',
       }),
     });
@@ -726,7 +731,8 @@ export class RdsSanitizedSnapshotter extends Construct {
 
   private deleteOldSnapshots(historyLimit: number) {
     const deleteOldFn = new DeleteOldFunction(this, 'delete-old', {
-      logRetention: logs.RetentionDays.ONE_MONTH,
+      logGroup: this.logGroup,
+      loggingFormat: lambda.LoggingFormat.JSON,
       timeout: cdk.Duration.minutes(5),
     });
     deleteOldFn.addToRolePolicy(new iam.PolicyStatement({

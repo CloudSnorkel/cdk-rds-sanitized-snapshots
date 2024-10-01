@@ -78,18 +78,6 @@
     },
     "DeleteAutomatedBackups": true,
     "Engine": "mysql",
-    "MasterUsername": {
-     "Fn::Join": [
-      "",
-      [
-       "{{resolve:secretsmanager:",
-       {
-        "Ref": "MySQLInstanceSecret84563F6F"
-       },
-       ":SecretString:username::}}"
-      ]
-     ]
-    },
     "MasterUserPassword": {
      "Fn::Join": [
       "",
@@ -99,6 +87,18 @@
         "Ref": "MySQLInstanceSecret84563F6F"
        },
        ":SecretString:password::}}"
+      ]
+     ]
+    },
+    "MasterUsername": {
+     "Fn::Join": [
+      "",
+      [
+       "{{resolve:secretsmanager:",
+       {
+        "Ref": "MySQLInstanceSecret84563F6F"
+       },
+       ":SecretString:username::}}"
       ]
      ]
     },
@@ -190,18 +190,6 @@
      "Ref": "MySQLClusterSubnets30A4ABD4"
     },
     "Engine": "aurora-mysql",
-    "MasterUsername": {
-     "Fn::Join": [
-      "",
-      [
-       "{{resolve:secretsmanager:",
-       {
-        "Ref": "MySQLClusterSecret06B35C31"
-       },
-       ":SecretString:username::}}"
-      ]
-     ]
-    },
     "MasterUserPassword": {
      "Fn::Join": [
       "",
@@ -211,6 +199,18 @@
         "Ref": "MySQLClusterSecret06B35C31"
        },
        ":SecretString:password::}}"
+      ]
+     ]
+    },
+    "MasterUsername": {
+     "Fn::Join": [
+      "",
+      [
+       "{{resolve:secretsmanager:",
+       {
+        "Ref": "MySQLClusterSecret06B35C31"
+       },
+       ":SecretString:username::}}"
       ]
      ]
     },
@@ -242,6 +242,7 @@
   "Key961B73FD": {
    "Type": "AWS::KMS::Key",
    "Properties": {
+    "Description": "RDS sanitize test source key",
     "KeyPolicy": {
      "Statement": [
       {
@@ -269,8 +270,7 @@
       }
      ],
      "Version": "2012-10-17"
-    },
-    "Description": "RDS sanitize test source key"
+    }
    },
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete"
@@ -359,18 +359,6 @@
       "Arn"
      ]
     },
-    "MasterUsername": {
-     "Fn::Join": [
-      "",
-      [
-       "{{resolve:secretsmanager:",
-       {
-        "Ref": "PostgresInstanceSecret47B7DD5E"
-       },
-       ":SecretString:username::}}"
-      ]
-     ]
-    },
     "MasterUserPassword": {
      "Fn::Join": [
       "",
@@ -380,6 +368,18 @@
         "Ref": "PostgresInstanceSecret47B7DD5E"
        },
        ":SecretString:password::}}"
+      ]
+     ]
+    },
+    "MasterUsername": {
+     "Fn::Join": [
+      "",
+      [
+       "{{resolve:secretsmanager:",
+       {
+        "Ref": "PostgresInstanceSecret47B7DD5E"
+       },
+       ":SecretString:username::}}"
       ]
      ]
     },
@@ -478,18 +478,6 @@
       "Arn"
      ]
     },
-    "MasterUsername": {
-     "Fn::Join": [
-      "",
-      [
-       "{{resolve:secretsmanager:",
-       {
-        "Ref": "PostgresClusterSecretEB353FC9"
-       },
-       ":SecretString:username::}}"
-      ]
-     ]
-    },
     "MasterUserPassword": {
      "Fn::Join": [
       "",
@@ -499,6 +487,18 @@
         "Ref": "PostgresClusterSecretEB353FC9"
        },
        ":SecretString:password::}}"
+      ]
+     ]
+    },
+    "MasterUsername": {
+     "Fn::Join": [
+      "",
+      [
+       "{{resolve:secretsmanager:",
+       {
+        "Ref": "PostgresClusterSecretEB353FC9"
+       },
+       ":SecretString:username::}}"
       ]
      ]
     },

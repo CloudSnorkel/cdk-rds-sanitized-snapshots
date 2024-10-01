@@ -1,5 +1,13 @@
 {
  "Resources": {
+  "Logs6819BB44": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "RetentionInDays": 1
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete"
+  },
   "TestServiceRoleCF49002B": {
    "Type": "AWS::IAM::Role",
    "Properties": {
@@ -61,12 +69,6 @@
      },
      "S3Key": "295638eaca4e56d19aa29f193a42e7ff4e2e20125032e0676efb5c35b233d93c.zip"
     },
-    "Role": {
-     "Fn::GetAtt": [
-      "TestServiceRoleCF49002B",
-      "Arn"
-     ]
-    },
     "Description": "src/test.lambda.ts",
     "Environment": {
      "Variables": {
@@ -74,120 +76,23 @@
      }
     },
     "Handler": "index.handler",
+    "LoggingConfig": {
+     "LogFormat": "JSON",
+     "LogGroup": {
+      "Ref": "Logs6819BB44"
+     }
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "TestServiceRoleCF49002B",
+      "Arn"
+     ]
+    },
     "Runtime": "nodejs18.x"
    },
    "DependsOn": [
     "TestServiceRoleDefaultPolicyE51BF2AA",
     "TestServiceRoleCF49002B"
-   ]
-  },
-  "TestLogRetention7A4CD73F": {
-   "Type": "Custom::LogRetention",
-   "Properties": {
-    "ServiceToken": {
-     "Fn::GetAtt": [
-      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-      "Arn"
-     ]
-    },
-    "LogGroupName": {
-     "Fn::Join": [
-      "",
-      [
-       "/aws/lambda/",
-       {
-        "Ref": "Test7BFAF513"
-       }
-      ]
-     ]
-    },
-    "RetentionInDays": 1
-   }
-  },
-  "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": {
-   "Type": "AWS::IAM::Role",
-   "Properties": {
-    "AssumeRolePolicyDocument": {
-     "Statement": [
-      {
-       "Action": "sts:AssumeRole",
-       "Effect": "Allow",
-       "Principal": {
-        "Service": "lambda.amazonaws.com"
-       }
-      }
-     ],
-     "Version": "2012-10-17"
-    },
-    "ManagedPolicyArns": [
-     {
-      "Fn::Join": [
-       "",
-       [
-        "arn:",
-        {
-         "Ref": "AWS::Partition"
-        },
-        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-       ]
-      ]
-     }
-    ]
-   }
-  },
-  "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB": {
-   "Type": "AWS::IAM::Policy",
-   "Properties": {
-    "PolicyDocument": {
-     "Statement": [
-      {
-       "Action": [
-        "logs:PutRetentionPolicy",
-        "logs:DeleteRetentionPolicy"
-       ],
-       "Effect": "Allow",
-       "Resource": "*"
-      }
-     ],
-     "Version": "2012-10-17"
-    },
-    "PolicyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
-    "Roles": [
-     {
-      "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
-     }
-    ]
-   }
-  },
-  "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
-   "Type": "AWS::Lambda::Function",
-   "Properties": {
-    "Handler": "index.handler",
-    "Runtime": {
-     "Fn::FindInMap": [
-      "DefaultCrNodeVersionMap",
-      {
-       "Ref": "AWS::Region"
-      },
-      "value"
-     ]
-    },
-    "Code": {
-     "S3Bucket": {
-      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
-     },
-     "S3Key": "5fa1330271b8967d9254ba2d4a07144f8acefe8b77e6d6bba38261373a50d5f8.zip"
-    },
-    "Role": {
-     "Fn::GetAtt": [
-      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
-      "Arn"
-     ]
-    }
-   },
-   "DependsOn": [
-    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
-    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
    ]
   },
   "WaitServiceRole80F0B8D7": {
@@ -257,12 +162,6 @@
      },
      "S3Key": "a33c1b440d13b6b6bee62c123d3c08a68dd448e2e31726e9f3f30b0c06607178.zip"
     },
-    "Role": {
-     "Fn::GetAtt": [
-      "WaitServiceRole80F0B8D7",
-      "Arn"
-     ]
-    },
     "Description": "src/test-wait.lambda.ts",
     "Environment": {
      "Variables": {
@@ -270,6 +169,18 @@
      }
     },
     "Handler": "index.handler",
+    "LoggingConfig": {
+     "LogFormat": "JSON",
+     "LogGroup": {
+      "Ref": "Logs6819BB44"
+     }
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "WaitServiceRole80F0B8D7",
+      "Arn"
+     ]
+    },
     "Runtime": "nodejs18.x",
     "Timeout": 180
    },
@@ -277,29 +188,6 @@
     "WaitServiceRoleDefaultPolicy527907DE",
     "WaitServiceRole80F0B8D7"
    ]
-  },
-  "WaitLogRetentionD0E6D74E": {
-   "Type": "Custom::LogRetention",
-   "Properties": {
-    "ServiceToken": {
-     "Fn::GetAtt": [
-      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-      "Arn"
-     ]
-    },
-    "LogGroupName": {
-     "Fn::Join": [
-      "",
-      [
-       "/aws/lambda/",
-       {
-        "Ref": "Wait4449FB25"
-       }
-      ]
-     ]
-    },
-    "RetentionInDays": 1
-   }
   },
   "ProviderframeworkonEventServiceRole9FF04296": {
    "Type": "AWS::IAM::Role",
@@ -414,13 +302,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "8e3d635893ea17fa3158623489cd42c680fad925b38de1ef51cb10d84f6e245e.zip"
-    },
-    "Role": {
-     "Fn::GetAtt": [
-      "ProviderframeworkonEventServiceRole9FF04296",
-      "Arn"
-     ]
+     "S3Key": "7382a0addb9f34974a1ea6c6c9b063882af874828f366f5c93b2b7b64db15c94.zip"
     },
     "Description": "AWS CDK resource provider framework - onEvent (RDS-Sanitized-Snapshotter-Test/Provider)",
     "Environment": {
@@ -443,44 +325,24 @@
      }
     },
     "Handler": "framework.onEvent",
-    "Runtime": {
-     "Fn::FindInMap": [
-      "DefaultCrNodeVersionMap",
-      {
-       "Ref": "AWS::Region"
-      },
-      "value"
+    "LoggingConfig": {
+     "LogGroup": {
+      "Ref": "Logs6819BB44"
+     }
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "ProviderframeworkonEventServiceRole9FF04296",
+      "Arn"
      ]
     },
+    "Runtime": "nodejs18.x",
     "Timeout": 900
    },
    "DependsOn": [
     "ProviderframeworkonEventServiceRoleDefaultPolicy48CD2133",
     "ProviderframeworkonEventServiceRole9FF04296"
    ]
-  },
-  "ProviderframeworkonEventLogRetention74EACA97": {
-   "Type": "Custom::LogRetention",
-   "Properties": {
-    "ServiceToken": {
-     "Fn::GetAtt": [
-      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-      "Arn"
-     ]
-    },
-    "LogGroupName": {
-     "Fn::Join": [
-      "",
-      [
-       "/aws/lambda/",
-       {
-        "Ref": "ProviderframeworkonEvent83C1D0A7"
-       }
-      ]
-     ]
-    },
-    "RetentionInDays": 1
-   }
   },
   "ProviderframeworkisCompleteServiceRoleB1087139": {
    "Type": "AWS::IAM::Role",
@@ -588,13 +450,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "8e3d635893ea17fa3158623489cd42c680fad925b38de1ef51cb10d84f6e245e.zip"
-    },
-    "Role": {
-     "Fn::GetAtt": [
-      "ProviderframeworkisCompleteServiceRoleB1087139",
-      "Arn"
-     ]
+     "S3Key": "7382a0addb9f34974a1ea6c6c9b063882af874828f366f5c93b2b7b64db15c94.zip"
     },
     "Description": "AWS CDK resource provider framework - isComplete (RDS-Sanitized-Snapshotter-Test/Provider)",
     "Environment": {
@@ -614,44 +470,24 @@
      }
     },
     "Handler": "framework.isComplete",
-    "Runtime": {
-     "Fn::FindInMap": [
-      "DefaultCrNodeVersionMap",
-      {
-       "Ref": "AWS::Region"
-      },
-      "value"
+    "LoggingConfig": {
+     "LogGroup": {
+      "Ref": "Logs6819BB44"
+     }
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "ProviderframeworkisCompleteServiceRoleB1087139",
+      "Arn"
      ]
     },
+    "Runtime": "nodejs18.x",
     "Timeout": 900
    },
    "DependsOn": [
     "ProviderframeworkisCompleteServiceRoleDefaultPolicy2E7140AC",
     "ProviderframeworkisCompleteServiceRoleB1087139"
    ]
-  },
-  "ProviderframeworkisCompleteLogRetentionC7DBBE41": {
-   "Type": "Custom::LogRetention",
-   "Properties": {
-    "ServiceToken": {
-     "Fn::GetAtt": [
-      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-      "Arn"
-     ]
-    },
-    "LogGroupName": {
-     "Fn::Join": [
-      "",
-      [
-       "/aws/lambda/",
-       {
-        "Ref": "ProviderframeworkisComplete26D7B0CB"
-       }
-      ]
-     ]
-    },
-    "RetentionInDays": 1
-   }
   },
   "ProviderframeworkonTimeoutServiceRole28643D26": {
    "Type": "AWS::IAM::Role",
@@ -759,13 +595,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "8e3d635893ea17fa3158623489cd42c680fad925b38de1ef51cb10d84f6e245e.zip"
-    },
-    "Role": {
-     "Fn::GetAtt": [
-      "ProviderframeworkonTimeoutServiceRole28643D26",
-      "Arn"
-     ]
+     "S3Key": "7382a0addb9f34974a1ea6c6c9b063882af874828f366f5c93b2b7b64db15c94.zip"
     },
     "Description": "AWS CDK resource provider framework - onTimeout (RDS-Sanitized-Snapshotter-Test/Provider)",
     "Environment": {
@@ -785,44 +615,24 @@
      }
     },
     "Handler": "framework.onTimeout",
-    "Runtime": {
-     "Fn::FindInMap": [
-      "DefaultCrNodeVersionMap",
-      {
-       "Ref": "AWS::Region"
-      },
-      "value"
+    "LoggingConfig": {
+     "LogGroup": {
+      "Ref": "Logs6819BB44"
+     }
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "ProviderframeworkonTimeoutServiceRole28643D26",
+      "Arn"
      ]
     },
+    "Runtime": "nodejs18.x",
     "Timeout": 900
    },
    "DependsOn": [
     "ProviderframeworkonTimeoutServiceRoleDefaultPolicy2688969F",
     "ProviderframeworkonTimeoutServiceRole28643D26"
    ]
-  },
-  "ProviderframeworkonTimeoutLogRetentionE4EB0919": {
-   "Type": "Custom::LogRetention",
-   "Properties": {
-    "ServiceToken": {
-     "Fn::GetAtt": [
-      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-      "Arn"
-     ]
-    },
-    "LogGroupName": {
-     "Fn::Join": [
-      "",
-      [
-       "/aws/lambda/",
-       {
-        "Ref": "ProviderframeworkonTimeout0B47CA38"
-       }
-      ]
-     ]
-    },
-    "RetentionInDays": 1
-   }
   },
   "ProviderwaiterstatemachineRole0C7159F9": {
    "Type": "AWS::IAM::Role",
@@ -1020,107 +830,6 @@
   }
  },
  "Mappings": {
-  "DefaultCrNodeVersionMap": {
-   "af-south-1": {
-    "value": "nodejs16.x"
-   },
-   "ap-east-1": {
-    "value": "nodejs16.x"
-   },
-   "ap-northeast-1": {
-    "value": "nodejs16.x"
-   },
-   "ap-northeast-2": {
-    "value": "nodejs16.x"
-   },
-   "ap-northeast-3": {
-    "value": "nodejs16.x"
-   },
-   "ap-south-1": {
-    "value": "nodejs16.x"
-   },
-   "ap-south-2": {
-    "value": "nodejs16.x"
-   },
-   "ap-southeast-1": {
-    "value": "nodejs16.x"
-   },
-   "ap-southeast-2": {
-    "value": "nodejs16.x"
-   },
-   "ap-southeast-3": {
-    "value": "nodejs16.x"
-   },
-   "ca-central-1": {
-    "value": "nodejs16.x"
-   },
-   "cn-north-1": {
-    "value": "nodejs16.x"
-   },
-   "cn-northwest-1": {
-    "value": "nodejs16.x"
-   },
-   "eu-central-1": {
-    "value": "nodejs16.x"
-   },
-   "eu-central-2": {
-    "value": "nodejs16.x"
-   },
-   "eu-north-1": {
-    "value": "nodejs16.x"
-   },
-   "eu-south-1": {
-    "value": "nodejs16.x"
-   },
-   "eu-south-2": {
-    "value": "nodejs16.x"
-   },
-   "eu-west-1": {
-    "value": "nodejs16.x"
-   },
-   "eu-west-2": {
-    "value": "nodejs16.x"
-   },
-   "eu-west-3": {
-    "value": "nodejs16.x"
-   },
-   "me-central-1": {
-    "value": "nodejs16.x"
-   },
-   "me-south-1": {
-    "value": "nodejs16.x"
-   },
-   "sa-east-1": {
-    "value": "nodejs16.x"
-   },
-   "us-east-1": {
-    "value": "nodejs16.x"
-   },
-   "us-east-2": {
-    "value": "nodejs16.x"
-   },
-   "us-gov-east-1": {
-    "value": "nodejs16.x"
-   },
-   "us-gov-west-1": {
-    "value": "nodejs16.x"
-   },
-   "us-iso-east-1": {
-    "value": "nodejs14.x"
-   },
-   "us-iso-west-1": {
-    "value": "nodejs14.x"
-   },
-   "us-isob-east-1": {
-    "value": "nodejs14.x"
-   },
-   "us-west-1": {
-    "value": "nodejs16.x"
-   },
-   "us-west-2": {
-    "value": "nodejs16.x"
-   }
-  },
   "ServiceprincipalMap": {
    "af-south-1": {
     "states": "states.af-south-1.amazonaws.com"
@@ -1151,6 +860,9 @@
    },
    "ap-southeast-3": {
     "states": "states.ap-southeast-3.amazonaws.com"
+   },
+   "ap-southeast-4": {
+    "states": "states.ap-southeast-4.amazonaws.com"
    },
    "ca-central-1": {
     "states": "states.ca-central-1.amazonaws.com"
@@ -1184,6 +896,9 @@
    },
    "eu-west-3": {
     "states": "states.eu-west-3.amazonaws.com"
+   },
+   "il-central-1": {
+    "states": "states.il-central-1.amazonaws.com"
    },
    "me-central-1": {
     "states": "states.me-central-1.amazonaws.com"

@@ -25,7 +25,6 @@
   "MySQLInstanceSnapshotterSGfromRDSSanitizedSnapshotterSFNMySQLInstanceSnapshotterSG69AE57C1ALLPORTSE497E70E": {
    "Type": "AWS::EC2::SecurityGroupIngress",
    "Properties": {
-    "IpProtocol": "tcp",
     "Description": "from RDSSanitizedSnapshotterSFNMySQLInstanceSnapshotterSG69AE57C1:ALL PORTS",
     "FromPort": 0,
     "GroupId": {
@@ -34,6 +33,7 @@
       "GroupId"
      ]
     },
+    "IpProtocol": "tcp",
     "SourceSecurityGroupId": {
      "Fn::GetAtt": [
       "MySQLInstanceSnapshotterSGC75DA465",
@@ -59,6 +59,14 @@
   },
   "MySQLInstanceSnapshottercluster86DF6015": {
    "Type": "AWS::ECS::Cluster"
+  },
+  "MySQLInstanceSnapshotterLogs55691739": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "RetentionInDays": 30
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete"
   },
   "MySQLInstanceSnapshotterparametersServiceRole0017B602": {
    "Type": "AWS::IAM::Role",
@@ -143,12 +151,6 @@
      },
      "S3Key": "73ae9c6df09ad4bfbc13c9d4e1f9695a2de8da41bbb8b0037182a8cda9a710c6.zip"
     },
-    "Role": {
-     "Fn::GetAtt": [
-      "MySQLInstanceSnapshotterparametersServiceRole0017B602",
-      "Arn"
-     ]
-    },
     "Description": "src/parameters.lambda.ts",
     "Environment": {
      "Variables": {
@@ -156,35 +158,24 @@
      }
     },
     "Handler": "index.handler",
+    "LoggingConfig": {
+     "LogFormat": "JSON",
+     "LogGroup": {
+      "Ref": "MySQLInstanceSnapshotterLogs55691739"
+     }
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "MySQLInstanceSnapshotterparametersServiceRole0017B602",
+      "Arn"
+     ]
+    },
     "Runtime": "nodejs18.x"
    },
    "DependsOn": [
     "MySQLInstanceSnapshotterparametersServiceRoleDefaultPolicyD8BFD2E0",
     "MySQLInstanceSnapshotterparametersServiceRole0017B602"
    ]
-  },
-  "MySQLInstanceSnapshotterparametersLogRetention879E313F": {
-   "Type": "Custom::LogRetention",
-   "Properties": {
-    "ServiceToken": {
-     "Fn::GetAtt": [
-      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-      "Arn"
-     ]
-    },
-    "LogGroupName": {
-     "Fn::Join": [
-      "",
-      [
-       "/aws/lambda/",
-       {
-        "Ref": "MySQLInstanceSnapshotterparameters53B0A6E1"
-       }
-      ]
-     ]
-    },
-    "RetentionInDays": 30
-   }
   },
   "MySQLInstanceSnapshotterwaitServiceRole21AAE4F2": {
    "Type": "AWS::IAM::Role",
@@ -379,12 +370,6 @@
      },
      "S3Key": "66486f7e33c34ceaae0d26eda8231c31f462018de9b6f34e598b3cc0df48b44f.zip"
     },
-    "Role": {
-     "Fn::GetAtt": [
-      "MySQLInstanceSnapshotterwaitServiceRole21AAE4F2",
-      "Arn"
-     ]
-    },
     "Description": "src/wait.lambda.ts",
     "Environment": {
      "Variables": {
@@ -392,43 +377,24 @@
      }
     },
     "Handler": "index.handler",
+    "LoggingConfig": {
+     "LogFormat": "JSON",
+     "LogGroup": {
+      "Ref": "MySQLInstanceSnapshotterLogs55691739"
+     }
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "MySQLInstanceSnapshotterwaitServiceRole21AAE4F2",
+      "Arn"
+     ]
+    },
     "Runtime": "nodejs18.x"
    },
    "DependsOn": [
     "MySQLInstanceSnapshotterwaitServiceRoleDefaultPolicyE6063975",
     "MySQLInstanceSnapshotterwaitServiceRole21AAE4F2"
    ]
-  },
-  "MySQLInstanceSnapshotterwaitLogRetentionE2296216": {
-   "Type": "Custom::LogRetention",
-   "Properties": {
-    "ServiceToken": {
-     "Fn::GetAtt": [
-      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-      "Arn"
-     ]
-    },
-    "LogGroupName": {
-     "Fn::Join": [
-      "",
-      [
-       "/aws/lambda/",
-       {
-        "Ref": "MySQLInstanceSnapshotterwait17927A95"
-       }
-      ]
-     ]
-    },
-    "RetentionInDays": 30
-   }
-  },
-  "MySQLInstanceSnapshotterLogs55691739": {
-   "Type": "AWS::Logs::LogGroup",
-   "Properties": {
-    "RetentionInDays": 30
-   },
-   "UpdateReplacePolicy": "Delete",
-   "DeletionPolicy": "Delete"
   },
   "MySQLInstanceSnapshotterMySQLTaskTaskRoleBFA1FB36": {
    "Type": "AWS::IAM::Role",
@@ -1374,17 +1340,11 @@
   "MySQLInstanceSnapshotterDirector69A6B7B4": {
    "Type": "AWS::StepFunctions::StateMachine",
    "Properties": {
-    "RoleArn": {
-     "Fn::GetAtt": [
-      "MySQLInstanceSnapshotterDirectorRoleE2669C80",
-      "Arn"
-     ]
-    },
     "DefinitionString": {
      "Fn::Join": [
       "",
       [
-       "{\"StartAt\":\"Get Parameters\",\"States\":{\"Get Parameters\":{\"Next\":\"Error Catcher\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"Resource\":\"",
+       "{\"StartAt\":\"Get Parameters\",\"States\":{\"Get Parameters\":{\"Next\":\"Error Catcher\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"Resource\":\"",
        {
         "Fn::GetAtt": [
          "MySQLInstanceSnapshotterparameters53B0A6E1",
@@ -1403,7 +1363,7 @@
        {
         "Fn::ImportValue": "RDS-Sanitized-Snapshotter-RDS:ExportsOutputRefMySQLInstanceA2499B9D2BD8E026"
        },
-       "\"}]}},\"Wait for Snapshot\":{\"Next\":\"Create Temporary Database\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
+       "\"}]}},\"Wait for Snapshot\":{\"Next\":\"Create Temporary Database\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
        {
         "Fn::GetAtt": [
          "MySQLInstanceSnapshotterwait17927A95",
@@ -1429,7 +1389,7 @@
        {
         "Fn::ImportValue": "RDS-Sanitized-Snapshotter-RDS:ExportsOutputRefMySQLInstanceA2499B9D2BD8E026"
        },
-       "\"}]}},\"Wait for Temporary Database\":{\"Next\":\"Set Temporary Password\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
+       "\"}]}},\"Wait for Temporary Database\":{\"Next\":\"Set Temporary Password\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
        {
         "Fn::GetAtt": [
          "MySQLInstanceSnapshotterwait17927A95",
@@ -1440,7 +1400,7 @@
        {
         "Ref": "AWS::Partition"
        },
-       ":states:::aws-sdk:rds:modifyDBInstance\",\"Parameters\":{\"DbInstanceIdentifier.$\":\"$.tempDbId\",\"MasterUserPassword.$\":\"$.tempDb.password\",\"ApplyImmediately\":true,\"BackupRetentionPeriod\":0}},\"Wait for Temporary Password\":{\"Next\":\"Get Temporary Endpoint\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
+       ":states:::aws-sdk:rds:modifyDBInstance\",\"Parameters\":{\"DbInstanceIdentifier.$\":\"$.tempDbId\",\"MasterUserPassword.$\":\"$.tempDb.password\",\"ApplyImmediately\":true,\"BackupRetentionPeriod\":0}},\"Wait for Temporary Password\":{\"Next\":\"Get Temporary Endpoint\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
        {
         "Fn::GetAtt": [
          "MySQLInstanceSnapshotterwait17927A95",
@@ -1511,7 +1471,7 @@
          "GroupId"
         ]
        },
-       "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"postgres\",\"Environment\":[{\"Name\":\"PGHOST\",\"Value.$\":\"$.tempDb.host.endpoint\"},{\"Name\":\"PGPORT\",\"Value.$\":\"$.tempDb.port\"},{\"Name\":\"PGUSER\",\"Value.$\":\"$.tempDb.user\"},{\"Name\":\"PGPASSWORD\",\"Value.$\":\"$.tempDb.password\"},{\"Name\":\"PGDATABASE\",\"Value\":\"postgres\"},{\"Name\":\"PGCONNECT_TIMEOUT\",\"Value\":\"30\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Wait for Final Snapshot\":{\"End\":true,\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
+       "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"postgres\",\"Environment\":[{\"Name\":\"PGHOST\",\"Value.$\":\"$.tempDb.host.endpoint\"},{\"Name\":\"PGPORT\",\"Value.$\":\"$.tempDb.port\"},{\"Name\":\"PGUSER\",\"Value.$\":\"$.tempDb.user\"},{\"Name\":\"PGPASSWORD\",\"Value.$\":\"$.tempDb.password\"},{\"Name\":\"PGDATABASE\",\"Value\":\"postgres\"},{\"Name\":\"PGCONNECT_TIMEOUT\",\"Value\":\"30\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Wait for Final Snapshot\":{\"End\":true,\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
        {
         "Fn::GetAtt": [
          "MySQLInstanceSnapshotterwait17927A95",
@@ -1529,6 +1489,12 @@
        ":states:::aws-sdk:rds:deleteDBInstance\",\"Parameters\":{\"DbInstanceIdentifier.$\":\"$.tempDbId\",\"SkipFinalSnapshot\":true}}}}]}}}"
       ]
      ]
+    },
+    "RoleArn": {
+     "Fn::GetAtt": [
+      "MySQLInstanceSnapshotterDirectorRoleE2669C80",
+      "Arn"
+     ]
     }
    },
    "DependsOn": [
@@ -1537,92 +1503,6 @@
    ],
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete"
-  },
-  "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": {
-   "Type": "AWS::IAM::Role",
-   "Properties": {
-    "AssumeRolePolicyDocument": {
-     "Statement": [
-      {
-       "Action": "sts:AssumeRole",
-       "Effect": "Allow",
-       "Principal": {
-        "Service": "lambda.amazonaws.com"
-       }
-      }
-     ],
-     "Version": "2012-10-17"
-    },
-    "ManagedPolicyArns": [
-     {
-      "Fn::Join": [
-       "",
-       [
-        "arn:",
-        {
-         "Ref": "AWS::Partition"
-        },
-        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-       ]
-      ]
-     }
-    ]
-   }
-  },
-  "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB": {
-   "Type": "AWS::IAM::Policy",
-   "Properties": {
-    "PolicyDocument": {
-     "Statement": [
-      {
-       "Action": [
-        "logs:PutRetentionPolicy",
-        "logs:DeleteRetentionPolicy"
-       ],
-       "Effect": "Allow",
-       "Resource": "*"
-      }
-     ],
-     "Version": "2012-10-17"
-    },
-    "PolicyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
-    "Roles": [
-     {
-      "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
-     }
-    ]
-   }
-  },
-  "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
-   "Type": "AWS::Lambda::Function",
-   "Properties": {
-    "Handler": "index.handler",
-    "Runtime": {
-     "Fn::FindInMap": [
-      "DefaultCrNodeVersionMap",
-      {
-       "Ref": "AWS::Region"
-      },
-      "value"
-     ]
-    },
-    "Code": {
-     "S3Bucket": {
-      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
-     },
-     "S3Key": "5fa1330271b8967d9254ba2d4a07144f8acefe8b77e6d6bba38261373a50d5f8.zip"
-    },
-    "Role": {
-     "Fn::GetAtt": [
-      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
-      "Arn"
-     ]
-    }
-   },
-   "DependsOn": [
-    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
-    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
-   ]
   },
   "MySQLClusterSnapshotterSGF5188D63": {
    "Type": "AWS::EC2::SecurityGroup",
@@ -1649,7 +1529,6 @@
   "MySQLClusterSnapshotterSGfromRDSSanitizedSnapshotterSFNMySQLClusterSnapshotterSG88C422B1ALLPORTS9D3E93FA": {
    "Type": "AWS::EC2::SecurityGroupIngress",
    "Properties": {
-    "IpProtocol": "tcp",
     "Description": "from RDSSanitizedSnapshotterSFNMySQLClusterSnapshotterSG88C422B1:ALL PORTS",
     "FromPort": 0,
     "GroupId": {
@@ -1658,6 +1537,7 @@
       "GroupId"
      ]
     },
+    "IpProtocol": "tcp",
     "SourceSecurityGroupId": {
      "Fn::GetAtt": [
       "MySQLClusterSnapshotterSGF5188D63",
@@ -1683,6 +1563,14 @@
   },
   "MySQLClusterSnapshottercluster9B2B4982": {
    "Type": "AWS::ECS::Cluster"
+  },
+  "MySQLClusterSnapshotterLogs987A7E0A": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "RetentionInDays": 30
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete"
   },
   "MySQLClusterSnapshotterparametersServiceRole4959428F": {
    "Type": "AWS::IAM::Role",
@@ -1772,12 +1660,6 @@
      },
      "S3Key": "73ae9c6df09ad4bfbc13c9d4e1f9695a2de8da41bbb8b0037182a8cda9a710c6.zip"
     },
-    "Role": {
-     "Fn::GetAtt": [
-      "MySQLClusterSnapshotterparametersServiceRole4959428F",
-      "Arn"
-     ]
-    },
     "Description": "src/parameters.lambda.ts",
     "Environment": {
      "Variables": {
@@ -1785,35 +1667,24 @@
      }
     },
     "Handler": "index.handler",
+    "LoggingConfig": {
+     "LogFormat": "JSON",
+     "LogGroup": {
+      "Ref": "MySQLClusterSnapshotterLogs987A7E0A"
+     }
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "MySQLClusterSnapshotterparametersServiceRole4959428F",
+      "Arn"
+     ]
+    },
     "Runtime": "nodejs18.x"
    },
    "DependsOn": [
     "MySQLClusterSnapshotterparametersServiceRoleDefaultPolicy9544C62B",
     "MySQLClusterSnapshotterparametersServiceRole4959428F"
    ]
-  },
-  "MySQLClusterSnapshotterparametersLogRetention49B4A2F1": {
-   "Type": "Custom::LogRetention",
-   "Properties": {
-    "ServiceToken": {
-     "Fn::GetAtt": [
-      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-      "Arn"
-     ]
-    },
-    "LogGroupName": {
-     "Fn::Join": [
-      "",
-      [
-       "/aws/lambda/",
-       {
-        "Ref": "MySQLClusterSnapshotterparametersAF9FF89F"
-       }
-      ]
-     ]
-    },
-    "RetentionInDays": 30
-   }
   },
   "MySQLClusterSnapshotterwaitServiceRoleD1DB455D": {
    "Type": "AWS::IAM::Role",
@@ -2008,12 +1879,6 @@
      },
      "S3Key": "66486f7e33c34ceaae0d26eda8231c31f462018de9b6f34e598b3cc0df48b44f.zip"
     },
-    "Role": {
-     "Fn::GetAtt": [
-      "MySQLClusterSnapshotterwaitServiceRoleD1DB455D",
-      "Arn"
-     ]
-    },
     "Description": "src/wait.lambda.ts",
     "Environment": {
      "Variables": {
@@ -2021,43 +1886,24 @@
      }
     },
     "Handler": "index.handler",
+    "LoggingConfig": {
+     "LogFormat": "JSON",
+     "LogGroup": {
+      "Ref": "MySQLClusterSnapshotterLogs987A7E0A"
+     }
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "MySQLClusterSnapshotterwaitServiceRoleD1DB455D",
+      "Arn"
+     ]
+    },
     "Runtime": "nodejs18.x"
    },
    "DependsOn": [
     "MySQLClusterSnapshotterwaitServiceRoleDefaultPolicy9E878AF7",
     "MySQLClusterSnapshotterwaitServiceRoleD1DB455D"
    ]
-  },
-  "MySQLClusterSnapshotterwaitLogRetention01D1F254": {
-   "Type": "Custom::LogRetention",
-   "Properties": {
-    "ServiceToken": {
-     "Fn::GetAtt": [
-      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-      "Arn"
-     ]
-    },
-    "LogGroupName": {
-     "Fn::Join": [
-      "",
-      [
-       "/aws/lambda/",
-       {
-        "Ref": "MySQLClusterSnapshotterwait73D57C6D"
-       }
-      ]
-     ]
-    },
-    "RetentionInDays": 30
-   }
-  },
-  "MySQLClusterSnapshotterLogs987A7E0A": {
-   "Type": "AWS::Logs::LogGroup",
-   "Properties": {
-    "RetentionInDays": 30
-   },
-   "UpdateReplacePolicy": "Delete",
-   "DeletionPolicy": "Delete"
   },
   "MySQLClusterSnapshotterMySQLTaskTaskRole3BAE9027": {
    "Type": "AWS::IAM::Role",
@@ -3073,17 +2919,11 @@
   "MySQLClusterSnapshotterDirector73A14BB0": {
    "Type": "AWS::StepFunctions::StateMachine",
    "Properties": {
-    "RoleArn": {
-     "Fn::GetAtt": [
-      "MySQLClusterSnapshotterDirectorRole6035EB89",
-      "Arn"
-     ]
-    },
     "DefinitionString": {
      "Fn::Join": [
       "",
       [
-       "{\"StartAt\":\"Get Parameters\",\"States\":{\"Get Parameters\":{\"Next\":\"Error Catcher\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"Resource\":\"",
+       "{\"StartAt\":\"Get Parameters\",\"States\":{\"Get Parameters\":{\"Next\":\"Error Catcher\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"Resource\":\"",
        {
         "Fn::GetAtt": [
          "MySQLClusterSnapshotterparametersAF9FF89F",
@@ -3102,7 +2942,7 @@
        {
         "Fn::ImportValue": "RDS-Sanitized-Snapshotter-RDS:ExportsOutputRefMySQLClusterD5C73C3376F94030"
        },
-       "\"}]}},\"Wait for Snapshot\":{\"Next\":\"Create Temporary Database\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
+       "\"}]}},\"Wait for Snapshot\":{\"Next\":\"Create Temporary Database\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
        {
         "Fn::GetAtt": [
          "MySQLClusterSnapshotterwait73D57C6D",
@@ -3128,7 +2968,7 @@
        {
         "Fn::ImportValue": "RDS-Sanitized-Snapshotter-RDS:ExportsOutputRefMySQLClusterD5C73C3376F94030"
        },
-       "\"}]}},\"Wait for Temporary Database\":{\"Next\":\"Set Temporary Password\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
+       "\"}]}},\"Wait for Temporary Database\":{\"Next\":\"Set Temporary Password\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
        {
         "Fn::GetAtt": [
          "MySQLClusterSnapshotterwait73D57C6D",
@@ -3139,7 +2979,7 @@
        {
         "Ref": "AWS::Partition"
        },
-       ":states:::aws-sdk:rds:modifyDBCluster\",\"Parameters\":{\"DbClusterIdentifier.$\":\"$.tempDbId\",\"MasterUserPassword.$\":\"$.tempDb.password\",\"ApplyImmediately\":true}},\"Wait for Temporary Password\":{\"Next\":\"Create Temporary Instance\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
+       ":states:::aws-sdk:rds:modifyDBCluster\",\"Parameters\":{\"DbClusterIdentifier.$\":\"$.tempDbId\",\"MasterUserPassword.$\":\"$.tempDb.password\",\"ApplyImmediately\":true}},\"Wait for Temporary Password\":{\"Next\":\"Create Temporary Instance\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
        {
         "Fn::GetAtt": [
          "MySQLClusterSnapshotterwait73D57C6D",
@@ -3150,7 +2990,7 @@
        {
         "Ref": "AWS::Partition"
        },
-       ":states:::aws-sdk:rds:createDBInstance\",\"Parameters\":{\"DbClusterIdentifier.$\":\"$.tempDbId\",\"DbInstanceIdentifier.$\":\"$.tempDbInstanceId\",\"DbInstanceClass.$\":\"$.tempDbInstanceClass\",\"Engine.$\":\"$.engine\"}},\"Wait for Temporary Instance\":{\"Next\":\"Get Temporary Cluster Endpoint\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
+       ":states:::aws-sdk:rds:createDBInstance\",\"Parameters\":{\"DbClusterIdentifier.$\":\"$.tempDbId\",\"DbInstanceIdentifier.$\":\"$.tempDbInstanceId\",\"DbInstanceClass.$\":\"$.tempDbInstanceClass\",\"Engine.$\":\"$.engine\"}},\"Wait for Temporary Instance\":{\"Next\":\"Get Temporary Cluster Endpoint\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
        {
         "Fn::GetAtt": [
          "MySQLClusterSnapshotterwait73D57C6D",
@@ -3221,7 +3061,7 @@
          "GroupId"
         ]
        },
-       "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"postgres\",\"Environment\":[{\"Name\":\"PGHOST\",\"Value.$\":\"$.tempDb.host.endpoint\"},{\"Name\":\"PGPORT\",\"Value.$\":\"$.tempDb.port\"},{\"Name\":\"PGUSER\",\"Value.$\":\"$.tempDb.user\"},{\"Name\":\"PGPASSWORD\",\"Value.$\":\"$.tempDb.password\"},{\"Name\":\"PGDATABASE\",\"Value\":\"postgres\"},{\"Name\":\"PGCONNECT_TIMEOUT\",\"Value\":\"30\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Wait for Final Snapshot\":{\"End\":true,\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
+       "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"postgres\",\"Environment\":[{\"Name\":\"PGHOST\",\"Value.$\":\"$.tempDb.host.endpoint\"},{\"Name\":\"PGPORT\",\"Value.$\":\"$.tempDb.port\"},{\"Name\":\"PGUSER\",\"Value.$\":\"$.tempDb.user\"},{\"Name\":\"PGPASSWORD\",\"Value.$\":\"$.tempDb.password\"},{\"Name\":\"PGDATABASE\",\"Value\":\"postgres\"},{\"Name\":\"PGCONNECT_TIMEOUT\",\"Value\":\"30\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Wait for Final Snapshot\":{\"End\":true,\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
        {
         "Fn::GetAtt": [
          "MySQLClusterSnapshotterwait73D57C6D",
@@ -3242,6 +3082,12 @@
        },
        ":states:::aws-sdk:rds:deleteDBCluster\",\"Parameters\":{\"DbClusterIdentifier.$\":\"$.tempDbId\",\"SkipFinalSnapshot\":true}}}}]}}}"
       ]
+     ]
+    },
+    "RoleArn": {
+     "Fn::GetAtt": [
+      "MySQLClusterSnapshotterDirectorRole6035EB89",
+      "Arn"
      ]
     }
    },
@@ -3277,7 +3123,6 @@
   "PostgreSQLInstanceSnapshotterSGfromRDSSanitizedSnapshotterSFNPostgreSQLInstanceSnapshotterSG52C89F5AALLPORTSEF1B0737": {
    "Type": "AWS::EC2::SecurityGroupIngress",
    "Properties": {
-    "IpProtocol": "tcp",
     "Description": "from RDSSanitizedSnapshotterSFNPostgreSQLInstanceSnapshotterSG52C89F5A:ALL PORTS",
     "FromPort": 0,
     "GroupId": {
@@ -3286,6 +3131,7 @@
       "GroupId"
      ]
     },
+    "IpProtocol": "tcp",
     "SourceSecurityGroupId": {
      "Fn::GetAtt": [
       "PostgreSQLInstanceSnapshotterSG97FD02BB",
@@ -3311,6 +3157,14 @@
   },
   "PostgreSQLInstanceSnapshottercluster067EC069": {
    "Type": "AWS::ECS::Cluster"
+  },
+  "PostgreSQLInstanceSnapshotterLogsF028D514": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "RetentionInDays": 30
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete"
   },
   "PostgreSQLInstanceSnapshotterparametersServiceRole23B2E630": {
    "Type": "AWS::IAM::Role",
@@ -3395,12 +3249,6 @@
      },
      "S3Key": "73ae9c6df09ad4bfbc13c9d4e1f9695a2de8da41bbb8b0037182a8cda9a710c6.zip"
     },
-    "Role": {
-     "Fn::GetAtt": [
-      "PostgreSQLInstanceSnapshotterparametersServiceRole23B2E630",
-      "Arn"
-     ]
-    },
     "Description": "src/parameters.lambda.ts",
     "Environment": {
      "Variables": {
@@ -3408,35 +3256,24 @@
      }
     },
     "Handler": "index.handler",
+    "LoggingConfig": {
+     "LogFormat": "JSON",
+     "LogGroup": {
+      "Ref": "PostgreSQLInstanceSnapshotterLogsF028D514"
+     }
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "PostgreSQLInstanceSnapshotterparametersServiceRole23B2E630",
+      "Arn"
+     ]
+    },
     "Runtime": "nodejs18.x"
    },
    "DependsOn": [
     "PostgreSQLInstanceSnapshotterparametersServiceRoleDefaultPolicy9C4B4594",
     "PostgreSQLInstanceSnapshotterparametersServiceRole23B2E630"
    ]
-  },
-  "PostgreSQLInstanceSnapshotterparametersLogRetentionED632F48": {
-   "Type": "Custom::LogRetention",
-   "Properties": {
-    "ServiceToken": {
-     "Fn::GetAtt": [
-      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-      "Arn"
-     ]
-    },
-    "LogGroupName": {
-     "Fn::Join": [
-      "",
-      [
-       "/aws/lambda/",
-       {
-        "Ref": "PostgreSQLInstanceSnapshotterparametersA0CF862A"
-       }
-      ]
-     ]
-    },
-    "RetentionInDays": 30
-   }
   },
   "PostgreSQLInstanceSnapshotterwaitServiceRole7815F7FF": {
    "Type": "AWS::IAM::Role",
@@ -3631,12 +3468,6 @@
      },
      "S3Key": "66486f7e33c34ceaae0d26eda8231c31f462018de9b6f34e598b3cc0df48b44f.zip"
     },
-    "Role": {
-     "Fn::GetAtt": [
-      "PostgreSQLInstanceSnapshotterwaitServiceRole7815F7FF",
-      "Arn"
-     ]
-    },
     "Description": "src/wait.lambda.ts",
     "Environment": {
      "Variables": {
@@ -3644,43 +3475,24 @@
      }
     },
     "Handler": "index.handler",
+    "LoggingConfig": {
+     "LogFormat": "JSON",
+     "LogGroup": {
+      "Ref": "PostgreSQLInstanceSnapshotterLogsF028D514"
+     }
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "PostgreSQLInstanceSnapshotterwaitServiceRole7815F7FF",
+      "Arn"
+     ]
+    },
     "Runtime": "nodejs18.x"
    },
    "DependsOn": [
     "PostgreSQLInstanceSnapshotterwaitServiceRoleDefaultPolicy20C24234",
     "PostgreSQLInstanceSnapshotterwaitServiceRole7815F7FF"
    ]
-  },
-  "PostgreSQLInstanceSnapshotterwaitLogRetentionB9508260": {
-   "Type": "Custom::LogRetention",
-   "Properties": {
-    "ServiceToken": {
-     "Fn::GetAtt": [
-      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-      "Arn"
-     ]
-    },
-    "LogGroupName": {
-     "Fn::Join": [
-      "",
-      [
-       "/aws/lambda/",
-       {
-        "Ref": "PostgreSQLInstanceSnapshotterwaitE64141BC"
-       }
-      ]
-     ]
-    },
-    "RetentionInDays": 30
-   }
-  },
-  "PostgreSQLInstanceSnapshotterLogsF028D514": {
-   "Type": "AWS::Logs::LogGroup",
-   "Properties": {
-    "RetentionInDays": 30
-   },
-   "UpdateReplacePolicy": "Delete",
-   "DeletionPolicy": "Delete"
   },
   "PostgreSQLInstanceSnapshotterMySQLTaskTaskRoleB2EF5D11": {
    "Type": "AWS::IAM::Role",
@@ -4636,17 +4448,11 @@
   "PostgreSQLInstanceSnapshotterDirector22C6400C": {
    "Type": "AWS::StepFunctions::StateMachine",
    "Properties": {
-    "RoleArn": {
-     "Fn::GetAtt": [
-      "PostgreSQLInstanceSnapshotterDirectorRole89143BB2",
-      "Arn"
-     ]
-    },
     "DefinitionString": {
      "Fn::Join": [
       "",
       [
-       "{\"StartAt\":\"Get Parameters\",\"States\":{\"Get Parameters\":{\"Next\":\"Error Catcher\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"Resource\":\"",
+       "{\"StartAt\":\"Get Parameters\",\"States\":{\"Get Parameters\":{\"Next\":\"Error Catcher\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"Resource\":\"",
        {
         "Fn::GetAtt": [
          "PostgreSQLInstanceSnapshotterparametersA0CF862A",
@@ -4669,7 +4475,7 @@
        {
         "Fn::ImportValue": "RDS-Sanitized-Snapshotter-RDS:ExportsOutputRefPostgresInstance8F00D2DD14EE3CD9"
        },
-       "\"}]}},\"Wait for Snapshot\":{\"Next\":\"Create Temporary Database\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
+       "\"}]}},\"Wait for Snapshot\":{\"Next\":\"Create Temporary Database\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
        {
         "Fn::GetAtt": [
          "PostgreSQLInstanceSnapshotterwaitE64141BC",
@@ -4695,7 +4501,7 @@
        {
         "Fn::ImportValue": "RDS-Sanitized-Snapshotter-RDS:ExportsOutputRefPostgresInstance8F00D2DD14EE3CD9"
        },
-       "\"}]}},\"Wait for Temporary Database\":{\"Next\":\"Set Temporary Password\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
+       "\"}]}},\"Wait for Temporary Database\":{\"Next\":\"Set Temporary Password\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
        {
         "Fn::GetAtt": [
          "PostgreSQLInstanceSnapshotterwaitE64141BC",
@@ -4706,7 +4512,7 @@
        {
         "Ref": "AWS::Partition"
        },
-       ":states:::aws-sdk:rds:modifyDBInstance\",\"Parameters\":{\"DbInstanceIdentifier.$\":\"$.tempDbId\",\"MasterUserPassword.$\":\"$.tempDb.password\",\"ApplyImmediately\":true,\"BackupRetentionPeriod\":0}},\"Wait for Temporary Password\":{\"Next\":\"Get Temporary Endpoint\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
+       ":states:::aws-sdk:rds:modifyDBInstance\",\"Parameters\":{\"DbInstanceIdentifier.$\":\"$.tempDbId\",\"MasterUserPassword.$\":\"$.tempDb.password\",\"ApplyImmediately\":true,\"BackupRetentionPeriod\":0}},\"Wait for Temporary Password\":{\"Next\":\"Get Temporary Endpoint\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
        {
         "Fn::GetAtt": [
          "PostgreSQLInstanceSnapshotterwaitE64141BC",
@@ -4777,7 +4583,7 @@
          "GroupId"
         ]
        },
-       "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"postgres\",\"Environment\":[{\"Name\":\"PGHOST\",\"Value.$\":\"$.tempDb.host.endpoint\"},{\"Name\":\"PGPORT\",\"Value.$\":\"$.tempDb.port\"},{\"Name\":\"PGUSER\",\"Value.$\":\"$.tempDb.user\"},{\"Name\":\"PGPASSWORD\",\"Value.$\":\"$.tempDb.password\"},{\"Name\":\"PGDATABASE\",\"Value\":\"postgres\"},{\"Name\":\"PGCONNECT_TIMEOUT\",\"Value\":\"30\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Wait for Final Snapshot\":{\"End\":true,\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
+       "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"postgres\",\"Environment\":[{\"Name\":\"PGHOST\",\"Value.$\":\"$.tempDb.host.endpoint\"},{\"Name\":\"PGPORT\",\"Value.$\":\"$.tempDb.port\"},{\"Name\":\"PGUSER\",\"Value.$\":\"$.tempDb.user\"},{\"Name\":\"PGPASSWORD\",\"Value.$\":\"$.tempDb.password\"},{\"Name\":\"PGDATABASE\",\"Value\":\"postgres\"},{\"Name\":\"PGCONNECT_TIMEOUT\",\"Value\":\"30\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Wait for Final Snapshot\":{\"End\":true,\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
        {
         "Fn::GetAtt": [
          "PostgreSQLInstanceSnapshotterwaitE64141BC",
@@ -4795,6 +4601,12 @@
        ":states:::aws-sdk:rds:deleteDBInstance\",\"Parameters\":{\"DbInstanceIdentifier.$\":\"$.tempDbId\",\"SkipFinalSnapshot\":true}}}}]}}}"
       ]
      ]
+    },
+    "RoleArn": {
+     "Fn::GetAtt": [
+      "PostgreSQLInstanceSnapshotterDirectorRole89143BB2",
+      "Arn"
+     ]
     }
    },
    "DependsOn": [
@@ -4807,6 +4619,7 @@
   "SnapshotKey0EDEBDF6": {
    "Type": "AWS::KMS::Key",
    "Properties": {
+    "Description": "RDS sanitize test target key",
     "KeyPolicy": {
      "Statement": [
       {
@@ -4834,8 +4647,7 @@
       }
      ],
      "Version": "2012-10-17"
-    },
-    "Description": "RDS sanitize test target key"
+    }
    },
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete"
@@ -4865,7 +4677,6 @@
   "PostgreSQLClusterSnapshotterSGfromRDSSanitizedSnapshotterSFNPostgreSQLClusterSnapshotterSGD655B838ALLPORTS45F04871": {
    "Type": "AWS::EC2::SecurityGroupIngress",
    "Properties": {
-    "IpProtocol": "tcp",
     "Description": "from RDSSanitizedSnapshotterSFNPostgreSQLClusterSnapshotterSGD655B838:ALL PORTS",
     "FromPort": 0,
     "GroupId": {
@@ -4874,6 +4685,7 @@
       "GroupId"
      ]
     },
+    "IpProtocol": "tcp",
     "SourceSecurityGroupId": {
      "Fn::GetAtt": [
       "PostgreSQLClusterSnapshotterSG7FF985A8",
@@ -4899,6 +4711,14 @@
   },
   "PostgreSQLClusterSnapshotterclusterD066B562": {
    "Type": "AWS::ECS::Cluster"
+  },
+  "PostgreSQLClusterSnapshotterLogsD5C5A603": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "RetentionInDays": 30
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete"
   },
   "PostgreSQLClusterSnapshotterparametersServiceRoleB3208E28": {
    "Type": "AWS::IAM::Role",
@@ -4988,12 +4808,6 @@
      },
      "S3Key": "73ae9c6df09ad4bfbc13c9d4e1f9695a2de8da41bbb8b0037182a8cda9a710c6.zip"
     },
-    "Role": {
-     "Fn::GetAtt": [
-      "PostgreSQLClusterSnapshotterparametersServiceRoleB3208E28",
-      "Arn"
-     ]
-    },
     "Description": "src/parameters.lambda.ts",
     "Environment": {
      "Variables": {
@@ -5001,35 +4815,24 @@
      }
     },
     "Handler": "index.handler",
+    "LoggingConfig": {
+     "LogFormat": "JSON",
+     "LogGroup": {
+      "Ref": "PostgreSQLClusterSnapshotterLogsD5C5A603"
+     }
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "PostgreSQLClusterSnapshotterparametersServiceRoleB3208E28",
+      "Arn"
+     ]
+    },
     "Runtime": "nodejs18.x"
    },
    "DependsOn": [
     "PostgreSQLClusterSnapshotterparametersServiceRoleDefaultPolicy82F25ECA",
     "PostgreSQLClusterSnapshotterparametersServiceRoleB3208E28"
    ]
-  },
-  "PostgreSQLClusterSnapshotterparametersLogRetention51777008": {
-   "Type": "Custom::LogRetention",
-   "Properties": {
-    "ServiceToken": {
-     "Fn::GetAtt": [
-      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-      "Arn"
-     ]
-    },
-    "LogGroupName": {
-     "Fn::Join": [
-      "",
-      [
-       "/aws/lambda/",
-       {
-        "Ref": "PostgreSQLClusterSnapshotterparameters25147BEC"
-       }
-      ]
-     ]
-    },
-    "RetentionInDays": 30
-   }
   },
   "PostgreSQLClusterSnapshotterwaitServiceRole662B9A5C": {
    "Type": "AWS::IAM::Role",
@@ -5224,12 +5027,6 @@
      },
      "S3Key": "66486f7e33c34ceaae0d26eda8231c31f462018de9b6f34e598b3cc0df48b44f.zip"
     },
-    "Role": {
-     "Fn::GetAtt": [
-      "PostgreSQLClusterSnapshotterwaitServiceRole662B9A5C",
-      "Arn"
-     ]
-    },
     "Description": "src/wait.lambda.ts",
     "Environment": {
      "Variables": {
@@ -5237,43 +5034,24 @@
      }
     },
     "Handler": "index.handler",
+    "LoggingConfig": {
+     "LogFormat": "JSON",
+     "LogGroup": {
+      "Ref": "PostgreSQLClusterSnapshotterLogsD5C5A603"
+     }
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "PostgreSQLClusterSnapshotterwaitServiceRole662B9A5C",
+      "Arn"
+     ]
+    },
     "Runtime": "nodejs18.x"
    },
    "DependsOn": [
     "PostgreSQLClusterSnapshotterwaitServiceRoleDefaultPolicyB7AEBC76",
     "PostgreSQLClusterSnapshotterwaitServiceRole662B9A5C"
    ]
-  },
-  "PostgreSQLClusterSnapshotterwaitLogRetention454520B8": {
-   "Type": "Custom::LogRetention",
-   "Properties": {
-    "ServiceToken": {
-     "Fn::GetAtt": [
-      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-      "Arn"
-     ]
-    },
-    "LogGroupName": {
-     "Fn::Join": [
-      "",
-      [
-       "/aws/lambda/",
-       {
-        "Ref": "PostgreSQLClusterSnapshotterwait7A15A210"
-       }
-      ]
-     ]
-    },
-    "RetentionInDays": 30
-   }
-  },
-  "PostgreSQLClusterSnapshotterLogsD5C5A603": {
-   "Type": "AWS::Logs::LogGroup",
-   "Properties": {
-    "RetentionInDays": 30
-   },
-   "UpdateReplacePolicy": "Delete",
-   "DeletionPolicy": "Delete"
   },
   "PostgreSQLClusterSnapshotterMySQLTaskTaskRoleE079F904": {
    "Type": "AWS::IAM::Role",
@@ -6336,17 +6114,11 @@
   "PostgreSQLClusterSnapshotterDirector864DA8F0": {
    "Type": "AWS::StepFunctions::StateMachine",
    "Properties": {
-    "RoleArn": {
-     "Fn::GetAtt": [
-      "PostgreSQLClusterSnapshotterDirectorRole38961E19",
-      "Arn"
-     ]
-    },
     "DefinitionString": {
      "Fn::Join": [
       "",
       [
-       "{\"StartAt\":\"Get Parameters\",\"States\":{\"Get Parameters\":{\"Next\":\"Error Catcher\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"Resource\":\"",
+       "{\"StartAt\":\"Get Parameters\",\"States\":{\"Get Parameters\":{\"Next\":\"Error Catcher\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"Resource\":\"",
        {
         "Fn::GetAtt": [
          "PostgreSQLClusterSnapshotterparameters25147BEC",
@@ -6369,7 +6141,7 @@
        {
         "Fn::ImportValue": "RDS-Sanitized-Snapshotter-RDS:ExportsOutputRefPostgresCluster5A5B7BE8BE4E3D78"
        },
-       "\"}]}},\"Wait for Snapshot\":{\"Next\":\"Re-encrypt Snapshot\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
+       "\"}]}},\"Wait for Snapshot\":{\"Next\":\"Re-encrypt Snapshot\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
        {
         "Fn::GetAtt": [
          "PostgreSQLClusterSnapshotterwait7A15A210",
@@ -6388,7 +6160,7 @@
        {
         "Fn::ImportValue": "RDS-Sanitized-Snapshotter-RDS:ExportsOutputRefPostgresCluster5A5B7BE8BE4E3D78"
        },
-       "\"}]}},\"Wait for Re-encrypt\":{\"Next\":\"Create Temporary Database\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
+       "\"}]}},\"Wait for Re-encrypt\":{\"Next\":\"Create Temporary Database\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
        {
         "Fn::GetAtt": [
          "PostgreSQLClusterSnapshotterwait7A15A210",
@@ -6414,7 +6186,7 @@
        {
         "Fn::ImportValue": "RDS-Sanitized-Snapshotter-RDS:ExportsOutputRefPostgresCluster5A5B7BE8BE4E3D78"
        },
-       "\"}]}},\"Wait for Temporary Database\":{\"Next\":\"Set Temporary Password\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
+       "\"}]}},\"Wait for Temporary Database\":{\"Next\":\"Set Temporary Password\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
        {
         "Fn::GetAtt": [
          "PostgreSQLClusterSnapshotterwait7A15A210",
@@ -6425,7 +6197,7 @@
        {
         "Ref": "AWS::Partition"
        },
-       ":states:::aws-sdk:rds:modifyDBCluster\",\"Parameters\":{\"DbClusterIdentifier.$\":\"$.tempDbId\",\"MasterUserPassword.$\":\"$.tempDb.password\",\"ApplyImmediately\":true}},\"Wait for Temporary Password\":{\"Next\":\"Create Temporary Instance\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
+       ":states:::aws-sdk:rds:modifyDBCluster\",\"Parameters\":{\"DbClusterIdentifier.$\":\"$.tempDbId\",\"MasterUserPassword.$\":\"$.tempDb.password\",\"ApplyImmediately\":true}},\"Wait for Temporary Password\":{\"Next\":\"Create Temporary Instance\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
        {
         "Fn::GetAtt": [
          "PostgreSQLClusterSnapshotterwait7A15A210",
@@ -6436,7 +6208,7 @@
        {
         "Ref": "AWS::Partition"
        },
-       ":states:::aws-sdk:rds:createDBInstance\",\"Parameters\":{\"DbClusterIdentifier.$\":\"$.tempDbId\",\"DbInstanceIdentifier.$\":\"$.tempDbInstanceId\",\"DbInstanceClass.$\":\"$.tempDbInstanceClass\",\"Engine.$\":\"$.engine\"}},\"Wait for Temporary Instance\":{\"Next\":\"Get Temporary Cluster Endpoint\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
+       ":states:::aws-sdk:rds:createDBInstance\",\"Parameters\":{\"DbClusterIdentifier.$\":\"$.tempDbId\",\"DbInstanceIdentifier.$\":\"$.tempDbInstanceId\",\"DbInstanceClass.$\":\"$.tempDbInstanceClass\",\"Engine.$\":\"$.engine\"}},\"Wait for Temporary Instance\":{\"Next\":\"Get Temporary Cluster Endpoint\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
        {
         "Fn::GetAtt": [
          "PostgreSQLClusterSnapshotterwait7A15A210",
@@ -6507,7 +6279,7 @@
          "GroupId"
         ]
        },
-       "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"postgres\",\"Environment\":[{\"Name\":\"PGHOST\",\"Value.$\":\"$.tempDb.host.endpoint\"},{\"Name\":\"PGPORT\",\"Value.$\":\"$.tempDb.port\"},{\"Name\":\"PGUSER\",\"Value.$\":\"$.tempDb.user\"},{\"Name\":\"PGPASSWORD\",\"Value.$\":\"$.tempDb.password\"},{\"Name\":\"PGDATABASE\",\"Value\":\"postgres\"},{\"Name\":\"PGCONNECT_TIMEOUT\",\"Value\":\"30\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Wait for Final Snapshot\":{\"End\":true,\"Retry\":[{\"ErrorEquals\":[\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
+       "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"postgres\",\"Environment\":[{\"Name\":\"PGHOST\",\"Value.$\":\"$.tempDb.host.endpoint\"},{\"Name\":\"PGPORT\",\"Value.$\":\"$.tempDb.port\"},{\"Name\":\"PGUSER\",\"Value.$\":\"$.tempDb.user\"},{\"Name\":\"PGPASSWORD\",\"Value.$\":\"$.tempDb.password\"},{\"Name\":\"PGDATABASE\",\"Value\":\"postgres\"},{\"Name\":\"PGCONNECT_TIMEOUT\",\"Value\":\"30\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Wait for Final Snapshot\":{\"End\":true,\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2},{\"ErrorEquals\":[\"NotReady\"],\"IntervalSeconds\":60,\"MaxAttempts\":300,\"BackoffRate\":1}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
        {
         "Fn::GetAtt": [
          "PostgreSQLClusterSnapshotterwait7A15A210",
@@ -6533,6 +6305,12 @@
        ":states:::aws-sdk:rds:deleteDBCluster\",\"Parameters\":{\"DbClusterIdentifier.$\":\"$.tempDbId\",\"SkipFinalSnapshot\":true}}}}]}}}"
       ]
      ]
+    },
+    "RoleArn": {
+     "Fn::GetAtt": [
+      "PostgreSQLClusterSnapshotterDirectorRole38961E19",
+      "Arn"
+     ]
     }
    },
    "DependsOn": [
@@ -6544,107 +6322,6 @@
   }
  },
  "Mappings": {
-  "DefaultCrNodeVersionMap": {
-   "af-south-1": {
-    "value": "nodejs16.x"
-   },
-   "ap-east-1": {
-    "value": "nodejs16.x"
-   },
-   "ap-northeast-1": {
-    "value": "nodejs16.x"
-   },
-   "ap-northeast-2": {
-    "value": "nodejs16.x"
-   },
-   "ap-northeast-3": {
-    "value": "nodejs16.x"
-   },
-   "ap-south-1": {
-    "value": "nodejs16.x"
-   },
-   "ap-south-2": {
-    "value": "nodejs16.x"
-   },
-   "ap-southeast-1": {
-    "value": "nodejs16.x"
-   },
-   "ap-southeast-2": {
-    "value": "nodejs16.x"
-   },
-   "ap-southeast-3": {
-    "value": "nodejs16.x"
-   },
-   "ca-central-1": {
-    "value": "nodejs16.x"
-   },
-   "cn-north-1": {
-    "value": "nodejs16.x"
-   },
-   "cn-northwest-1": {
-    "value": "nodejs16.x"
-   },
-   "eu-central-1": {
-    "value": "nodejs16.x"
-   },
-   "eu-central-2": {
-    "value": "nodejs16.x"
-   },
-   "eu-north-1": {
-    "value": "nodejs16.x"
-   },
-   "eu-south-1": {
-    "value": "nodejs16.x"
-   },
-   "eu-south-2": {
-    "value": "nodejs16.x"
-   },
-   "eu-west-1": {
-    "value": "nodejs16.x"
-   },
-   "eu-west-2": {
-    "value": "nodejs16.x"
-   },
-   "eu-west-3": {
-    "value": "nodejs16.x"
-   },
-   "me-central-1": {
-    "value": "nodejs16.x"
-   },
-   "me-south-1": {
-    "value": "nodejs16.x"
-   },
-   "sa-east-1": {
-    "value": "nodejs16.x"
-   },
-   "us-east-1": {
-    "value": "nodejs16.x"
-   },
-   "us-east-2": {
-    "value": "nodejs16.x"
-   },
-   "us-gov-east-1": {
-    "value": "nodejs16.x"
-   },
-   "us-gov-west-1": {
-    "value": "nodejs16.x"
-   },
-   "us-iso-east-1": {
-    "value": "nodejs14.x"
-   },
-   "us-iso-west-1": {
-    "value": "nodejs14.x"
-   },
-   "us-isob-east-1": {
-    "value": "nodejs14.x"
-   },
-   "us-west-1": {
-    "value": "nodejs16.x"
-   },
-   "us-west-2": {
-    "value": "nodejs16.x"
-   }
-  },
   "ServiceprincipalMap": {
    "af-south-1": {
     "states": "states.af-south-1.amazonaws.com"
@@ -6675,6 +6352,9 @@
    },
    "ap-southeast-3": {
     "states": "states.ap-southeast-3.amazonaws.com"
+   },
+   "ap-southeast-4": {
+    "states": "states.ap-southeast-4.amazonaws.com"
    },
    "ca-central-1": {
     "states": "states.ca-central-1.amazonaws.com"
@@ -6708,6 +6388,9 @@
    },
    "eu-west-3": {
     "states": "states.eu-west-3.amazonaws.com"
+   },
+   "il-central-1": {
+    "states": "states.il-central-1.amazonaws.com"
    },
    "me-central-1": {
     "states": "states.me-central-1.amazonaws.com"
