@@ -166,6 +166,7 @@ Trigger this step function to get a new snapshot.
 | <code><a href="#@cloudsnorkel/cdk-rds-sanitized-snapshots.IRdsSanitizedSnapshotter.property.snapshotKey">snapshotKey</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | Optional KMS key to encrypt target snapshot. |
 | <code><a href="#@cloudsnorkel/cdk-rds-sanitized-snapshots.IRdsSanitizedSnapshotter.property.snapshotPrefix">snapshotPrefix</a></code> | <code>string</code> | Prefix for sanitized snapshot name. |
 | <code><a href="#@cloudsnorkel/cdk-rds-sanitized-snapshots.IRdsSanitizedSnapshotter.property.tempPrefix">tempPrefix</a></code> | <code>string</code> | Prefix for all temporary snapshots and databases. |
+| <code><a href="#@cloudsnorkel/cdk-rds-sanitized-snapshots.IRdsSanitizedSnapshotter.property.useExistingSnapshot">useExistingSnapshot</a></code> | <code>boolean</code> | Use the latest available snapshot instead of taking a new one. |
 
 ---
 
@@ -366,6 +367,23 @@ public readonly tempPrefix: string;
 Prefix for all temporary snapshots and databases.
 
 The step function execution id will be added to it.
+
+---
+
+##### `useExistingSnapshot`<sup>Optional</sup> <a name="useExistingSnapshot" id="@cloudsnorkel/cdk-rds-sanitized-snapshots.IRdsSanitizedSnapshotter.property.useExistingSnapshot"></a>
+
+```typescript
+public readonly useExistingSnapshot: boolean;
+```
+
+- *Type:* boolean
+- *Default:* false
+
+Use the latest available snapshot instead of taking a new one.
+
+This can be used to shorten the process at the cost of using a possibly older snapshot.
+
+This will use the latest snapshot whether it's an automatic system snapshot or a manual snapshot.
 
 ---
 

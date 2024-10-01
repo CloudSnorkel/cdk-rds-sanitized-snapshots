@@ -148,6 +148,7 @@
           "**/test/**",
           "**/build-tools/**",
           "src/delete-old.lambda.ts",
+          "src/find-snapshot.lambda.ts",
           "src/parameters.lambda.ts",
           "src/test-wait.lambda.ts",
           "src/test.lambda.ts",

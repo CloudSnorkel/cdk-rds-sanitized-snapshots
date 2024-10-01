@@ -50,6 +50,9 @@
           "spawn": "bundle:delete-old.lambda"
         },
         {
+          "spawn": "bundle:find-snapshot.lambda"
+        },
+        {
           "spawn": "bundle:parameters.lambda"
         },
         {
@@ -78,6 +81,24 @@
       "steps": [
         {
           "exec": "esbuild --bundle src/delete-old.lambda.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/delete-old.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --watch"
+        }
+      ]
+    },
+    "bundle:find-snapshot.lambda": {
+      "name": "bundle:find-snapshot.lambda",
+      "description": "Create a JavaScript bundle from src/find-snapshot.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/find-snapshot.lambda.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/find-snapshot.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/*"
+        }
+      ]
+    },
+    "bundle:find-snapshot.lambda:watch": {
+      "name": "bundle:find-snapshot.lambda:watch",
+      "description": "Continuously update the JavaScript bundle from src/find-snapshot.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/find-snapshot.lambda.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/find-snapshot.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --watch"
         }
       ]
     },
