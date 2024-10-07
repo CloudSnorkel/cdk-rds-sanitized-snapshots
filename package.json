@@ -58,9 +58,9 @@
     "organization": false
   },
   "devDependencies": {
-    "@aws-sdk/client-rds": "^3.658.1",
-    "@aws-sdk/client-resource-groups-tagging-api": "^3.658.1",
-    "@aws-sdk/client-sfn": "^3.658.1",
+    "@aws-sdk/client-rds": "^3.665.0",
+    "@aws-sdk/client-resource-groups-tagging-api": "^3.665.0",
+    "@aws-sdk/client-sfn": "^3.665.0",
     "@types/aws-lambda": "^8.10.145",
     "@types/jest": "^27.0.0",
     "@types/node": "^16 <= 16.18.78",
@@ -73,7 +73,7 @@
     "esbuild": "^0.24.0",
     "eslint": "^8",
     "eslint-import-resolver-typescript": "^3.6.3",
-    "eslint-plugin-import": "^2.30.0",
+    "eslint-plugin-import": "^2.31.0",
     "jest": "^27.0.0",
     "jest-junit": "^15",
     "jsii": "1.x",
