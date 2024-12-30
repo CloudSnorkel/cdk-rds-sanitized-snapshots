@@ -58,7 +58,7 @@
     "organization": false
   },
   "devDependencies": {
-    "@aws-sdk/client-rds": "^3.716.0",
+    "@aws-sdk/client-rds": "^3.719.1",
     "@aws-sdk/client-resource-groups-tagging-api": "^3.716.0",
     "@aws-sdk/client-sfn": "^3.716.0",
     "@stylistic/eslint-plugin": "^2",
