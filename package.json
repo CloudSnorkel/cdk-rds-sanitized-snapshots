@@ -58,9 +58,9 @@
     "organization": false
   },
   "devDependencies": {
-    "@aws-sdk/client-rds": "^3.731.1",
-    "@aws-sdk/client-resource-groups-tagging-api": "^3.731.1",
-    "@aws-sdk/client-sfn": "^3.731.1",
+    "@aws-sdk/client-rds": "^3.734.0",
+    "@aws-sdk/client-resource-groups-tagging-api": "^3.734.0",
+    "@aws-sdk/client-sfn": "^3.734.0",
     "@stylistic/eslint-plugin": "^2",
     "@types/aws-lambda": "^8.10.147",
     "@types/jest": "^27.0.0",
