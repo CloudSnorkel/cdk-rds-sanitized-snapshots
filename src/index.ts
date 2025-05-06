@@ -298,7 +298,7 @@ export class RdsSanitizedSnapshotter extends Construct {
     }
 
     if (props.snapshotHistoryLimit) {
-      s.next(this.deleteOldSnapshots(props.snapshotHistoryLimit));
+      s.next(this.deleteOldSnapshots(this.isCluster, props.snapshotHistoryLimit));
     }
 
     errorCatcher.branch(c);
@@ -733,7 +733,7 @@ export class RdsSanitizedSnapshotter extends Construct {
     });
   }
 
-  private deleteOldSnapshots(historyLimit: number) {
+  private deleteOldSnapshots(isCluster: boolean, historyLimit: number) {
     const deleteOldFn = new DeleteOldFunction(this, 'delete-old', {
       logGroup: this.logGroup,
       loggingFormat: lambda.LoggingFormat.JSON,
@@ -752,7 +752,7 @@ export class RdsSanitizedSnapshotter extends Construct {
       payload: stepfunctions.TaskInput.fromObject(<DeleteOldSnapshotsInput>{
         tags: this.finalSnapshotTags,
         historyLimit: historyLimit,
-        resourceType: 'rds:cluster-snapshot',
+        isCluster: isCluster,
       }),
       payloadResponseOnly: true,
       resultPath: stepfunctions.JsonPath.DISCARD,
