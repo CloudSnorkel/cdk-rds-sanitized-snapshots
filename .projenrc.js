@@ -79,6 +79,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   jestOptions: {
     jestVersion: '^27.0.0', // 28 requires a later typescript version
   },
+  pullRequestTemplate: false,
 });
 
 // disable automatic releases, but keep workflow that can be triggered manually
