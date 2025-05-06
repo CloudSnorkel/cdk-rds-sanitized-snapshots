@@ -5,13 +5,13 @@ import { GetResourcesCommand, ResourceGroupsTaggingAPIClient } from '@aws-sdk/cl
 const tagging = new ResourceGroupsTaggingAPIClient();
 const rds = new RDSClient();
 
-interface Input {
+export interface DeleteOldSnapshotsInput {
   tags: { Key: string; Value: string }[];
   historyLimit: number;
   resourceType: string;
 }
 
-exports.handler = async function (input: Input) {
+export async function handler(input: DeleteOldSnapshotsInput) {
   const snapshotsResponse = await tagging.send(new GetResourcesCommand({
     TagFilters: input.tags.map(f => {
       return { Key: f.Key, Values: [f.Value] };
@@ -42,4 +42,4 @@ exports.handler = async function (input: Input) {
       DBClusterSnapshotIdentifier: snapshot,
     }));
   }
-};
+}

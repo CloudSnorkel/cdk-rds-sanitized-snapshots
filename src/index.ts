@@ -14,9 +14,13 @@ import {
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { DeleteOldFunction } from './delete-old-function';
+import { DeleteOldSnapshotsInput } from './delete-old.lambda';
 import { FindSnapshotFunction } from './find-snapshot-function';
+import { FindSnapshotInput } from './find-snapshot.lambda';
 import { ParametersFunction } from './parameters-function';
+import { ParametersInput } from './parameters.lambda';
 import { WaitFunction } from './wait-function';
+import { WaitInput } from './wait.lambda';
 
 export interface IRdsSanitizedSnapshotter {
   /**
@@ -339,7 +343,7 @@ export class RdsSanitizedSnapshotter extends Construct {
     const parametersFn = new ParametersFunction(this, 'parameters', { logGroup: this.logGroup, loggingFormat: lambda.LoggingFormat.JSON });
     const parametersState = new stepfunctions_tasks.LambdaInvoke(this, 'Get Parameters', {
       lambdaFunction: parametersFn,
-      payload: stepfunctions.TaskInput.fromObject({
+      payload: stepfunctions.TaskInput.fromObject(<ParametersInput>{
         executionId: stepfunctions.JsonPath.stringAt('$$.Execution.Id'),
         isCluster: this.isCluster,
         databaseIdentifier: this.databaseIdentifier,
@@ -380,7 +384,7 @@ export class RdsSanitizedSnapshotter extends Construct {
       timeout: cdk.Duration.minutes(1),
     });
 
-    let payload = {
+    const payload: FindSnapshotInput = {
       databaseIdentifier: stepfunctions.JsonPath.stringAt(databaseId),
       isCluster: this.isCluster,
     };
@@ -435,7 +439,7 @@ export class RdsSanitizedSnapshotter extends Construct {
     return new stepfunctions_tasks.LambdaInvoke(this, id, {
       lambdaFunction: this.waitFn,
       payloadResponseOnly: true,
-      payload: stepfunctions.TaskInput.fromObject(payload),
+      payload: stepfunctions.TaskInput.fromObject(<WaitInput>payload),
       resultPath: stepfunctions.JsonPath.DISCARD,
     }).addRetry({
       errors: ['NotReady'],
@@ -745,7 +749,7 @@ export class RdsSanitizedSnapshotter extends Construct {
     }));
     return new stepfunctions_tasks.LambdaInvoke(this, 'Delete Old Snapshots', {
       lambdaFunction: deleteOldFn,
-      payload: stepfunctions.TaskInput.fromObject({
+      payload: stepfunctions.TaskInput.fromObject(<DeleteOldSnapshotsInput>{
         tags: this.finalSnapshotTags,
         historyLimit: historyLimit,
         resourceType: 'rds:cluster-snapshot',

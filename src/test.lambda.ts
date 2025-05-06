@@ -15,11 +15,11 @@ interface Result {
   PhysicalResourceId: string;
 }
 
-exports.handler = async function (input: Input): Promise<Result> {
+export async function handler(input: Input): Promise<Result> {
   if (input.RequestType == 'Create' || input.RequestType == 'Update') {
     const exec = await sfn.send(new StartExecutionCommand({ stateMachineArn: input.ResourceProperties.StepFunctionArn }));
     return { PhysicalResourceId: exec.executionArn! };
   }
 
   return { PhysicalResourceId: input.PhysicalResourceId };
-};
+}

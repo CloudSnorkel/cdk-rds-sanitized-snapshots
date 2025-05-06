@@ -4,7 +4,7 @@ import { DescribeDBClustersCommand, DescribeDBInstancesCommand, RDSClient } from
 
 const rds = new RDSClient();
 
-interface Input {
+export interface ParametersInput {
   executionId: string;
   isCluster: boolean;
   databaseIdentifier: string;
@@ -13,7 +13,7 @@ interface Input {
   tempPrefix: string;
 }
 
-interface Parameters {
+interface ParametersOutput {
   databaseIdentifier: string;
   isCluster: boolean;
   engine: string;
@@ -62,7 +62,7 @@ function confirmLength(name: string, value: string) {
   }
 }
 
-exports.handler = async function (input: Input): Promise<Parameters> {
+export async function handler(input: ParametersInput): Promise<ParametersOutput> {
   let port: number;
   let user: string;
   let engine: string | undefined;
@@ -125,7 +125,7 @@ exports.handler = async function (input: Input): Promise<Parameters> {
 
   const tempSuffix = crypto.randomBytes(8).toString('hex');
 
-  const result: Parameters = {
+  const result: ParametersOutput = {
     databaseIdentifier: input.databaseIdentifier,
     isCluster: input.isCluster,
     engine: engine ?? 'unknown',
@@ -153,4 +153,4 @@ exports.handler = async function (input: Input): Promise<Parameters> {
   confirmLength('targetSnapshotId', result.targetSnapshotId);
 
   return result;
-};
+}
