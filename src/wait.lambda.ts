@@ -9,7 +9,7 @@ import {
 
 const rds = new RDSClient();
 
-interface Input {
+export interface WaitInput {
   resourceType: 'snapshot' | 'cluster' | 'instance';
   databaseIdentifier: string;
   snapshotIdentifier?: string;
@@ -37,7 +37,7 @@ function empty(obj: any) {
   return obj === undefined || obj === null || Object.keys(obj).length == 0;
 }
 
-exports.handler = async function (input: Input) {
+export async function handler(input: WaitInput) {
   console.log(input);
 
   if (input.resourceType == 'snapshot' && input.snapshotIdentifier) {
@@ -117,4 +117,4 @@ exports.handler = async function (input: Input) {
   } else {
     throw new Error('Bad parameters');
   }
-};
+}

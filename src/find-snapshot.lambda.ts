@@ -3,12 +3,12 @@ import { DescribeDBClusterSnapshotsCommand, DescribeDBSnapshotsCommand, Describe
 
 const rds = new RDSClient();
 
-interface Input {
+export interface FindSnapshotInput {
   databaseIdentifier: string;
   isCluster: boolean;
 }
 
-exports.handler = async function (input: Input) {
+export async function handler(input: FindSnapshotInput) {
   let marker: string | undefined = undefined;
   let lastSnapshotId = '';
   let lastSnapshotTime = 0;
@@ -48,4 +48,4 @@ exports.handler = async function (input: Input) {
   return {
     id: lastSnapshotId,
   };
-};
+}

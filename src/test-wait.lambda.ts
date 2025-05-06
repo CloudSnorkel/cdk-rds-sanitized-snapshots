@@ -20,7 +20,7 @@ interface Result {
   IsComplete: boolean;
 }
 
-exports.handler = async function (input: Input): Promise<Result> {
+export async function handler(input: Input): Promise<Result> {
   console.log(input.RequestType, input.PhysicalResourceId);
 
   if (input.RequestType == 'Create' || input.RequestType == 'Update') {
@@ -56,4 +56,4 @@ exports.handler = async function (input: Input): Promise<Result> {
 
   // delete -- we don't actually need to delete anything
   return { IsComplete: true };
-};
+}
