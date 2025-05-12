@@ -148,8 +148,8 @@ export class RdsSanitizedSnapshotter extends Construct {
   private readonly useExistingSnapshot: boolean;
   private readonly logGroup: logs.ILogGroup;
 
-  private readonly generalTags: {Key: string; Value: string}[];
-  private readonly finalSnapshotTags: {Key: string; Value: string}[];
+  private readonly generalTags: { Key: string; Value: string }[];
+  private readonly finalSnapshotTags: { Key: string; Value: string }[];
   private readonly databaseIdentifier: string;
   private readonly databaseName?: string;
   private readonly snapshotPrefix: string;
