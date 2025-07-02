@@ -32,7 +32,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     mavenGroupId: 'com.cloudsnorkel',
     mavenArtifactId: 'cdk.rds.sanitized-snapshots',
     javaPackage: 'com.cloudsnorkel.cdk.rds.sanitizedsnapshots',
-    mavenEndpoint: 'https://s01.oss.sonatype.org',
+    mavenServerId: 'central-ossrh',
   },
   publishToNuget: {
     dotNetNamespace: 'CloudSnorkel',
