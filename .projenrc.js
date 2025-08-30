@@ -21,9 +21,11 @@ const project = new awscdk.AwsCdkConstructLibrary({
   deps: [
   ],
   releaseToNpm: true,
+  npmTrustedPublishing: true,
   publishToPypi: {
     distName: 'cloudsnorkel.cdk-rds-sanitized-snapshots',
     module: 'cloudsnorkel.cdk_rds_sanitized_snapshots',
+    trustedPublishing: true,
   },
   publishToGo: {
     moduleName: 'github.com/CloudSnorkel/cdk-rds-sanitized-snapshots-go',
