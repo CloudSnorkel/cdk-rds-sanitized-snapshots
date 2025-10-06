@@ -170,7 +170,7 @@
       "Arn"
      ]
     },
-    "Runtime": "nodejs18.x"
+    "Runtime": "nodejs22.x"
    },
    "DependsOn": [
     "MySQLInstanceSnapshotterparametersServiceRoleDefaultPolicyD8BFD2E0",
@@ -389,7 +389,7 @@
       "Arn"
      ]
     },
-    "Runtime": "nodejs18.x"
+    "Runtime": "nodejs22.x"
    },
    "DependsOn": [
     "MySQLInstanceSnapshotterwaitServiceRoleDefaultPolicyE6063975",
@@ -1679,7 +1679,7 @@
       "Arn"
      ]
     },
-    "Runtime": "nodejs18.x"
+    "Runtime": "nodejs22.x"
    },
    "DependsOn": [
     "MySQLClusterSnapshotterparametersServiceRoleDefaultPolicy9544C62B",
@@ -1898,7 +1898,7 @@
       "Arn"
      ]
     },
-    "Runtime": "nodejs18.x"
+    "Runtime": "nodejs22.x"
    },
    "DependsOn": [
     "MySQLClusterSnapshotterwaitServiceRoleDefaultPolicy9E878AF7",
@@ -3268,7 +3268,7 @@
       "Arn"
      ]
     },
-    "Runtime": "nodejs18.x"
+    "Runtime": "nodejs22.x"
    },
    "DependsOn": [
     "PostgreSQLInstanceSnapshotterparametersServiceRoleDefaultPolicy9C4B4594",
@@ -3487,7 +3487,7 @@
       "Arn"
      ]
     },
-    "Runtime": "nodejs18.x"
+    "Runtime": "nodejs22.x"
    },
    "DependsOn": [
     "PostgreSQLInstanceSnapshotterwaitServiceRoleDefaultPolicy20C24234",
@@ -4827,7 +4827,7 @@
       "Arn"
      ]
     },
-    "Runtime": "nodejs18.x"
+    "Runtime": "nodejs22.x"
    },
    "DependsOn": [
     "PostgreSQLClusterSnapshotterparametersServiceRoleDefaultPolicy82F25ECA",
@@ -5046,7 +5046,7 @@
       "Arn"
      ]
     },
-    "Runtime": "nodejs18.x"
+    "Runtime": "nodejs22.x"
    },
    "DependsOn": [
     "PostgreSQLClusterSnapshotterwaitServiceRoleDefaultPolicyB7AEBC76",
