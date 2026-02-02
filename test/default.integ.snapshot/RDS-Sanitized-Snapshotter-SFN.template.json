@@ -170,7 +170,15 @@
       "Arn"
      ]
     },
-    "Runtime": "nodejs22.x"
+    "Runtime": {
+     "Fn::FindInMap": [
+      "LatestNodeRuntimeMap",
+      {
+       "Ref": "AWS::Region"
+      },
+      "value"
+     ]
+    }
    },
    "DependsOn": [
     "MySQLInstanceSnapshotterparametersServiceRoleDefaultPolicyD8BFD2E0",
@@ -389,7 +397,15 @@
       "Arn"
      ]
     },
-    "Runtime": "nodejs22.x"
+    "Runtime": {
+     "Fn::FindInMap": [
+      "LatestNodeRuntimeMap",
+      {
+       "Ref": "AWS::Region"
+      },
+      "value"
+     ]
+    }
    },
    "DependsOn": [
     "MySQLInstanceSnapshotterwaitServiceRoleDefaultPolicyE6063975",
@@ -941,117 +957,231 @@
       {
        "Action": "ecs:RunTask",
        "Effect": "Allow",
-       "Resource": {
-        "Fn::Join": [
-         "",
-         [
-          "arn:",
-          {
-           "Fn::Select": [
-            1,
-            {
-             "Fn::Split": [
-              ":",
-              {
-               "Ref": "MySQLInstanceSnapshotterMySQLTask45C5FE96"
-              }
-             ]
-            }
-           ]
-          },
-          ":",
-          {
-           "Fn::Select": [
-            2,
-            {
-             "Fn::Split": [
-              ":",
-              {
-               "Ref": "MySQLInstanceSnapshotterMySQLTask45C5FE96"
-              }
-             ]
-            }
-           ]
-          },
-          ":",
-          {
-           "Fn::Select": [
-            3,
-            {
-             "Fn::Split": [
-              ":",
-              {
-               "Ref": "MySQLInstanceSnapshotterMySQLTask45C5FE96"
-              }
-             ]
-            }
-           ]
-          },
-          ":",
-          {
-           "Fn::Select": [
-            4,
-            {
-             "Fn::Split": [
-              ":",
-              {
-               "Ref": "MySQLInstanceSnapshotterMySQLTask45C5FE96"
-              }
-             ]
-            }
-           ]
-          },
-          ":",
-          {
-           "Fn::Select": [
-            0,
-            {
-             "Fn::Split": [
-              "/",
-              {
-               "Fn::Select": [
-                5,
-                {
-                 "Fn::Split": [
-                  ":",
-                  {
-                   "Ref": "MySQLInstanceSnapshotterMySQLTask45C5FE96"
-                  }
-                 ]
-                }
-               ]
-              }
-             ]
-            }
-           ]
-          },
-          "/",
-          {
-           "Fn::Select": [
-            1,
-            {
-             "Fn::Split": [
-              "/",
-              {
-               "Fn::Select": [
-                5,
-                {
-                 "Fn::Split": [
-                  ":",
-                  {
-                   "Ref": "MySQLInstanceSnapshotterMySQLTask45C5FE96"
-                  }
-                 ]
-                }
-               ]
-              }
-             ]
-            }
-           ]
-          }
+       "Resource": [
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Fn::Select": [
+             1,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "MySQLInstanceSnapshotterMySQLTask45C5FE96"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             2,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "MySQLInstanceSnapshotterMySQLTask45C5FE96"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             3,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "MySQLInstanceSnapshotterMySQLTask45C5FE96"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             4,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "MySQLInstanceSnapshotterMySQLTask45C5FE96"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             0,
+             {
+              "Fn::Split": [
+               "/",
+               {
+                "Fn::Select": [
+                 5,
+                 {
+                  "Fn::Split": [
+                   ":",
+                   {
+                    "Ref": "MySQLInstanceSnapshotterMySQLTask45C5FE96"
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           },
+           "/",
+           {
+            "Fn::Select": [
+             1,
+             {
+              "Fn::Split": [
+               "/",
+               {
+                "Fn::Select": [
+                 5,
+                 {
+                  "Fn::Split": [
+                   ":",
+                   {
+                    "Ref": "MySQLInstanceSnapshotterMySQLTask45C5FE96"
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           }
+          ]
          ]
-        ]
-       }
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Fn::Select": [
+             1,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "MySQLInstanceSnapshotterMySQLTask45C5FE96"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             2,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "MySQLInstanceSnapshotterMySQLTask45C5FE96"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             3,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "MySQLInstanceSnapshotterMySQLTask45C5FE96"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             4,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "MySQLInstanceSnapshotterMySQLTask45C5FE96"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             0,
+             {
+              "Fn::Split": [
+               "/",
+               {
+                "Fn::Select": [
+                 5,
+                 {
+                  "Fn::Split": [
+                   ":",
+                   {
+                    "Ref": "MySQLInstanceSnapshotterMySQLTask45C5FE96"
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           },
+           "/",
+           {
+            "Fn::Select": [
+             1,
+             {
+              "Fn::Split": [
+               "/",
+               {
+                "Fn::Select": [
+                 5,
+                 {
+                  "Fn::Split": [
+                   ":",
+                   {
+                    "Ref": "MySQLInstanceSnapshotterMySQLTask45C5FE96"
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           },
+           ":*"
+          ]
+         ]
+        }
+       ]
       },
       {
        "Action": [
@@ -1110,117 +1240,231 @@
       {
        "Action": "ecs:RunTask",
        "Effect": "Allow",
-       "Resource": {
-        "Fn::Join": [
-         "",
-         [
-          "arn:",
-          {
-           "Fn::Select": [
-            1,
-            {
-             "Fn::Split": [
-              ":",
-              {
-               "Ref": "MySQLInstanceSnapshotterPostreSQLTaskFAABAACF"
-              }
-             ]
-            }
-           ]
-          },
-          ":",
-          {
-           "Fn::Select": [
-            2,
-            {
-             "Fn::Split": [
-              ":",
-              {
-               "Ref": "MySQLInstanceSnapshotterPostreSQLTaskFAABAACF"
-              }
-             ]
-            }
-           ]
-          },
-          ":",
-          {
-           "Fn::Select": [
-            3,
-            {
-             "Fn::Split": [
-              ":",
-              {
-               "Ref": "MySQLInstanceSnapshotterPostreSQLTaskFAABAACF"
-              }
-             ]
-            }
-           ]
-          },
-          ":",
-          {
-           "Fn::Select": [
-            4,
-            {
-             "Fn::Split": [
-              ":",
-              {
-               "Ref": "MySQLInstanceSnapshotterPostreSQLTaskFAABAACF"
-              }
-             ]
-            }
-           ]
-          },
-          ":",
-          {
-           "Fn::Select": [
-            0,
-            {
-             "Fn::Split": [
-              "/",
-              {
-               "Fn::Select": [
-                5,
-                {
-                 "Fn::Split": [
-                  ":",
-                  {
-                   "Ref": "MySQLInstanceSnapshotterPostreSQLTaskFAABAACF"
-                  }
-                 ]
-                }
-               ]
-              }
-             ]
-            }
-           ]
-          },
-          "/",
-          {
-           "Fn::Select": [
-            1,
-            {
-             "Fn::Split": [
-              "/",
-              {
-               "Fn::Select": [
-                5,
-                {
-                 "Fn::Split": [
-                  ":",
-                  {
-                   "Ref": "MySQLInstanceSnapshotterPostreSQLTaskFAABAACF"
-                  }
-                 ]
-                }
-               ]
-              }
-             ]
-            }
-           ]
-          }
+       "Resource": [
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Fn::Select": [
+             1,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "MySQLInstanceSnapshotterPostreSQLTaskFAABAACF"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             2,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "MySQLInstanceSnapshotterPostreSQLTaskFAABAACF"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             3,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "MySQLInstanceSnapshotterPostreSQLTaskFAABAACF"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             4,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "MySQLInstanceSnapshotterPostreSQLTaskFAABAACF"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             0,
+             {
+              "Fn::Split": [
+               "/",
+               {
+                "Fn::Select": [
+                 5,
+                 {
+                  "Fn::Split": [
+                   ":",
+                   {
+                    "Ref": "MySQLInstanceSnapshotterPostreSQLTaskFAABAACF"
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           },
+           "/",
+           {
+            "Fn::Select": [
+             1,
+             {
+              "Fn::Split": [
+               "/",
+               {
+                "Fn::Select": [
+                 5,
+                 {
+                  "Fn::Split": [
+                   ":",
+                   {
+                    "Ref": "MySQLInstanceSnapshotterPostreSQLTaskFAABAACF"
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           }
+          ]
          ]
-        ]
-       }
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Fn::Select": [
+             1,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "MySQLInstanceSnapshotterPostreSQLTaskFAABAACF"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             2,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "MySQLInstanceSnapshotterPostreSQLTaskFAABAACF"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             3,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "MySQLInstanceSnapshotterPostreSQLTaskFAABAACF"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             4,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "MySQLInstanceSnapshotterPostreSQLTaskFAABAACF"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             0,
+             {
+              "Fn::Split": [
+               "/",
+               {
+                "Fn::Select": [
+                 5,
+                 {
+                  "Fn::Split": [
+                   ":",
+                   {
+                    "Ref": "MySQLInstanceSnapshotterPostreSQLTaskFAABAACF"
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           },
+           "/",
+           {
+            "Fn::Select": [
+             1,
+             {
+              "Fn::Split": [
+               "/",
+               {
+                "Fn::Select": [
+                 5,
+                 {
+                  "Fn::Split": [
+                   ":",
+                   {
+                    "Ref": "MySQLInstanceSnapshotterPostreSQLTaskFAABAACF"
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           },
+           ":*"
+          ]
+         ]
+        }
+       ]
       },
       {
        "Action": "iam:PassRole",
@@ -1679,7 +1923,15 @@
       "Arn"
      ]
     },
-    "Runtime": "nodejs22.x"
+    "Runtime": {
+     "Fn::FindInMap": [
+      "LatestNodeRuntimeMap",
+      {
+       "Ref": "AWS::Region"
+      },
+      "value"
+     ]
+    }
    },
    "DependsOn": [
     "MySQLClusterSnapshotterparametersServiceRoleDefaultPolicy9544C62B",
@@ -1898,7 +2150,15 @@
       "Arn"
      ]
     },
-    "Runtime": "nodejs22.x"
+    "Runtime": {
+     "Fn::FindInMap": [
+      "LatestNodeRuntimeMap",
+      {
+       "Ref": "AWS::Region"
+      },
+      "value"
+     ]
+    }
    },
    "DependsOn": [
     "MySQLClusterSnapshotterwaitServiceRoleDefaultPolicy9E878AF7",
@@ -2520,117 +2780,231 @@
       {
        "Action": "ecs:RunTask",
        "Effect": "Allow",
-       "Resource": {
-        "Fn::Join": [
-         "",
-         [
-          "arn:",
-          {
-           "Fn::Select": [
-            1,
-            {
-             "Fn::Split": [
-              ":",
-              {
-               "Ref": "MySQLClusterSnapshotterMySQLTask8414A409"
-              }
-             ]
-            }
-           ]
-          },
-          ":",
-          {
-           "Fn::Select": [
-            2,
-            {
-             "Fn::Split": [
-              ":",
-              {
-               "Ref": "MySQLClusterSnapshotterMySQLTask8414A409"
-              }
-             ]
-            }
-           ]
-          },
-          ":",
-          {
-           "Fn::Select": [
-            3,
-            {
-             "Fn::Split": [
-              ":",
-              {
-               "Ref": "MySQLClusterSnapshotterMySQLTask8414A409"
-              }
-             ]
-            }
-           ]
-          },
-          ":",
-          {
-           "Fn::Select": [
-            4,
-            {
-             "Fn::Split": [
-              ":",
-              {
-               "Ref": "MySQLClusterSnapshotterMySQLTask8414A409"
-              }
-             ]
-            }
-           ]
-          },
-          ":",
-          {
-           "Fn::Select": [
-            0,
-            {
-             "Fn::Split": [
-              "/",
-              {
-               "Fn::Select": [
-                5,
-                {
-                 "Fn::Split": [
-                  ":",
-                  {
-                   "Ref": "MySQLClusterSnapshotterMySQLTask8414A409"
-                  }
-                 ]
-                }
-               ]
-              }
-             ]
-            }
-           ]
-          },
-          "/",
-          {
-           "Fn::Select": [
-            1,
-            {
-             "Fn::Split": [
-              "/",
-              {
-               "Fn::Select": [
-                5,
-                {
-                 "Fn::Split": [
-                  ":",
-                  {
-                   "Ref": "MySQLClusterSnapshotterMySQLTask8414A409"
-                  }
-                 ]
-                }
-               ]
-              }
-             ]
-            }
-           ]
-          }
+       "Resource": [
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Fn::Select": [
+             1,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "MySQLClusterSnapshotterMySQLTask8414A409"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             2,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "MySQLClusterSnapshotterMySQLTask8414A409"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             3,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "MySQLClusterSnapshotterMySQLTask8414A409"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             4,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "MySQLClusterSnapshotterMySQLTask8414A409"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             0,
+             {
+              "Fn::Split": [
+               "/",
+               {
+                "Fn::Select": [
+                 5,
+                 {
+                  "Fn::Split": [
+                   ":",
+                   {
+                    "Ref": "MySQLClusterSnapshotterMySQLTask8414A409"
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           },
+           "/",
+           {
+            "Fn::Select": [
+             1,
+             {
+              "Fn::Split": [
+               "/",
+               {
+                "Fn::Select": [
+                 5,
+                 {
+                  "Fn::Split": [
+                   ":",
+                   {
+                    "Ref": "MySQLClusterSnapshotterMySQLTask8414A409"
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           }
+          ]
          ]
-        ]
-       }
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Fn::Select": [
+             1,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "MySQLClusterSnapshotterMySQLTask8414A409"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             2,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "MySQLClusterSnapshotterMySQLTask8414A409"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             3,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "MySQLClusterSnapshotterMySQLTask8414A409"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             4,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "MySQLClusterSnapshotterMySQLTask8414A409"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             0,
+             {
+              "Fn::Split": [
+               "/",
+               {
+                "Fn::Select": [
+                 5,
+                 {
+                  "Fn::Split": [
+                   ":",
+                   {
+                    "Ref": "MySQLClusterSnapshotterMySQLTask8414A409"
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           },
+           "/",
+           {
+            "Fn::Select": [
+             1,
+             {
+              "Fn::Split": [
+               "/",
+               {
+                "Fn::Select": [
+                 5,
+                 {
+                  "Fn::Split": [
+                   ":",
+                   {
+                    "Ref": "MySQLClusterSnapshotterMySQLTask8414A409"
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           },
+           ":*"
+          ]
+         ]
+        }
+       ]
       },
       {
        "Action": [
@@ -2689,117 +3063,231 @@
       {
        "Action": "ecs:RunTask",
        "Effect": "Allow",
-       "Resource": {
-        "Fn::Join": [
-         "",
-         [
-          "arn:",
-          {
-           "Fn::Select": [
-            1,
-            {
-             "Fn::Split": [
-              ":",
-              {
-               "Ref": "MySQLClusterSnapshotterPostreSQLTaskB18030B4"
-              }
-             ]
-            }
-           ]
-          },
-          ":",
-          {
-           "Fn::Select": [
-            2,
-            {
-             "Fn::Split": [
-              ":",
-              {
-               "Ref": "MySQLClusterSnapshotterPostreSQLTaskB18030B4"
-              }
-             ]
-            }
-           ]
-          },
-          ":",
-          {
-           "Fn::Select": [
-            3,
-            {
-             "Fn::Split": [
-              ":",
-              {
-               "Ref": "MySQLClusterSnapshotterPostreSQLTaskB18030B4"
-              }
-             ]
-            }
-           ]
-          },
-          ":",
-          {
-           "Fn::Select": [
-            4,
-            {
-             "Fn::Split": [
-              ":",
-              {
-               "Ref": "MySQLClusterSnapshotterPostreSQLTaskB18030B4"
-              }
-             ]
-            }
-           ]
-          },
-          ":",
-          {
-           "Fn::Select": [
-            0,
-            {
-             "Fn::Split": [
-              "/",
-              {
-               "Fn::Select": [
-                5,
-                {
-                 "Fn::Split": [
-                  ":",
-                  {
-                   "Ref": "MySQLClusterSnapshotterPostreSQLTaskB18030B4"
-                  }
-                 ]
-                }
-               ]
-              }
-             ]
-            }
-           ]
-          },
-          "/",
-          {
-           "Fn::Select": [
-            1,
-            {
-             "Fn::Split": [
-              "/",
-              {
-               "Fn::Select": [
-                5,
-                {
-                 "Fn::Split": [
-                  ":",
-                  {
-                   "Ref": "MySQLClusterSnapshotterPostreSQLTaskB18030B4"
-                  }
-                 ]
-                }
-               ]
-              }
-             ]
-            }
-           ]
-          }
+       "Resource": [
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Fn::Select": [
+             1,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "MySQLClusterSnapshotterPostreSQLTaskB18030B4"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             2,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "MySQLClusterSnapshotterPostreSQLTaskB18030B4"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             3,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "MySQLClusterSnapshotterPostreSQLTaskB18030B4"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             4,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "MySQLClusterSnapshotterPostreSQLTaskB18030B4"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             0,
+             {
+              "Fn::Split": [
+               "/",
+               {
+                "Fn::Select": [
+                 5,
+                 {
+                  "Fn::Split": [
+                   ":",
+                   {
+                    "Ref": "MySQLClusterSnapshotterPostreSQLTaskB18030B4"
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           },
+           "/",
+           {
+            "Fn::Select": [
+             1,
+             {
+              "Fn::Split": [
+               "/",
+               {
+                "Fn::Select": [
+                 5,
+                 {
+                  "Fn::Split": [
+                   ":",
+                   {
+                    "Ref": "MySQLClusterSnapshotterPostreSQLTaskB18030B4"
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           }
+          ]
          ]
-        ]
-       }
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Fn::Select": [
+             1,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "MySQLClusterSnapshotterPostreSQLTaskB18030B4"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             2,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "MySQLClusterSnapshotterPostreSQLTaskB18030B4"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             3,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "MySQLClusterSnapshotterPostreSQLTaskB18030B4"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             4,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "MySQLClusterSnapshotterPostreSQLTaskB18030B4"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             0,
+             {
+              "Fn::Split": [
+               "/",
+               {
+                "Fn::Select": [
+                 5,
+                 {
+                  "Fn::Split": [
+                   ":",
+                   {
+                    "Ref": "MySQLClusterSnapshotterPostreSQLTaskB18030B4"
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           },
+           "/",
+           {
+            "Fn::Select": [
+             1,
+             {
+              "Fn::Split": [
+               "/",
+               {
+                "Fn::Select": [
+                 5,
+                 {
+                  "Fn::Split": [
+                   ":",
+                   {
+                    "Ref": "MySQLClusterSnapshotterPostreSQLTaskB18030B4"
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           },
+           ":*"
+          ]
+         ]
+        }
+       ]
       },
       {
        "Action": "iam:PassRole",
@@ -3268,7 +3756,15 @@
       "Arn"
      ]
     },
-    "Runtime": "nodejs22.x"
+    "Runtime": {
+     "Fn::FindInMap": [
+      "LatestNodeRuntimeMap",
+      {
+       "Ref": "AWS::Region"
+      },
+      "value"
+     ]
+    }
    },
    "DependsOn": [
     "PostgreSQLInstanceSnapshotterparametersServiceRoleDefaultPolicy9C4B4594",
@@ -3487,7 +3983,15 @@
       "Arn"
      ]
     },
-    "Runtime": "nodejs22.x"
+    "Runtime": {
+     "Fn::FindInMap": [
+      "LatestNodeRuntimeMap",
+      {
+       "Ref": "AWS::Region"
+      },
+      "value"
+     ]
+    }
    },
    "DependsOn": [
     "PostgreSQLInstanceSnapshotterwaitServiceRoleDefaultPolicy20C24234",
@@ -4039,117 +4543,231 @@
       {
        "Action": "ecs:RunTask",
        "Effect": "Allow",
-       "Resource": {
-        "Fn::Join": [
-         "",
-         [
-          "arn:",
-          {
-           "Fn::Select": [
-            1,
-            {
-             "Fn::Split": [
-              ":",
-              {
-               "Ref": "PostgreSQLInstanceSnapshotterMySQLTask53136402"
-              }
-             ]
-            }
-           ]
-          },
-          ":",
-          {
-           "Fn::Select": [
-            2,
-            {
-             "Fn::Split": [
-              ":",
-              {
-               "Ref": "PostgreSQLInstanceSnapshotterMySQLTask53136402"
-              }
-             ]
-            }
-           ]
-          },
-          ":",
-          {
-           "Fn::Select": [
-            3,
-            {
-             "Fn::Split": [
-              ":",
-              {
-               "Ref": "PostgreSQLInstanceSnapshotterMySQLTask53136402"
-              }
-             ]
-            }
-           ]
-          },
-          ":",
-          {
-           "Fn::Select": [
-            4,
-            {
-             "Fn::Split": [
-              ":",
-              {
-               "Ref": "PostgreSQLInstanceSnapshotterMySQLTask53136402"
-              }
-             ]
-            }
-           ]
-          },
-          ":",
-          {
-           "Fn::Select": [
-            0,
-            {
-             "Fn::Split": [
-              "/",
-              {
-               "Fn::Select": [
-                5,
-                {
-                 "Fn::Split": [
-                  ":",
-                  {
-                   "Ref": "PostgreSQLInstanceSnapshotterMySQLTask53136402"
-                  }
-                 ]
-                }
-               ]
-              }
-             ]
-            }
-           ]
-          },
-          "/",
-          {
-           "Fn::Select": [
-            1,
-            {
-             "Fn::Split": [
-              "/",
-              {
-               "Fn::Select": [
-                5,
-                {
-                 "Fn::Split": [
-                  ":",
-                  {
-                   "Ref": "PostgreSQLInstanceSnapshotterMySQLTask53136402"
-                  }
-                 ]
-                }
-               ]
-              }
-             ]
-            }
-           ]
-          }
+       "Resource": [
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Fn::Select": [
+             1,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "PostgreSQLInstanceSnapshotterMySQLTask53136402"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             2,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "PostgreSQLInstanceSnapshotterMySQLTask53136402"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             3,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "PostgreSQLInstanceSnapshotterMySQLTask53136402"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             4,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "PostgreSQLInstanceSnapshotterMySQLTask53136402"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             0,
+             {
+              "Fn::Split": [
+               "/",
+               {
+                "Fn::Select": [
+                 5,
+                 {
+                  "Fn::Split": [
+                   ":",
+                   {
+                    "Ref": "PostgreSQLInstanceSnapshotterMySQLTask53136402"
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           },
+           "/",
+           {
+            "Fn::Select": [
+             1,
+             {
+              "Fn::Split": [
+               "/",
+               {
+                "Fn::Select": [
+                 5,
+                 {
+                  "Fn::Split": [
+                   ":",
+                   {
+                    "Ref": "PostgreSQLInstanceSnapshotterMySQLTask53136402"
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           }
+          ]
          ]
-        ]
-       }
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Fn::Select": [
+             1,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "PostgreSQLInstanceSnapshotterMySQLTask53136402"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             2,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "PostgreSQLInstanceSnapshotterMySQLTask53136402"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             3,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "PostgreSQLInstanceSnapshotterMySQLTask53136402"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             4,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "PostgreSQLInstanceSnapshotterMySQLTask53136402"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             0,
+             {
+              "Fn::Split": [
+               "/",
+               {
+                "Fn::Select": [
+                 5,
+                 {
+                  "Fn::Split": [
+                   ":",
+                   {
+                    "Ref": "PostgreSQLInstanceSnapshotterMySQLTask53136402"
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           },
+           "/",
+           {
+            "Fn::Select": [
+             1,
+             {
+              "Fn::Split": [
+               "/",
+               {
+                "Fn::Select": [
+                 5,
+                 {
+                  "Fn::Split": [
+                   ":",
+                   {
+                    "Ref": "PostgreSQLInstanceSnapshotterMySQLTask53136402"
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           },
+           ":*"
+          ]
+         ]
+        }
+       ]
       },
       {
        "Action": [
@@ -4208,117 +4826,231 @@
       {
        "Action": "ecs:RunTask",
        "Effect": "Allow",
-       "Resource": {
-        "Fn::Join": [
-         "",
-         [
-          "arn:",
-          {
-           "Fn::Select": [
-            1,
-            {
-             "Fn::Split": [
-              ":",
-              {
-               "Ref": "PostgreSQLInstanceSnapshotterPostreSQLTask3DC21CCB"
-              }
-             ]
-            }
-           ]
-          },
-          ":",
-          {
-           "Fn::Select": [
-            2,
-            {
-             "Fn::Split": [
-              ":",
-              {
-               "Ref": "PostgreSQLInstanceSnapshotterPostreSQLTask3DC21CCB"
-              }
-             ]
-            }
-           ]
-          },
-          ":",
-          {
-           "Fn::Select": [
-            3,
-            {
-             "Fn::Split": [
-              ":",
-              {
-               "Ref": "PostgreSQLInstanceSnapshotterPostreSQLTask3DC21CCB"
-              }
-             ]
-            }
-           ]
-          },
-          ":",
-          {
-           "Fn::Select": [
-            4,
-            {
-             "Fn::Split": [
-              ":",
-              {
-               "Ref": "PostgreSQLInstanceSnapshotterPostreSQLTask3DC21CCB"
-              }
-             ]
-            }
-           ]
-          },
-          ":",
-          {
-           "Fn::Select": [
-            0,
-            {
-             "Fn::Split": [
-              "/",
-              {
-               "Fn::Select": [
-                5,
-                {
-                 "Fn::Split": [
-                  ":",
-                  {
-                   "Ref": "PostgreSQLInstanceSnapshotterPostreSQLTask3DC21CCB"
-                  }
-                 ]
-                }
-               ]
-              }
-             ]
-            }
-           ]
-          },
-          "/",
-          {
-           "Fn::Select": [
-            1,
-            {
-             "Fn::Split": [
-              "/",
-              {
-               "Fn::Select": [
-                5,
-                {
-                 "Fn::Split": [
-                  ":",
-                  {
-                   "Ref": "PostgreSQLInstanceSnapshotterPostreSQLTask3DC21CCB"
-                  }
-                 ]
-                }
-               ]
-              }
-             ]
-            }
-           ]
-          }
+       "Resource": [
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Fn::Select": [
+             1,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "PostgreSQLInstanceSnapshotterPostreSQLTask3DC21CCB"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             2,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "PostgreSQLInstanceSnapshotterPostreSQLTask3DC21CCB"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             3,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "PostgreSQLInstanceSnapshotterPostreSQLTask3DC21CCB"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             4,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "PostgreSQLInstanceSnapshotterPostreSQLTask3DC21CCB"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             0,
+             {
+              "Fn::Split": [
+               "/",
+               {
+                "Fn::Select": [
+                 5,
+                 {
+                  "Fn::Split": [
+                   ":",
+                   {
+                    "Ref": "PostgreSQLInstanceSnapshotterPostreSQLTask3DC21CCB"
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           },
+           "/",
+           {
+            "Fn::Select": [
+             1,
+             {
+              "Fn::Split": [
+               "/",
+               {
+                "Fn::Select": [
+                 5,
+                 {
+                  "Fn::Split": [
+                   ":",
+                   {
+                    "Ref": "PostgreSQLInstanceSnapshotterPostreSQLTask3DC21CCB"
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           }
+          ]
          ]
-        ]
-       }
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Fn::Select": [
+             1,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "PostgreSQLInstanceSnapshotterPostreSQLTask3DC21CCB"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             2,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "PostgreSQLInstanceSnapshotterPostreSQLTask3DC21CCB"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             3,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "PostgreSQLInstanceSnapshotterPostreSQLTask3DC21CCB"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             4,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "PostgreSQLInstanceSnapshotterPostreSQLTask3DC21CCB"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             0,
+             {
+              "Fn::Split": [
+               "/",
+               {
+                "Fn::Select": [
+                 5,
+                 {
+                  "Fn::Split": [
+                   ":",
+                   {
+                    "Ref": "PostgreSQLInstanceSnapshotterPostreSQLTask3DC21CCB"
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           },
+           "/",
+           {
+            "Fn::Select": [
+             1,
+             {
+              "Fn::Split": [
+               "/",
+               {
+                "Fn::Select": [
+                 5,
+                 {
+                  "Fn::Split": [
+                   ":",
+                   {
+                    "Ref": "PostgreSQLInstanceSnapshotterPostreSQLTask3DC21CCB"
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           },
+           ":*"
+          ]
+         ]
+        }
+       ]
       },
       {
        "Action": "iam:PassRole",
@@ -4827,7 +5559,15 @@
       "Arn"
      ]
     },
-    "Runtime": "nodejs22.x"
+    "Runtime": {
+     "Fn::FindInMap": [
+      "LatestNodeRuntimeMap",
+      {
+       "Ref": "AWS::Region"
+      },
+      "value"
+     ]
+    }
    },
    "DependsOn": [
     "PostgreSQLClusterSnapshotterparametersServiceRoleDefaultPolicy82F25ECA",
@@ -5046,7 +5786,15 @@
       "Arn"
      ]
     },
-    "Runtime": "nodejs22.x"
+    "Runtime": {
+     "Fn::FindInMap": [
+      "LatestNodeRuntimeMap",
+      {
+       "Ref": "AWS::Region"
+      },
+      "value"
+     ]
+    }
    },
    "DependsOn": [
     "PostgreSQLClusterSnapshotterwaitServiceRoleDefaultPolicyB7AEBC76",
@@ -5692,117 +6440,231 @@
       {
        "Action": "ecs:RunTask",
        "Effect": "Allow",
-       "Resource": {
-        "Fn::Join": [
-         "",
-         [
-          "arn:",
-          {
-           "Fn::Select": [
-            1,
-            {
-             "Fn::Split": [
-              ":",
-              {
-               "Ref": "PostgreSQLClusterSnapshotterMySQLTask9D91D3F5"
-              }
-             ]
-            }
-           ]
-          },
-          ":",
-          {
-           "Fn::Select": [
-            2,
-            {
-             "Fn::Split": [
-              ":",
-              {
-               "Ref": "PostgreSQLClusterSnapshotterMySQLTask9D91D3F5"
-              }
-             ]
-            }
-           ]
-          },
-          ":",
-          {
-           "Fn::Select": [
-            3,
-            {
-             "Fn::Split": [
-              ":",
-              {
-               "Ref": "PostgreSQLClusterSnapshotterMySQLTask9D91D3F5"
-              }
-             ]
-            }
-           ]
-          },
-          ":",
-          {
-           "Fn::Select": [
-            4,
-            {
-             "Fn::Split": [
-              ":",
-              {
-               "Ref": "PostgreSQLClusterSnapshotterMySQLTask9D91D3F5"
-              }
-             ]
-            }
-           ]
-          },
-          ":",
-          {
-           "Fn::Select": [
-            0,
-            {
-             "Fn::Split": [
-              "/",
-              {
-               "Fn::Select": [
-                5,
-                {
-                 "Fn::Split": [
-                  ":",
-                  {
-                   "Ref": "PostgreSQLClusterSnapshotterMySQLTask9D91D3F5"
-                  }
-                 ]
-                }
-               ]
-              }
-             ]
-            }
-           ]
-          },
-          "/",
-          {
-           "Fn::Select": [
-            1,
-            {
-             "Fn::Split": [
-              "/",
-              {
-               "Fn::Select": [
-                5,
-                {
-                 "Fn::Split": [
-                  ":",
-                  {
-                   "Ref": "PostgreSQLClusterSnapshotterMySQLTask9D91D3F5"
-                  }
-                 ]
-                }
-               ]
-              }
-             ]
-            }
-           ]
-          }
+       "Resource": [
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Fn::Select": [
+             1,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "PostgreSQLClusterSnapshotterMySQLTask9D91D3F5"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             2,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "PostgreSQLClusterSnapshotterMySQLTask9D91D3F5"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             3,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "PostgreSQLClusterSnapshotterMySQLTask9D91D3F5"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             4,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "PostgreSQLClusterSnapshotterMySQLTask9D91D3F5"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             0,
+             {
+              "Fn::Split": [
+               "/",
+               {
+                "Fn::Select": [
+                 5,
+                 {
+                  "Fn::Split": [
+                   ":",
+                   {
+                    "Ref": "PostgreSQLClusterSnapshotterMySQLTask9D91D3F5"
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           },
+           "/",
+           {
+            "Fn::Select": [
+             1,
+             {
+              "Fn::Split": [
+               "/",
+               {
+                "Fn::Select": [
+                 5,
+                 {
+                  "Fn::Split": [
+                   ":",
+                   {
+                    "Ref": "PostgreSQLClusterSnapshotterMySQLTask9D91D3F5"
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           }
+          ]
          ]
-        ]
-       }
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Fn::Select": [
+             1,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "PostgreSQLClusterSnapshotterMySQLTask9D91D3F5"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             2,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "PostgreSQLClusterSnapshotterMySQLTask9D91D3F5"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             3,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "PostgreSQLClusterSnapshotterMySQLTask9D91D3F5"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             4,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "PostgreSQLClusterSnapshotterMySQLTask9D91D3F5"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             0,
+             {
+              "Fn::Split": [
+               "/",
+               {
+                "Fn::Select": [
+                 5,
+                 {
+                  "Fn::Split": [
+                   ":",
+                   {
+                    "Ref": "PostgreSQLClusterSnapshotterMySQLTask9D91D3F5"
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           },
+           "/",
+           {
+            "Fn::Select": [
+             1,
+             {
+              "Fn::Split": [
+               "/",
+               {
+                "Fn::Select": [
+                 5,
+                 {
+                  "Fn::Split": [
+                   ":",
+                   {
+                    "Ref": "PostgreSQLClusterSnapshotterMySQLTask9D91D3F5"
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           },
+           ":*"
+          ]
+         ]
+        }
+       ]
       },
       {
        "Action": [
@@ -5861,117 +6723,231 @@
       {
        "Action": "ecs:RunTask",
        "Effect": "Allow",
-       "Resource": {
-        "Fn::Join": [
-         "",
-         [
-          "arn:",
-          {
-           "Fn::Select": [
-            1,
-            {
-             "Fn::Split": [
-              ":",
-              {
-               "Ref": "PostgreSQLClusterSnapshotterPostreSQLTaskE150FEBD"
-              }
-             ]
-            }
-           ]
-          },
-          ":",
-          {
-           "Fn::Select": [
-            2,
-            {
-             "Fn::Split": [
-              ":",
-              {
-               "Ref": "PostgreSQLClusterSnapshotterPostreSQLTaskE150FEBD"
-              }
-             ]
-            }
-           ]
-          },
-          ":",
-          {
-           "Fn::Select": [
-            3,
-            {
-             "Fn::Split": [
-              ":",
-              {
-               "Ref": "PostgreSQLClusterSnapshotterPostreSQLTaskE150FEBD"
-              }
-             ]
-            }
-           ]
-          },
-          ":",
-          {
-           "Fn::Select": [
-            4,
-            {
-             "Fn::Split": [
-              ":",
-              {
-               "Ref": "PostgreSQLClusterSnapshotterPostreSQLTaskE150FEBD"
-              }
-             ]
-            }
-           ]
-          },
-          ":",
-          {
-           "Fn::Select": [
-            0,
-            {
-             "Fn::Split": [
-              "/",
-              {
-               "Fn::Select": [
-                5,
-                {
-                 "Fn::Split": [
-                  ":",
-                  {
-                   "Ref": "PostgreSQLClusterSnapshotterPostreSQLTaskE150FEBD"
-                  }
-                 ]
-                }
-               ]
-              }
-             ]
-            }
-           ]
-          },
-          "/",
-          {
-           "Fn::Select": [
-            1,
-            {
-             "Fn::Split": [
-              "/",
-              {
-               "Fn::Select": [
-                5,
-                {
-                 "Fn::Split": [
-                  ":",
-                  {
-                   "Ref": "PostgreSQLClusterSnapshotterPostreSQLTaskE150FEBD"
-                  }
-                 ]
-                }
-               ]
-              }
-             ]
-            }
-           ]
-          }
+       "Resource": [
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Fn::Select": [
+             1,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "PostgreSQLClusterSnapshotterPostreSQLTaskE150FEBD"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             2,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "PostgreSQLClusterSnapshotterPostreSQLTaskE150FEBD"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             3,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "PostgreSQLClusterSnapshotterPostreSQLTaskE150FEBD"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             4,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "PostgreSQLClusterSnapshotterPostreSQLTaskE150FEBD"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             0,
+             {
+              "Fn::Split": [
+               "/",
+               {
+                "Fn::Select": [
+                 5,
+                 {
+                  "Fn::Split": [
+                   ":",
+                   {
+                    "Ref": "PostgreSQLClusterSnapshotterPostreSQLTaskE150FEBD"
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           },
+           "/",
+           {
+            "Fn::Select": [
+             1,
+             {
+              "Fn::Split": [
+               "/",
+               {
+                "Fn::Select": [
+                 5,
+                 {
+                  "Fn::Split": [
+                   ":",
+                   {
+                    "Ref": "PostgreSQLClusterSnapshotterPostreSQLTaskE150FEBD"
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           }
+          ]
          ]
-        ]
-       }
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Fn::Select": [
+             1,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "PostgreSQLClusterSnapshotterPostreSQLTaskE150FEBD"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             2,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "PostgreSQLClusterSnapshotterPostreSQLTaskE150FEBD"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             3,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "PostgreSQLClusterSnapshotterPostreSQLTaskE150FEBD"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             4,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Ref": "PostgreSQLClusterSnapshotterPostreSQLTaskE150FEBD"
+               }
+              ]
+             }
+            ]
+           },
+           ":",
+           {
+            "Fn::Select": [
+             0,
+             {
+              "Fn::Split": [
+               "/",
+               {
+                "Fn::Select": [
+                 5,
+                 {
+                  "Fn::Split": [
+                   ":",
+                   {
+                    "Ref": "PostgreSQLClusterSnapshotterPostreSQLTaskE150FEBD"
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           },
+           "/",
+           {
+            "Fn::Select": [
+             1,
+             {
+              "Fn::Split": [
+               "/",
+               {
+                "Fn::Select": [
+                 5,
+                 {
+                  "Fn::Split": [
+                   ":",
+                   {
+                    "Ref": "PostgreSQLClusterSnapshotterPostreSQLTaskE150FEBD"
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           },
+           ":*"
+          ]
+         ]
+        }
+       ]
       },
       {
        "Action": "iam:PassRole",
@@ -6322,6 +7298,113 @@
   }
  },
  "Mappings": {
+  "LatestNodeRuntimeMap": {
+   "af-south-1": {
+    "value": "nodejs20.x"
+   },
+   "ap-east-1": {
+    "value": "nodejs20.x"
+   },
+   "ap-northeast-1": {
+    "value": "nodejs20.x"
+   },
+   "ap-northeast-2": {
+    "value": "nodejs20.x"
+   },
+   "ap-northeast-3": {
+    "value": "nodejs20.x"
+   },
+   "ap-south-1": {
+    "value": "nodejs20.x"
+   },
+   "ap-south-2": {
+    "value": "nodejs20.x"
+   },
+   "ap-southeast-1": {
+    "value": "nodejs20.x"
+   },
+   "ap-southeast-2": {
+    "value": "nodejs20.x"
+   },
+   "ap-southeast-3": {
+    "value": "nodejs20.x"
+   },
+   "ap-southeast-4": {
+    "value": "nodejs20.x"
+   },
+   "ca-central-1": {
+    "value": "nodejs20.x"
+   },
+   "cn-north-1": {
+    "value": "nodejs18.x"
+   },
+   "cn-northwest-1": {
+    "value": "nodejs18.x"
+   },
+   "eu-central-1": {
+    "value": "nodejs20.x"
+   },
+   "eu-central-2": {
+    "value": "nodejs20.x"
+   },
+   "eu-north-1": {
+    "value": "nodejs20.x"
+   },
+   "eu-south-1": {
+    "value": "nodejs20.x"
+   },
+   "eu-south-2": {
+    "value": "nodejs20.x"
+   },
+   "eu-west-1": {
+    "value": "nodejs20.x"
+   },
+   "eu-west-2": {
+    "value": "nodejs20.x"
+   },
+   "eu-west-3": {
+    "value": "nodejs20.x"
+   },
+   "il-central-1": {
+    "value": "nodejs20.x"
+   },
+   "me-central-1": {
+    "value": "nodejs20.x"
+   },
+   "me-south-1": {
+    "value": "nodejs20.x"
+   },
+   "sa-east-1": {
+    "value": "nodejs20.x"
+   },
+   "us-east-1": {
+    "value": "nodejs20.x"
+   },
+   "us-east-2": {
+    "value": "nodejs20.x"
+   },
+   "us-gov-east-1": {
+    "value": "nodejs18.x"
+   },
+   "us-gov-west-1": {
+    "value": "nodejs18.x"
+   },
+   "us-iso-east-1": {
+    "value": "nodejs18.x"
+   },
+   "us-iso-west-1": {
+    "value": "nodejs18.x"
+   },
+   "us-isob-east-1": {
+    "value": "nodejs18.x"
+   },
+   "us-west-1": {
+    "value": "nodejs20.x"
+   },
+   "us-west-2": {
+    "value": "nodejs20.x"
+   }
+  },
   "ServiceprincipalMap": {
    "af-south-1": {
     "states": "states.af-south-1.amazonaws.com"
