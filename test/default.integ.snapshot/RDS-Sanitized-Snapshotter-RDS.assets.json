@@ -1,13 +1,14 @@
 {
-  "version": "36.0.0",
+  "version": "50.0.0",
   "files": {
     "da7ebb4e6882fcf053b199e0417772188b1369e252d27b7cf23ae1743467b6b0": {
+      "displayName": "RDS-Sanitized-Snapshotter-RDS Template",
       "source": {
         "path": "RDS-Sanitized-Snapshotter-RDS.template.json",
         "packaging": "file"
       },
       "destinations": {
-        "current_account-current_region": {
+        "current_account-current_region-3c342463": {
           "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
           "objectKey": "da7ebb4e6882fcf053b199e0417772188b1369e252d27b7cf23ae1743467b6b0.json",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"

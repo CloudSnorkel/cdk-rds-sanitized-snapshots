@@ -5,7 +5,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   author: 'Amir Szekely',
   authorAddress: 'amir@cloudsnorkel.com',
   stability: Stability.EXPERIMENTAL,
-  cdkVersion: '2.146.0', // 2.85.0 for no more deprecated nodejs 14 in integration test, 2.217.0 for lambda log settings, 2.146.0 for determineLatestNodeRuntime
+  cdkVersion: '2.239.0', // 2.85.0 for no more deprecated nodejs 14 in integration test, 2.217.0 for lambda log settings, 2.146.0 for determineLatestNodeRuntime, 2.239.0 for https://github.com/aws/aws-cdk/issues/37041
   defaultReleaseBranch: 'main',
   name: '@cloudsnorkel/cdk-rds-sanitized-snapshots',
   repositoryUrl: 'https://github.com/CloudSnorkel/cdk-rds-sanitized-snapshots.git',
