@@ -16,18 +16,19 @@ jobs:
       CI: "true"
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: main
           fetch-depth: 0
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: lts/*
       - name: Install dependencies
         run: yarn install --check-files --frozen-lockfile
       - name: Snapshot main
         run: |
+          npm run bundle
           npm run integ:default:snapshot
       - name: Switch to branch
         env:
@@ -37,6 +38,7 @@ jobs:
         run: yarn install --check-files --frozen-lockfile
       - name: Snapshot branch
         run: |
+          npm run bundle
           npm run integ:default:snapshot
       - name: Find mutations
         id: create_patch
