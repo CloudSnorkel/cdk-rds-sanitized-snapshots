@@ -1,13 +1,14 @@
 {
-  "version": "36.0.0",
+  "version": "50.0.0",
   "files": {
     "87f12f407d189e096c584f71ca2c69ffa63607430c7f39f994ea967e20be935b": {
+      "displayName": "RDS-Sanitized-Snapshotter-VPC Template",
       "source": {
         "path": "RDS-Sanitized-Snapshotter-VPC.template.json",
         "packaging": "file"
       },
       "destinations": {
-        "current_account-current_region": {
+        "current_account-current_region-670a1c52": {
           "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
           "objectKey": "87f12f407d189e096c584f71ca2c69ffa63607430c7f39f994ea967e20be935b.json",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
