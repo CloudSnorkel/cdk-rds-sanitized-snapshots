@@ -8,6 +8,9 @@ on:
 jobs:
   on-failure:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     if: ${{ github.event.workflow_run.conclusion == 'failure' }}
     env:
       CI: "true"
@@ -20,12 +23,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18.x
+          node-version: lts/*
       - name: Install dependencies
         run: yarn install --check-files --frozen-lockfile
       - name: Snapshot main
         run: |
-          npm run bundle
           npm run integ:default:snapshot
       - name: Switch to branch
         env:
@@ -35,7 +37,6 @@ jobs:
         run: yarn install --check-files --frozen-lockfile
       - name: Snapshot branch
         run: |
-          npm run bundle
           npm run integ:default:snapshot
       - name: Find mutations
         id: create_patch
@@ -49,6 +50,10 @@ jobs:
         continue-on-error: true
         run: |-
           git diff --staged -U0 | grep '"path":' | cut -d '"' -f 4 | xargs -rL 2 diff -ruN > /tmp/assets.diff
+      - name: List diff files
+        if: steps.create_patch.outputs.patch_created
+        run: |-
+          grep ^diff /tmp/assets.diff
       - name: Upload assets.diff
         if: steps.create_patch.outputs.patch_created
         uses: actions/upload-artifact@v4
