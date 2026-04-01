@@ -20,6 +20,7 @@
 /.gitignore linguist-generated
 /.mergify.yml linguist-generated
 /.npmignore linguist-generated
+/.npmrc linguist-generated
 /.projen/** linguist-generated
 /.projen/deps.json linguist-generated
 /.projen/files.json linguist-generated
@@ -27,6 +28,7 @@
 /API.md linguist-generated
 /LICENSE linguist-generated
 /package.json linguist-generated
+/pnpm-lock.yaml linguist-generated
 /src/delete-old-function.ts linguist-generated
 /src/find-snapshot-function.ts linguist-generated
 /src/parameters-function.ts linguist-generated
@@ -34,5 +36,4 @@
 /src/test-wait-function.ts linguist-generated
 /src/wait-function.ts linguist-generated
 /tsconfig.dev.json linguist-generated linguist-language=JSON-with-Comments
-/yarn.lock linguist-generated
 yarn.lock eol=lf
