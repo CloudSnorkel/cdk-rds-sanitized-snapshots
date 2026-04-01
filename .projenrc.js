@@ -18,6 +18,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     '@aws-sdk/client-sfn',
     '@types/aws-lambda',
   ],
+  packageManager: 'pnpm',
   deps: [
   ],
   releaseToNpm: true,
@@ -66,7 +67,9 @@ const project = new awscdk.AwsCdkConstructLibrary({
         cron: ['0 0 1 * *'],
       },
     },
+    cooldown: 5, // don't include updates from the last five days to try and dodge supply chain attacks
   },
+  workflowPackageCache: true,
   githubOptions: {
     pullRequestLintOptions: {
       semanticTitleOptions: {
