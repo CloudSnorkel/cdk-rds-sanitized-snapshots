@@ -103,6 +103,9 @@ project.gitattributes.addAttributes('*.json', 'eol=lf');
 project.gitattributes.addAttributes('*.sh', 'eol=lf');
 project.gitattributes.addAttributes('*.yml', 'eol=lf');
 
+// .projenrc.js is not part of the project
+project.eslint.allowDefaultProjectFiles('.projenrc.js');
+
 // funding
 project.package.addField('funding', 'https://github.com/sponsors/CloudSnorkel');
 
