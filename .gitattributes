@@ -34,5 +34,6 @@
 /src/test-function.ts linguist-generated
 /src/test-wait-function.ts linguist-generated
 /src/wait-function.ts linguist-generated
-/tsconfig.dev.json linguist-generated linguist-language=JSON-with-Comments
+/test/tsconfig.json linguist-generated linguist-language=JSON-with-Comments
+/tsconfig.json linguist-generated
 yarn.lock eol=lf
