@@ -8,6 +8,7 @@
   "scripts": {
     "build": "projen build",
     "bump": "projen bump",
+    "bump:releasable-commits": "projen bump:releasable-commits",
     "bundle": "projen bundle",
     "bundle:delete-old.lambda": "projen bundle:delete-old.lambda",
     "bundle:delete-old.lambda:watch": "projen bundle:delete-old.lambda:watch",
@@ -58,9 +59,9 @@
     "organization": false
   },
   "devDependencies": {
-    "@aws-sdk/client-rds": "^3.1075.0",
-    "@aws-sdk/client-resource-groups-tagging-api": "^3.1075.0",
-    "@aws-sdk/client-sfn": "^3.1075.0",
+    "@aws-sdk/client-rds": "^3.1095.0",
+    "@aws-sdk/client-resource-groups-tagging-api": "^3.1095.0",
+    "@aws-sdk/client-sfn": "^3.1095.0",
     "@stylistic/eslint-plugin": "^2",
     "@types/aws-lambda": "^8.10.162",
     "@types/jest": "^27.0.0",
@@ -78,11 +79,11 @@
     "jest": "^27.0.0",
     "jest-junit": "^17",
     "jsii": "~5.9.0",
-    "jsii-diff": "^1.137.0",
+    "jsii-diff": "^1.139.0",
     "jsii-docgen": "^10.5.0",
-    "jsii-pacmak": "^1.137.0",
+    "jsii-pacmak": "^1.139.0",
     "jsii-rosetta": "~5.9.0",
-    "projen": "^0.100.7",
+    "projen": "^0.101.20",
     "ts-jest": "^27.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^4.9.5"
