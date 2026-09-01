@@ -18,7 +18,6 @@ dist
 /.github/
 /.vscode/
 /.idea/
-/.projenrc.js
 tsconfig.tsbuildinfo
 /.eslintrc.json
 !.jsii
@@ -26,3 +25,4 @@ tsconfig.tsbuildinfo
 test/.tmp
 test/default.integ.snapshot
 /.gitattributes
+/.projenrc.js

@@ -162,7 +162,8 @@
           "src/parameters.lambda.ts",
           "src/test-wait.lambda.ts",
           "src/test.lambda.ts",
-          "src/wait.lambda.ts"
+          "src/wait.lambda.ts",
+          ".projenrc.js"
         ],
         "optionalDependencies": false,
         "peerDependencies": true
