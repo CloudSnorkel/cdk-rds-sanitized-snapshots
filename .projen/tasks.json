@@ -97,7 +97,16 @@
       "description": "Create a JavaScript bundle from src/delete-old.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/delete-old.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/delete-old.lambda/index.js\" --tsconfig=\"test/tsconfig.json\" --external:@aws-sdk/*"
+          "execArgs": [
+            "esbuild",
+            "--bundle",
+            "src/delete-old.lambda.ts",
+            "--target=node22",
+            "--platform=node",
+            "--outfile=assets/delete-old.lambda/index.js",
+            "--tsconfig=test/tsconfig.json",
+            "--external:@aws-sdk/*"
+          ]
         }
       ]
     },
@@ -106,7 +115,17 @@
       "description": "Continuously update the JavaScript bundle from src/delete-old.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/delete-old.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/delete-old.lambda/index.js\" --tsconfig=\"test/tsconfig.json\" --external:@aws-sdk/* --watch"
+          "execArgs": [
+            "esbuild",
+            "--bundle",
+            "src/delete-old.lambda.ts",
+            "--target=node22",
+            "--platform=node",
+            "--outfile=assets/delete-old.lambda/index.js",
+            "--tsconfig=test/tsconfig.json",
+            "--external:@aws-sdk/*",
+            "--watch"
+          ]
         }
       ]
     },
@@ -115,7 +134,16 @@
       "description": "Create a JavaScript bundle from src/find-snapshot.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/find-snapshot.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/find-snapshot.lambda/index.js\" --tsconfig=\"test/tsconfig.json\" --external:@aws-sdk/*"
+          "execArgs": [
+            "esbuild",
+            "--bundle",
+            "src/find-snapshot.lambda.ts",
+            "--target=node22",
+            "--platform=node",
+            "--outfile=assets/find-snapshot.lambda/index.js",
+            "--tsconfig=test/tsconfig.json",
+            "--external:@aws-sdk/*"
+          ]
         }
       ]
     },
@@ -124,7 +152,17 @@
       "description": "Continuously update the JavaScript bundle from src/find-snapshot.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/find-snapshot.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/find-snapshot.lambda/index.js\" --tsconfig=\"test/tsconfig.json\" --external:@aws-sdk/* --watch"
+          "execArgs": [
+            "esbuild",
+            "--bundle",
+            "src/find-snapshot.lambda.ts",
+            "--target=node22",
+            "--platform=node",
+            "--outfile=assets/find-snapshot.lambda/index.js",
+            "--tsconfig=test/tsconfig.json",
+            "--external:@aws-sdk/*",
+            "--watch"
+          ]
         }
       ]
     },
@@ -133,7 +171,16 @@
       "description": "Create a JavaScript bundle from src/parameters.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/parameters.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/parameters.lambda/index.js\" --tsconfig=\"test/tsconfig.json\" --external:@aws-sdk/*"
+          "execArgs": [
+            "esbuild",
+            "--bundle",
+            "src/parameters.lambda.ts",
+            "--target=node22",
+            "--platform=node",
+            "--outfile=assets/parameters.lambda/index.js",
+            "--tsconfig=test/tsconfig.json",
+            "--external:@aws-sdk/*"
+          ]
         }
       ]
     },
@@ -142,7 +189,17 @@
       "description": "Continuously update the JavaScript bundle from src/parameters.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/parameters.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/parameters.lambda/index.js\" --tsconfig=\"test/tsconfig.json\" --external:@aws-sdk/* --watch"
+          "execArgs": [
+            "esbuild",
+            "--bundle",
+            "src/parameters.lambda.ts",
+            "--target=node22",
+            "--platform=node",
+            "--outfile=assets/parameters.lambda/index.js",
+            "--tsconfig=test/tsconfig.json",
+            "--external:@aws-sdk/*",
+            "--watch"
+          ]
         }
       ]
     },
@@ -151,7 +208,16 @@
       "description": "Create a JavaScript bundle from src/test-wait.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/test-wait.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/test-wait.lambda/index.js\" --tsconfig=\"test/tsconfig.json\" --external:@aws-sdk/*"
+          "execArgs": [
+            "esbuild",
+            "--bundle",
+            "src/test-wait.lambda.ts",
+            "--target=node22",
+            "--platform=node",
+            "--outfile=assets/test-wait.lambda/index.js",
+            "--tsconfig=test/tsconfig.json",
+            "--external:@aws-sdk/*"
+          ]
         }
       ]
     },
@@ -160,7 +226,17 @@
       "description": "Continuously update the JavaScript bundle from src/test-wait.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/test-wait.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/test-wait.lambda/index.js\" --tsconfig=\"test/tsconfig.json\" --external:@aws-sdk/* --watch"
+          "execArgs": [
+            "esbuild",
+            "--bundle",
+            "src/test-wait.lambda.ts",
+            "--target=node22",
+            "--platform=node",
+            "--outfile=assets/test-wait.lambda/index.js",
+            "--tsconfig=test/tsconfig.json",
+            "--external:@aws-sdk/*",
+            "--watch"
+          ]
         }
       ]
     },
@@ -169,7 +245,16 @@
       "description": "Create a JavaScript bundle from src/test.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/test.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/test.lambda/index.js\" --tsconfig=\"test/tsconfig.json\" --external:@aws-sdk/*"
+          "execArgs": [
+            "esbuild",
+            "--bundle",
+            "src/test.lambda.ts",
+            "--target=node22",
+            "--platform=node",
+            "--outfile=assets/test.lambda/index.js",
+            "--tsconfig=test/tsconfig.json",
+            "--external:@aws-sdk/*"
+          ]
         }
       ]
     },
@@ -178,7 +263,17 @@
       "description": "Continuously update the JavaScript bundle from src/test.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/test.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/test.lambda/index.js\" --tsconfig=\"test/tsconfig.json\" --external:@aws-sdk/* --watch"
+          "execArgs": [
+            "esbuild",
+            "--bundle",
+            "src/test.lambda.ts",
+            "--target=node22",
+            "--platform=node",
+            "--outfile=assets/test.lambda/index.js",
+            "--tsconfig=test/tsconfig.json",
+            "--external:@aws-sdk/*",
+            "--watch"
+          ]
         }
       ]
     },
@@ -187,7 +282,16 @@
       "description": "Create a JavaScript bundle from src/wait.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/wait.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/wait.lambda/index.js\" --tsconfig=\"test/tsconfig.json\" --external:@aws-sdk/*"
+          "execArgs": [
+            "esbuild",
+            "--bundle",
+            "src/wait.lambda.ts",
+            "--target=node22",
+            "--platform=node",
+            "--outfile=assets/wait.lambda/index.js",
+            "--tsconfig=test/tsconfig.json",
+            "--external:@aws-sdk/*"
+          ]
         }
       ]
     },
@@ -196,7 +300,17 @@
       "description": "Continuously update the JavaScript bundle from src/wait.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/wait.lambda.ts --target=\"node22\" --platform=\"node\" --outfile=\"assets/wait.lambda/index.js\" --tsconfig=\"test/tsconfig.json\" --external:@aws-sdk/* --watch"
+          "execArgs": [
+            "esbuild",
+            "--bundle",
+            "src/wait.lambda.ts",
+            "--target=node22",
+            "--platform=node",
+            "--outfile=assets/wait.lambda/index.js",
+            "--tsconfig=test/tsconfig.json",
+            "--external:@aws-sdk/*",
+            "--watch"
+          ]
         }
       ]
     },
@@ -208,22 +322,35 @@
       },
       "steps": [
         {
-          "exec": "git checkout -b scratch",
+          "execArgs": [
+            "git",
+            "checkout",
+            "-b",
+            "scratch"
+          ],
           "name": "save current HEAD in \"scratch\" branch"
         },
         {
-          "exec": "git checkout $BRANCH"
+          "exec": "git checkout \"$BRANCH\""
         },
         {
-          "exec": "git fetch origin",
+          "execArgs": [
+            "git",
+            "fetch",
+            "origin"
+          ],
           "name": "fetch latest changes from origin"
         },
         {
-          "exec": "git reset --hard origin/$BRANCH",
+          "exec": "git reset --hard \"origin/$BRANCH\"",
           "name": "hard reset to origin commit"
         },
         {
-          "exec": "git clean -fdx",
+          "execArgs": [
+            "git",
+            "clean",
+            "-fdx"
+          ],
           "name": "clean all untracked files"
         },
         {
@@ -237,7 +364,13 @@
       "description": "Perform API compatibility check against latest version",
       "steps": [
         {
-          "exec": "jsii-diff npm:$(node -p \"require('./package.json').name\") -k --ignore-file .compatignore || (echo \"\nUNEXPECTED BREAKING CHANGES: add keys such as 'removed:constructs.Node.of' to .compatignore to skip.\n\" && exit 1)"
+          "execArgs": [
+            "jsii-diff",
+            "npm:@cloudsnorkel/cdk-rds-sanitized-snapshots",
+            "-k",
+            "--ignore-file",
+            ".compatignore"
+          ]
         }
       ]
     },
@@ -299,7 +432,18 @@
       },
       "steps": [
         {
-          "exec": "eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern $@ src test build-tools .projenrc.js",
+          "execArgs": [
+            "eslint",
+            "--ext",
+            ".ts,.tsx",
+            "--fix",
+            "--no-error-on-unmatched-pattern",
+            "$@",
+            "src",
+            "test",
+            "build-tools",
+            ".projenrc.js"
+          ],
           "receiveArgs": true
         }
       ]
@@ -327,10 +471,29 @@
       "description": "assert the snapshot of integration test 'default'",
       "steps": [
         {
-          "exec": "[ -d \"test/default.integ.snapshot\" ] || (echo \"No snapshot available for integration test 'default'. Run 'projen integ:default:deploy' to capture.\" && exit 1)"
+          "execArgs": [
+            "node",
+            "-e",
+            "const [dir, name, task] = process.argv.slice(1); const stat = require('fs').statSync(dir, { throwIfNoEntry: false }); if (!stat || !stat.isDirectory()) { console.error(`No snapshot available for integration test '${name}'. Run 'projen ${task}' to capture.`); process.exit(1); }",
+            "test/default.integ.snapshot",
+            "default",
+            "integ:default:deploy"
+          ]
         },
         {
-          "exec": "cdk synth --app \"ts-node -P test/tsconfig.json test/default.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata -o test/.tmp/default.integ/assert.cdk.out > /dev/null"
+          "execArgs": [
+            "cdk",
+            "synth",
+            "--quiet",
+            "--app",
+            "ts-node -P test/tsconfig.json test/default.integ.ts",
+            "--no-notices",
+            "--no-version-reporting",
+            "--no-asset-metadata",
+            "--no-path-metadata",
+            "-o",
+            "test/.tmp/default.integ/assert.cdk.out"
+          ]
         },
         {
           "execArgs": [
@@ -362,7 +525,20 @@
           ]
         },
         {
-          "exec": "cdk deploy --app \"ts-node -P test/tsconfig.json test/default.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata '**' --require-approval=never -o test/.tmp/default.integ/deploy.cdk.out"
+          "execArgs": [
+            "cdk",
+            "deploy",
+            "--app",
+            "ts-node -P test/tsconfig.json test/default.integ.ts",
+            "--no-notices",
+            "--no-version-reporting",
+            "--no-asset-metadata",
+            "--no-path-metadata",
+            "**",
+            "--require-approval=never",
+            "-o",
+            "test/.tmp/default.integ/deploy.cdk.out"
+          ]
         },
         {
           "execArgs": [
@@ -388,7 +564,14 @@
       "description": "destroy integration test 'default'",
       "steps": [
         {
-          "exec": "cdk destroy --app test/default.integ.snapshot '**' --no-version-reporting"
+          "execArgs": [
+            "cdk",
+            "destroy",
+            "--app",
+            "test/default.integ.snapshot",
+            "**",
+            "--no-version-reporting"
+          ]
         }
       ]
     },
@@ -397,7 +580,19 @@
       "description": "update snapshot for integration test \"default\"",
       "steps": [
         {
-          "exec": "cdk synth --app \"ts-node -P test/tsconfig.json test/default.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata -o test/default.integ.snapshot > /dev/null"
+          "execArgs": [
+            "cdk",
+            "synth",
+            "--quiet",
+            "--app",
+            "ts-node -P test/tsconfig.json test/default.integ.ts",
+            "--no-notices",
+            "--no-version-reporting",
+            "--no-asset-metadata",
+            "--no-path-metadata",
+            "-o",
+            "test/default.integ.snapshot"
+          ]
         }
       ]
     },
@@ -406,7 +601,19 @@
       "description": "watch integration test 'default' (without updating snapshots)",
       "steps": [
         {
-          "exec": "cdk watch --app \"ts-node -P test/tsconfig.json test/default.integ.ts\" --no-notices --no-version-reporting --no-asset-metadata --no-path-metadata '**' -o test/.tmp/default.integ/deploy.cdk.out"
+          "execArgs": [
+            "cdk",
+            "watch",
+            "--app",
+            "ts-node -P test/tsconfig.json test/default.integ.ts",
+            "--no-notices",
+            "--no-version-reporting",
+            "--no-asset-metadata",
+            "--no-path-metadata",
+            "**",
+            "-o",
+            "test/.tmp/default.integ/deploy.cdk.out"
+          ]
         }
       ]
     },
@@ -564,7 +771,11 @@
       },
       "steps": [
         {
-          "exec": "rm -fr dist"
+          "execArgs": [
+            "rm",
+            "-fr",
+            "dist"
+          ]
         },
         {
           "spawn": "bump"
@@ -585,7 +796,11 @@
       "description": "Run tests",
       "steps": [
         {
-          "exec": "jest --passWithNoTests --updateSnapshot",
+          "execArgs": [
+            "jest",
+            "--passWithNoTests",
+            "--updateSnapshot"
+          ],
           "receiveArgs": true
         },
         {
@@ -601,7 +816,10 @@
       "description": "Run jest in watch mode",
       "steps": [
         {
-          "exec": "jest --watch"
+          "execArgs": [
+            "jest",
+            "--watch"
+          ]
         }
       ]
     },
