@@ -104,6 +104,7 @@
             "--target=node22",
             "--platform=node",
             "--outfile=assets/delete-old.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*"
           ]
@@ -122,6 +123,7 @@
             "--target=node22",
             "--platform=node",
             "--outfile=assets/delete-old.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*",
             "--watch"
@@ -141,6 +143,7 @@
             "--target=node22",
             "--platform=node",
             "--outfile=assets/find-snapshot.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*"
           ]
@@ -159,6 +162,7 @@
             "--target=node22",
             "--platform=node",
             "--outfile=assets/find-snapshot.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*",
             "--watch"
@@ -178,6 +182,7 @@
             "--target=node22",
             "--platform=node",
             "--outfile=assets/parameters.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*"
           ]
@@ -196,6 +201,7 @@
             "--target=node22",
             "--platform=node",
             "--outfile=assets/parameters.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*",
             "--watch"
@@ -215,6 +221,7 @@
             "--target=node22",
             "--platform=node",
             "--outfile=assets/test-wait.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*"
           ]
@@ -233,6 +240,7 @@
             "--target=node22",
             "--platform=node",
             "--outfile=assets/test-wait.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*",
             "--watch"
@@ -252,6 +260,7 @@
             "--target=node22",
             "--platform=node",
             "--outfile=assets/test.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*"
           ]
@@ -270,6 +279,7 @@
             "--target=node22",
             "--platform=node",
             "--outfile=assets/test.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*",
             "--watch"
@@ -289,6 +299,7 @@
             "--target=node22",
             "--platform=node",
             "--outfile=assets/wait.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*"
           ]
@@ -307,6 +318,7 @@
             "--target=node22",
             "--platform=node",
             "--outfile=assets/wait.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*",
             "--watch"
@@ -789,7 +801,8 @@
         {
           "exec": "git diff --ignore-space-at-eol --exit-code"
         }
-      ]
+      ],
+      "condition": "git log --oneline -1 | grep -v \"chore(release):\" > /dev/null"
     },
     "test": {
       "name": "test",
